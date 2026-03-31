@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Z.com Help Center — ศูนย์ช่วยเหลือ</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#e0242a; --red-d:#b91c20; --red-l:#fef2f2; --red-m:rgba(224,36,42,.08);
+  --blue:#1b5fd8; --blue-l:#eff6ff; --blue-m:rgba(27,95,216,.08);
+  --teal:#0284c7; --teal-l:#e0f2fe;
+  --amber:#b45309; --amber-l:#fffbeb;
+  --green:#047857; --green-l:#ecfdf5;
+  --purple:#6d28d9; --purple-l:#f5f3ff;
+  --orange:#c2410c; --orange-l:#fff7ed;
+  --bg:#f3f4f8; --surface:#fff; --s2:#f1f3f8; --s3:#e8eaf0;
+  --border:#e2e5ef; --border-s:#cdd1e0;
+  --h:#0d1626; --b:#374151; --s:#5f6b7c; --m:#9aa3b0;
+  --sh:0 1px 6px rgba(13,22,38,.07),0 1px 2px rgba(13,22,38,.04);
+  --sh-md:0 4px 16px rgba(13,22,38,.09),0 2px 5px rgba(13,22,38,.05);
+  --sh-lg:0 12px 40px rgba(13,22,38,.12);
+  --sh-xl:0 24px 64px rgba(13,22,38,.16);
+  --r:12px; --rs:9px; --rxs:7px; --rpill:999px;
+  --panel:360px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;height:100%;}
+body{font-family:'Noto Sans Thai','Sora',sans-serif;background:var(--bg);color:var(--b);height:100%;overflow:hidden;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--border-s);border-radius:2px;}
+::-webkit-scrollbar-track{background:transparent;}
+
+/* ══ LAYOUT ══ */
+.layout{display:flex;flex-direction:column;height:100vh;}
+
+/* ══ NAV ══ */
+.nav{height:54px;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0;z-index:20;}
+.nav-brand{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
+.brand-ico{width:30px;height:30px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Sora';font-weight:800;color:#fff;font-size:13px;box-shadow:0 2px 8px rgba(224,36,42,.3);}
+.brand-txt{font-family:'Sora';font-weight:700;font-size:14.5px;color:var(--h);letter-spacing:-.3px;}
+.brand-txt b{color:var(--red);}
+.nav-srch{flex:1;max-width:320px;margin:0 auto;position:relative;}
+.nav-srch input{width:100%;height:32px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--rpill);padding:0 11px 0 30px;font-size:12px;font-family:inherit;color:var(--b);outline:none;transition:all .18s;}
+.nav-srch input:focus{background:#fff;border-color:var(--red);box-shadow:0 0 0 3px var(--red-m);}
+.nav-srch input::placeholder{color:var(--m);}
+.nav-srch .si{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--m);}
+.nav-right{display:flex;align-items:center;gap:6px;margin-left:auto;}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:var(--rxs);font-size:11.5px;font-weight:600;font-family:inherit;cursor:pointer;border:none;transition:all .16s;white-space:nowrap;}
+.btn-g{background:transparent;color:var(--s);}
+.btn-g:hover{background:var(--s2);color:var(--b);}
+.btn-o{background:transparent;color:var(--b);border:1.5px solid var(--border-s);}
+.btn-o:hover{border-color:var(--red);color:var(--red);background:var(--red-l);}
+.btn-r{background:var(--red);color:#fff;box-shadow:0 2px 7px rgba(224,36,42,.22);}
+.btn-r:hover{background:var(--red-d);transform:translateY(-1px);}
+
+/* ══ BODY SPLIT ══ */
+.body-split{flex:1;display:flex;overflow:hidden;}
+
+/* ══ MAIN SCROLL AREA ══ */
+.main-area{flex:1;overflow-y:auto;min-width:0;}
+
+/* ══ HERO ══ */
+.hero{background:linear-gradient(150deg,#0c1626 0%,#162038 55%,#0c1626 100%);padding:44px 24px 56px;text-align:center;position:relative;overflow:hidden;}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 20% 55%,rgba(224,36,42,.1) 0%,transparent 55%),radial-gradient(ellipse 50% 50% at 80% 25%,rgba(27,95,216,.08) 0%,transparent 55%);}
+.hero-dots{position:absolute;inset:0;opacity:.028;background-image:radial-gradient(rgba(255,255,255,.7) 1px,transparent 1px);background-size:30px 30px;}
+.hero-inner{position:relative;z-index:1;max-width:560px;margin:0 auto;}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:var(--rpill);padding:4px 12px;margin-bottom:14px;font-size:10.5px;color:rgba(255,255,255,.6);font-weight:500;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:live 2s infinite;}
+@keyframes live{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,.4)}50%{box-shadow:0 0 0 4px rgba(74,222,128,0)}}
+.hero h1{font-family:'Sora';font-size:clamp(22px,3.5vw,36px);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.7px;margin-bottom:8px;}
+.hero h1 em{font-style:normal;color:var(--red);}
+.hero-sub{font-size:13.5px;color:rgba(255,255,255,.45);line-height:1.6;margin-bottom:22px;}
+.hero-search{background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:5px 5px 5px 16px;display:flex;align-items:center;gap:8px;max-width:480px;margin:0 auto 14px;transition:all .18s;}
+.hero-search:focus-within{background:rgba(255,255,255,.11);border-color:rgba(224,36,42,.38);box-shadow:0 0 0 3px rgba(224,36,42,.08);}
+.hero-search input{flex:1;background:none;border:none;outline:none;font-size:13px;color:#fff;font-family:inherit;}
+.hero-search input::placeholder{color:rgba(255,255,255,.28);}
+.hero-search-btn{background:var(--red);color:#fff;border:none;border-radius:var(--rxs);padding:7px 14px;font-size:11.5px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .16s;flex-shrink:0;}
+.hero-search-btn:hover{background:var(--red-d);}
+.hero-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;}
+.htag{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.48);font-size:10.5px;font-weight:500;padding:3px 10px;border-radius:var(--rpill);cursor:pointer;transition:all .15s;}
+.htag:hover{background:rgba(224,36,42,.18);border-color:rgba(224,36,42,.36);color:#fff;}
+
+.hero-wave{background:var(--bg);height:28px;position:relative;overflow:hidden;}
+.hero-wave::before{content:'';position:absolute;bottom:0;left:-8%;right:-8%;height:56px;background:#162038;border-radius:0 0 50% 50%;}
+
+/* ══ CONTENT WRAP ══ */
+.wrap{max-width:860px;margin:0 auto;padding:0 20px;}
+.sec{padding:32px 0;}
+.sec-hd{display:flex;align-items:baseline;gap:8px;margin-bottom:16px;}
+.sec-hd h2{font-family:'Sora';font-size:16.5px;font-weight:700;color:var(--h);letter-spacing:-.2px;}
+.sec-hd p{font-size:11.5px;color:var(--s);}
+.see-all{margin-left:auto;font-size:11.5px;color:var(--red);font-weight:600;cursor:pointer;background:none;border:none;font-family:inherit;}
+.see-all:hover{text-decoration:underline;}
+
+/* CAT GRID */
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.cat-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:15px 13px;cursor:pointer;transition:all .18s;display:flex;align-items:flex-start;gap:10px;position:relative;overflow:hidden;}
+.cat-card::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .18s;background:var(--cch,transparent);}
+.cat-card:hover{border-color:var(--ccb,var(--border-s));transform:translateY(-1px);box-shadow:var(--sh-md);}
+.cat-card:hover::after{opacity:1;}
+.cc-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.cc-nm{font-size:12.5px;font-weight:700;color:var(--h);margin-bottom:2px;}
+.cc-desc{font-size:10.5px;color:var(--s);line-height:1.45;}
+.cc-n{font-size:10px;font-weight:600;color:var(--m);margin-top:4px;}
+.cc-arr{margin-left:auto;color:var(--m);opacity:0;transition:all .16s;font-size:14px;align-self:center;flex-shrink:0;}
+.cat-card:hover .cc-arr{opacity:1;transform:translateX(2px);}
+
+/* FEAT GRID */
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fc{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .18s;}
+.fc:hover{box-shadow:var(--sh-md);transform:translateY(-1px);}
+.fc-top{padding:15px 16px 12px;}
+.fc-cat{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:var(--rpill);margin-bottom:7px;}
+.fc-title{font-size:13px;font-weight:700;color:var(--h);line-height:1.35;margin-bottom:5px;}
+.fc-desc{font-size:11px;color:var(--s);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.fc-bot{padding:8px 16px;background:var(--bg);display:flex;align-items:center;}
+.fc-meta{font-size:10px;color:var(--m);}
+
+/* ART LIST */
+.art-list{display:flex;flex-direction:column;gap:6px;}
+.art-row{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 14px;cursor:pointer;transition:all .16s;display:flex;align-items:flex-start;gap:11px;}
+.art-row:hover{border-color:var(--border-s);box-shadow:var(--sh);transform:translateX(2px);}
+.ar-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ar-cat{font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px;}
+.ar-title{font-size:13px;font-weight:700;color:var(--h);line-height:1.36;margin-bottom:3px;}
+.ar-desc{font-size:11px;color:var(--s);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.ar-meta{display:flex;align-items:center;gap:8px;margin-top:6px;}
+.ar-mt{font-size:10px;color:var(--m);}
+.ar-arr{color:var(--m);font-size:15px;align-self:center;flex-shrink:0;opacity:0;transition:opacity .16s;}
+.art-row:hover .ar-arr{opacity:1;}
+
+/* TRACK BAND */
+.track-band{background:linear-gradient(130deg,#0d1828,#192f4a);border-radius:var(--r);padding:20px 24px;display:flex;align-items:center;gap:16px;position:relative;overflow:hidden;}
+.track-band::before{content:'';position:absolute;right:-10px;top:-10px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(224,36,42,.12),transparent 65%);}
+.tb-h3{font-family:'Sora';font-size:15px;font-weight:700;color:#fff;margin-bottom:3px;}
+.tb-p{font-size:11.5px;color:rgba(255,255,255,.38);}
+.tb-row{display:flex;gap:7px;margin-top:10px;}
+.tb-inp{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.11);border-radius:var(--rxs);padding:7px 11px;color:#fff;font-size:11.5px;font-family:'JetBrains Mono';outline:none;width:170px;transition:all .16s;}
+.tb-inp::placeholder{color:rgba(255,255,255,.22);}
+.tb-inp:focus{border-color:rgba(224,36,42,.4);background:rgba(255,255,255,.12);}
+.tb-emu{font-size:48px;margin-left:auto;flex-shrink:0;opacity:.65;}
+
+/* SEARCH RESULTS */
+#srchSec{display:none;padding:24px 0 0;}
+.srch-hd{display:flex;align-items:center;gap:7px;padding-bottom:11px;border-bottom:1.5px solid var(--border);margin-bottom:11px;}
+.srch-q{font-size:13.5px;font-weight:700;color:var(--h);}
+.srch-c{font-size:11.5px;color:var(--s);}
+.srch-clear{margin-left:auto;background:none;border:none;font-size:11.5px;color:var(--red);font-weight:600;cursor:pointer;font-family:inherit;}
+
+/* ══════════════════════════════════════════
+   RIGHT PANEL — EMBEDDED HELP ASSISTANT
+══════════════════════════════════════════ */
+.right-panel{
+  width:var(--panel);
+  flex-shrink:0;
+  background:var(--surface);
+  border-left:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* Panel Header */
+.rp-head{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:14px 16px;
+  flex-shrink:0;
+}
+.rp-head-top{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+.rp-agent-ava{
+  width:36px;height:36px;border-radius:9px;flex-shrink:0;
+  background:var(--blue-l);border:1.5px solid rgba(27,95,216,.14);
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+}
+.rp-agent-name{font-size:13px;font-weight:700;color:var(--h);}
+.rp-agent-status{display:flex;align-items:center;gap:5px;margin-top:2px;font-size:11px;color:var(--m);}
+.status-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:live 2s infinite;flex-shrink:0;display:none;}
+
+/* Search in panel */
+.rp-search{position:relative;}
+.rp-search input{
+  width:100%;background:var(--bg);border:1.5px solid var(--border);
+  border-radius:var(--rs);padding:8px 11px 8px 30px;
+  font-size:12px;font-family:inherit;color:var(--b);outline:none;transition:all .18s;
+}
+.rp-search input:focus{background:#fff;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-m);}
+.rp-search input::placeholder{color:var(--m);}
+.rp-search-ico{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--m);}
+
+/* Tabs */
+.rp-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.rp-tab{flex:1;padding:8px 6px;font-size:11px;font-weight:600;color:var(--m);background:none;border:none;cursor:pointer;transition:all .15s;font-family:inherit;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.rp-tab:hover{color:var(--b);background:var(--bg);}
+.rp-tab.active{color:var(--blue);border-bottom-color:var(--blue);}
+
+/* Panes */
+.rp-body{flex:1;overflow:hidden;position:relative;}
+.rp-pane{position:absolute;inset:0;overflow-y:auto;padding:14px;display:none;flex-direction:column;gap:10px;}
+.rp-pane.active{display:flex;}
+
+/* ── CHAT PANE ── */
+.chat-messages{display:flex;flex-direction:column;gap:12px;flex:1;}
+
+/* Message */
+.msg{display:flex;gap:7px;align-items:flex-start;}
+.msg.agent{flex-direction:row;}
+.msg.user{flex-direction:row-reverse;}
+.msg-ava{width:26px;height:26px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:2px;background:var(--blue-l);border:1.5px solid rgba(27,95,216,.14);}
+.msg-content{max-width:87%;}
+.msg-bubble{
+  padding:8px 11px;border-radius:9px;font-size:12px;line-height:1.6;
+}
+.agent .msg-bubble{
+  background:var(--s2);color:var(--b);
+  border:1px solid var(--border);
+}
+.user .msg-bubble{
+  background:var(--blue);color:#fff;
+}
+.msg-time{display:none;}
+
+/* KB Article Card in chat */
+.kb-card{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--rs);padding:9px 11px;margin-top:5px;
+  cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:8px;
+}
+.kb-card:hover{border-color:var(--blue);background:var(--blue-l);}
+.kb-card-ico{font-size:16px;flex-shrink:0;}
+.kb-card-body{flex:1;min-width:0;}
+.kb-card-cat{font-size:9.5px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;}
+.kb-card-title{font-size:11.5px;font-weight:700;color:var(--h);line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kb-card-arr{font-size:13px;color:var(--m);flex-shrink:0;transition:transform .15s;}
+.kb-card:hover .kb-card-arr{transform:translateX(2px);color:var(--blue);}
+
+/* Multi KB card group */
+.kb-card-group{margin-top:5px;display:flex;flex-direction:column;gap:5px;}
+.kb-group-lbl{font-size:9.5px;color:var(--m);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+
+/* Quick reply chips */
+.quick-replies{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.qr{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--rxs);padding:5px 11px;
+  font-size:11px;font-weight:600;color:var(--h);
+  cursor:pointer;transition:all .15s;font-family:inherit;
+  display:flex;align-items:center;gap:4px;
+}
+.qr:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-l);}
+
+/* Typing indicator */
+.typing-bubble{display:flex;align-items:center;gap:4px;padding:10px 13px;}
+.ty{width:6px;height:6px;border-radius:50%;background:var(--m);animation:ty 1.4s infinite;}
+.ty:nth-child(2){animation-delay:.18s;}.ty:nth-child(3){animation-delay:.36s;}
+@keyframes ty{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-5px);opacity:1}}
+
+/* Thinking bar */
+.thinking-bar{height:2px;background:linear-gradient(90deg,transparent,var(--blue),var(--teal),transparent);background-size:200%;animation:thinkscroll 1.6s linear infinite;display:none;}
+.thinking-bar.on{display:block;}
+@keyframes thinkscroll{0%{background-position:200%}100%{background-position:-200%}}
+
+/* Chat input area */
+.chat-input-area{
+  padding:10px 14px 12px;border-top:1px solid var(--border);
+  background:var(--s2);flex-shrink:0;
+}
+.chat-input-row{display:flex;gap:7px;align-items:flex-end;}
+.chat-input{
+  flex:1;background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--rs);padding:8px 11px;
+  font-size:12px;font-family:inherit;color:var(--b);
+  outline:none;transition:all .18s;resize:none;
+  line-height:1.5;min-height:36px;max-height:90px;
+}
+.chat-input:focus{background:#fff;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-m);}
+.chat-input::placeholder{color:var(--m);}
+.send-btn{
+  width:34px;height:34px;background:var(--blue);border:none;
+  border-radius:var(--rs);cursor:pointer;color:#fff;font-size:14px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:all .16s;
+}
+.send-btn:hover{background:#1850c0;}
+.chat-hint{font-size:10px;color:var(--m);margin-top:7px;text-align:center;line-height:1.5;}
+.chat-hint a{color:var(--blue);cursor:pointer;text-decoration:none;}
+.chat-hint a:hover{text-decoration:underline;}
+
+/* ── KB PANE ── */
+.kb-section-lbl{font-size:10px;font-weight:700;color:var(--s);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;margin-top:8px;}
+.kb-section-lbl:first-child{margin-top:0;}
+.kb-mini-list{display:flex;flex-direction:column;gap:5px;}
+.kb-mini{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--rxs);padding:8px 10px;
+  cursor:pointer;transition:all .14s;
+  display:flex;align-items:center;gap:8px;
+}
+.kb-mini:hover{border-color:var(--border-s);background:var(--s2);}
+.kb-mini-ico{font-size:14px;flex-shrink:0;}
+.kb-mini-body{flex:1;min-width:0;}
+.kb-mini-title{font-size:11.5px;font-weight:700;color:var(--h);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kb-mini-meta{font-size:9.5px;color:var(--m);margin-top:1px;}
+.kb-mini-arr{font-size:12px;color:var(--m);flex-shrink:0;}
+
+/* ─── ARTICLE MODAL ─── */
+.art-ov{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(13,22,38,.55);backdrop-filter:blur(5px);
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:22px 16px;overflow-y:auto;
+  opacity:0;pointer-events:none;transition:opacity .22s;
+}
+.art-ov.open{opacity:1;pointer-events:all;}
+.art-mod{
+  background:var(--surface);border-radius:var(--r);
+  width:100%;max-width:680px;box-shadow:var(--sh-xl);
+  transform:translateY(16px) scale(.98);
+  transition:transform .28s cubic-bezier(.34,1.18,.64,1);
+  margin:auto;
+}
+.art-ov.open .art-mod{transform:translateY(0) scale(1);}
+.am-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;position:sticky;top:0;background:#fff;z-index:2;border-radius:var(--r) var(--r) 0 0;}
+.am-cat-ico{font-size:19px;}
+.am-cat-nm{font-size:10px;font-weight:700;color:var(--s);text-transform:uppercase;letter-spacing:.5px;}
+.am-breadcrumb{font-size:11px;color:var(--m);margin-left:4px;}
+.close-x{margin-left:auto;background:var(--s2);border:none;width:27px;height:27px;border-radius:7px;font-size:12px;cursor:pointer;color:var(--s);transition:all .13s;}
+.close-x:hover{background:var(--border-s);color:var(--h);}
+.am-body{padding:18px 24px 4px;}
+.am-body h1{font-family:'Sora';font-size:19px;font-weight:800;color:var(--h);margin-bottom:8px;line-height:1.28;letter-spacing:-.3px;}
+.am-meta{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:14px;}
+.am-mi{font-size:10.5px;color:var(--m);}
+.ai-sum{background:linear-gradient(135deg,#eff6ff,#eef2ff);border:1.5px solid rgba(27,95,216,.11);border-radius:var(--rs);padding:12px 14px;margin-bottom:16px;}
+.ai-sum-lbl{font-size:9.5px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:flex;align-items:center;gap:4px;}
+.ai-sum-txt{font-size:12px;color:var(--b);line-height:1.7;}
+.am-body h2{font-family:'Sora';font-size:14.5px;font-weight:700;color:var(--h);margin:18px 0 6px;}
+.am-body p{font-size:12px;color:var(--b);line-height:1.75;margin-bottom:9px;}
+.am-body ul,.am-body ol{padding-left:16px;margin-bottom:10px;}
+.am-body li{font-size:12px;color:var(--b);line-height:1.65;margin-bottom:3px;}
+.code-block{background:#0d1626;border-radius:var(--rxs);padding:11px 14px;font-family:'JetBrains Mono';font-size:11px;color:#7dd3fc;margin:6px 0 12px;overflow-x:auto;line-height:1.6;position:relative;}
+.copy-btn{position:absolute;top:6px;right:6px;background:rgba(255,255,255,.07);border:none;border-radius:4px;padding:2px 7px;font-size:9.5px;color:rgba(255,255,255,.4);cursor:pointer;font-family:inherit;}
+.copy-btn:hover{background:rgba(255,255,255,.13);color:rgba(255,255,255,.7);}
+.note{border-radius:var(--rxs);padding:9px 12px;margin:8px 0 12px;font-size:11.5px;line-height:1.62;display:flex;gap:7px;align-items:flex-start;}
+.n-info{background:var(--blue-l);border:1.5px solid rgba(27,95,216,.11);}
+.n-warn{background:var(--amber-l);border:1.5px solid rgba(180,83,9,.13);}
+.n-tip{background:var(--green-l);border:1.5px solid rgba(4,120,87,.13);}
+.n-ico{font-size:13px;flex-shrink:0;margin-top:1px;}
+.steps{counter-reset:st;display:flex;flex-direction:column;gap:7px;margin:8px 0 14px;}
+.step{display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:var(--rxs);align-items:flex-start;}
+.st-n{counter-increment:st;min-width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Sora';}
+.st-n::before{content:counter(st);}
+.st-body{font-size:11.5px;color:var(--b);line-height:1.62;}
+.st-body strong{color:var(--h);}
+.tbl{overflow-x:auto;margin:8px 0 13px;}
+table{width:100%;border-collapse:collapse;font-size:11.5px;}
+th{background:var(--s2);padding:7px 10px;text-align:left;font-weight:700;color:var(--h);border-bottom:2px solid var(--border);}
+td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--b);vertical-align:top;}
+tr:hover td{background:var(--bg);}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;font-family:'JetBrains Mono';}
+.am-related{padding:0 24px 10px;}
+.rl-lbl{font-size:11.5px;font-weight:700;color:var(--s);margin-bottom:7px;}
+.rl-list{display:flex;flex-direction:column;gap:4px;}
+.rl-item{display:flex;align-items:center;gap:7px;padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--rxs);cursor:pointer;transition:all .13s;font-size:12px;color:var(--b);}
+.rl-item:hover{border-color:var(--red);color:var(--red);background:var(--red-l);}
+.am-fb{padding:11px 24px 15px;border-top:1px solid var(--border);display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.fb-lbl{font-size:11.5px;color:var(--s);}
+.fb-y,.fb-n{background:var(--s2);border:1.5px solid var(--border);border-radius:var(--rxs);padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:all .13s;font-family:inherit;color:var(--s);}
+.fb-y:hover,.fb-n:hover{border-color:var(--border-s);color:var(--b);}
+.fb-tkt{margin-left:auto;font-size:11px;font-weight:700;color:var(--red);background:var(--red-l);border:1.5px solid rgba(224,36,42,.15);padding:4px 10px;border-radius:var(--rxs);cursor:pointer;font-family:inherit;transition:all .13s;}
+.fb-tkt:hover{background:var(--red);color:#fff;}
+
+/* Ticket modal */
+.tkt-ov{position:fixed;inset:0;z-index:200;background:rgba(13,22,38,.55);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .22s;}
+.tkt-ov.open{opacity:1;pointer-events:all;}
+.tkt-mod{background:var(--surface);border-radius:var(--r);width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:var(--sh-xl);transform:translateY(16px);transition:transform .28s cubic-bezier(.34,1.18,.64,1);}
+.tkt-ov.open .tkt-mod{transform:translateY(0);}
+.tm-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.tm-head h2{font-family:'Sora';font-size:14.5px;font-weight:700;color:var(--h);}
+.tm-body{padding:16px 18px;display:flex;flex-direction:column;gap:11px;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fl{font-size:11px;font-weight:700;color:var(--s);}
+.fl span{color:var(--red);}
+.fi,.fs,.fta{background:var(--s2);border:1.5px solid var(--border);border-radius:var(--rxs);padding:8px 10px;font-size:12px;font-family:inherit;color:var(--b);outline:none;transition:all .16s;}
+.fi:focus,.fs:focus,.fta:focus{background:#fff;border-color:var(--red);box-shadow:0 0 0 3px var(--red-m);}
+.fta{resize:vertical;min-height:75px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.ai-hints{background:var(--blue-l);border:1.5px solid rgba(27,95,216,.11);border-radius:var(--rxs);padding:9px 11px;}
+.aih-lbl{font-size:9.5px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.aih-item{font-size:11px;color:var(--s);padding:3px 0;cursor:pointer;display:flex;gap:5px;line-height:1.4;}
+.aih-item:hover{color:var(--blue);}
+.aih-item::before{content:'→';color:var(--blue);flex-shrink:0;}
+.tm-foot{padding:11px 18px 14px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:6px;}
+
+/* Tracker modal */
+.trk-ov{position:fixed;inset:0;z-index:200;background:rgba(13,22,38,.55);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .22s;}
+.trk-ov.open{opacity:1;pointer-events:all;}
+.trk-mod{background:var(--surface);border-radius:var(--r);width:100%;max-width:440px;box-shadow:var(--sh-xl);transform:translateY(16px);transition:transform .28s cubic-bezier(.34,1.18,.64,1);}
+.trk-ov.open .trk-mod{transform:translateY(0);}
+.trk-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.trk-head h2{font-family:'Sora';font-size:14.5px;font-weight:700;color:var(--h);}
+.trk-body{padding:16px 18px;}
+.progress-track{display:flex;align-items:center;margin-bottom:18px;}
+.pt-step{display:flex;flex-direction:column;align-items:center;flex:1;}
+.pt-circle{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:var(--m);background:var(--s2);transition:all .26s;font-family:'Sora';}
+.pt-step.done .pt-circle{background:var(--green);border-color:var(--green);color:#fff;}
+.pt-step.active .pt-circle{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 0 0 3px var(--blue-m);}
+.pt-lbl{font-size:9px;font-weight:600;color:var(--m);margin-top:3px;text-align:center;}
+.pt-step.done .pt-lbl,.pt-step.active .pt-lbl{color:var(--s);}
+.pt-line{flex:1;height:2px;background:var(--border);border-radius:2px;margin:0 3px;margin-bottom:12px;}
+.pt-line.done{background:var(--green);}
+.trk-card{background:var(--s2);border-radius:var(--rxs);padding:11px 13px;}
+.td-row{display:flex;justify-content:space-between;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--border);}
+.td-row:last-child{border-bottom:none;}
+.td-k{font-size:11px;color:var(--m);}
+.td-v{font-size:11px;font-weight:600;color:var(--b);text-align:right;max-width:200px;font-family:'JetBrains Mono';}
+.td-v.nm{font-family:inherit;}
+.td-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;}
+.b-open{background:rgba(27,95,216,.1);color:var(--blue);}
+.b-pend{background:var(--amber-l);color:var(--amber);}
+.b-done{background:var(--green-l);color:var(--green);}
+.b-esc{background:var(--red-l);color:var(--red);}
+.trk-msg{background:var(--blue-l);border:1.5px solid rgba(27,95,216,.11);border-radius:var(--rxs);padding:9px 11px;margin-top:11px;font-size:11.5px;color:var(--b);line-height:1.62;display:flex;gap:7px;}
+
+/* Toast */
+.toast{position:fixed;bottom:18px;left:18px;z-index:500;background:var(--h);border-radius:var(--rs);padding:10px 13px;display:flex;align-items:center;gap:8px;box-shadow:var(--sh-xl);min-width:240px;transform:translateY(12px);opacity:0;transition:all .26s;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;pointer-events:all;}
+.toast-ico{font-size:15px;flex-shrink:0;}
+.toast-t{font-size:11.5px;font-weight:700;color:#fff;}
+.toast-d{font-size:10.5px;color:rgba(255,255,255,.44);margin-top:1px;}
+.toast-x{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.32);cursor:pointer;font-size:12px;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fadeUp .4s ease forwards;}
+.fu1{animation-delay:.04s;opacity:0;}.fu2{animation-delay:.08s;opacity:0;}
+.fu3{animation-delay:.12s;opacity:0;}.fu4{animation-delay:.16s;opacity:0;}.fu5{animation-delay:.2s;opacity:0;}
+footer{background:var(--h);color:rgba(255,255,255,.28);text-align:center;padding:16px;font-size:11px;}
+footer a{color:rgba(255,255,255,.42);margin:0 6px;}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <a class="nav-brand" href="#"><div class="brand-ico">Z</div><span class="brand-txt">Z<b>.com</b> Help</span></a>
+  <div class="nav-srch">
+    <span class="si">🔍</span>
+    <input type="text" placeholder="ค้นหาบทความ..." onkeydown="if(event.key==='Enter')doSearch(this.value)">
+  </div>
+  <div class="nav-right">
+    <button class="btn btn-g" onclick="openTracker()">🎫 ติดตาม Ticket</button>
+    <button class="btn btn-o" onclick="openTicket()">+ แจ้งปัญหา</button>
+    <button class="btn btn-r">เข้าสู่ระบบ</button>
+  </div>
+</nav>
+
+<!-- ── BODY ── -->
+<div class="body-split">
+
+  <!-- ── LEFT: MAIN CONTENT ── -->
+  <div class="main-area">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-glow"></div><div class="hero-dots"></div>
+      <div class="hero-inner">
+        <div class="hero-pill fu fu1"><span class="live-dot"></span>ยินดีต้อนรับสู่ศูนย์ช่วยเหลือ Z.com</div>
+        <h1 class="fu fu2">มีคำถาม?<br>เราพร้อมช่วยคุณ<em> ทุกเรื่อง</em></h1>
+        <p class="hero-sub fu fu3">บทความกว่า 248 บทความ ครอบคลุมทุกบริการ Z.com</p>
+        <div class="hero-search fu fu4">
+          <span style="font-size:16px;color:rgba(255,255,255,.3)">🔍</span>
+          <input id="heroInp" type="text" placeholder="ค้นหา เช่น ตั้งค่า DNS, SSL หมดอายุ, Email ส่งไม่ได้..." onkeydown="if(event.key==='Enter')triggerSearch()">
+          <button class="hero-search-btn" onclick="triggerSearch()">ค้นหา</button>
+        </div>
+        <div class="hero-tags fu fu5">
+          <span class="htag" onclick="doSearch('DNS')">DNS Records</span>
+          <span class="htag" onclick="doSearch('SSL')">SSL / HTTPS</span>
+          <span class="htag" onclick="doSearch('email')">Email ส่งไม่ได้</span>
+          <span class="htag" onclick="doSearch('wordpress')">WordPress</span>
+          <span class="htag" onclick="doSearch('backup')">Backup</span>
+          <span class="htag" onclick="doSearch('domain transfer')">ย้าย Domain</span>
+          <span class="htag" onclick="doSearch('billing')">ชำระเงิน</span>
+        </div>
+      </div>
+    </section>
+    <div class="hero-wave"></div>
+
+    <div class="wrap">
+      <!-- SEARCH RESULTS -->
+      <section id="srchSec">
+        <div id="srchWrap"></div>
+      </section>
+
+      <div id="homeSec">
+        <!-- CATEGORIES -->
+        <section class="sec">
+          <div class="sec-hd"><h2>หมวดหมู่บริการ</h2><p>เลือกหัวข้อที่ต้องการ</p></div>
+          <div class="cat-grid">
+            <div class="cat-card" style="--ccb:#0284c7;--cch:rgba(2,132,199,.03)" onclick="showCat('domain')">
+              <div class="cc-ico" style="background:var(--teal-l)">🌐</div>
+              <div><div class="cc-nm">Domain</div><div class="cc-desc">DNS, Transfer, ต่ออายุ, Whois</div><div class="cc-n">52 บทความ</div></div>
+              <span class="cc-arr">›</span>
+            </div>
+            <div class="cat-card" style="--ccb:#1b5fd8;--cch:rgba(27,95,216,.03)" onclick="showCat('hosting')">
+              <div class="cc-ico" style="background:var(--blue-l)">🖥️</div>
+              <div><div class="cc-nm">Web Hosting</div><div class="cc-desc">cPanel, FTP, Backup, WordPress</div><div class="cc-n">74 บทความ</div></div>
+              <span class="cc-arr">›</span>
+            </div>
+            <div class="cat-card" style="--ccb:#b45309;--cch:rgba(180,83,9,.03)" onclick="showCat('ssl')">
+              <div class="cc-ico" style="background:var(--amber-l)">🔒</div>
+              <div><div class="cc-nm">SSL Certificate</div><div class="cc-desc">Let's Encrypt, HTTPS, Mixed Content</div><div class="cc-n">28 บทความ</div></div>
+              <span class="cc-arr">›</span>
+            </div>
+            <div class="cat-card" style="--ccb:#6d28d9;--cch:rgba(109,40,217,.03)" onclick="showCat('email')">
+              <div class="cc-ico" style="background:var(--purple-l)">✉️</div>
+              <div><div class="cc-nm">Email Hosting</div><div class="cc-desc">SMTP, IMAP, SPF, DKIM, Blacklist</div><div class="cc-n">41 บทความ</div></div>
+              <span class="cc-arr">›</span>
+            </div>
+            <div class="cat-card" style="--ccb:#047857;--cch:rgba(4,120,87,.03)" onclick="showCat('billing')">
+              <div class="cc-ico" style="background:var(--green-l)">💳</div>
+              <div><div class="cc-nm">Billing & Payment</div><div class="cc-desc">ชำระเงิน, ใบกำกับ, Auto-Renew</div><div class="cc-n">33 บทความ</div></div>
+              <span class="cc-arr">›</span>
+            </div>
+            <div class="cat-card" style="--ccb:#c2410c;--cch:rgba(194,65,12,.03)" onclick="showCat('cpanel')">
+              <div class="cc-ico" style="background:var(--orange-l)">⚙️</div>
+              <div><div class="cc-nm">cPanel & Tools</div><div class="cc-desc">File Manager, PHP, Cron Jobs</div><div class="cc-n">20 บทความ</div></div>
+              <span class="cc-arr">›</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- FEATURED -->
+        <section class="sec" style="padding-top:0">
+          <div class="sec-hd"><h2>บทความแนะนำ</h2><button class="see-all" onclick="showAll()">ดูทั้งหมด →</button></div>
+          <div class="feat-grid">
+            <div class="fc" onclick="openArt('dns')">
+              <div class="fc-top">
+                <div class="fc-cat" style="background:var(--teal-l);color:var(--teal)">🌐 Domain</div>
+                <div class="fc-title">การตั้งค่า DNS Records ฉบับสมบูรณ์</div>
+                <div class="fc-desc">A Record, CNAME, MX, TXT พร้อมตัวอย่างจริงและขั้นตอนใน Z.com</div>
+              </div>
+              <div class="fc-bot"><span class="fc-meta">👁 10.2K · ⏱ 7 นาที</span></div>
+            </div>
+            <div class="fc" onclick="openArt('ssl')">
+              <div class="fc-top">
+                <div class="fc-cat" style="background:var(--amber-l);color:var(--amber)">🔒 SSL</div>
+                <div class="fc-title">ติดตั้ง SSL / HTTPS ทีละขั้นตอน</div>
+                <div class="fc-desc">Let's Encrypt ฟรี, Force Redirect และแก้ Mixed Content</div>
+              </div>
+              <div class="fc-bot"><span class="fc-meta">👁 8.7K · ⏱ 5 นาที</span></div>
+            </div>
+            <div class="fc" onclick="openArt('email')">
+              <div class="fc-top">
+                <div class="fc-cat" style="background:var(--purple-l);color:var(--purple)">✉️ Email</div>
+                <div class="fc-title">แก้ปัญหา Email ส่ง/รับไม่ได้ทุก Error</div>
+                <div class="fc-desc">Checklist MX, SPF, DKIM, Blacklist และตาราง Error Code ครบ</div>
+              </div>
+              <div class="fc-bot"><span class="fc-meta">👁 7.1K · ⏱ 8 นาที</span></div>
+            </div>
+            <div class="fc" onclick="openArt('wordpress')">
+              <div class="fc-top">
+                <div class="fc-cat" style="background:var(--blue-l);color:var(--blue)">🖥️ Hosting</div>
+                <div class="fc-title">ติดตั้ง WordPress ผ่าน Softaculous</div>
+                <div class="fc-desc">ติดตั้งใน 2 นาที พร้อม Plugin ที่ควรติดตั้งทันที</div>
+              </div>
+              <div class="fc-bot"><span class="fc-meta">👁 8.2K · ⏱ 4 นาที</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- POPULAR -->
+        <section class="sec" style="padding-top:0">
+          <div class="sec-hd"><h2>บทความที่ถามบ่อย</h2></div>
+          <div class="art-list">
+            <div class="art-row" onclick="openArt('domain-transfer')">
+              <div class="ar-ico" style="background:var(--teal-l)">🚚</div>
+              <div style="flex:1;min-width:0">
+                <div class="ar-cat" style="color:var(--teal)">Domain</div>
+                <div class="ar-title">ย้าย Domain Transfer มายัง Z.com</div>
+                <div class="ar-desc">ขั้นตอนขอ Auth Code, Unlock Domain และ Transfer code</div>
+                <div class="ar-meta"><span class="ar-mt">👁 9.4K</span><span class="ar-mt">⏱ 5 นาที</span></div>
+              </div><span class="ar-arr">›</span>
+            </div>
+            <div class="art-row" onclick="openArt('billing')">
+              <div class="ar-ico" style="background:var(--green-l)">💳</div>
+              <div style="flex:1;min-width:0">
+                <div class="ar-cat" style="color:var(--green)">Billing</div>
+                <div class="ar-title">ชำระเงิน ต่ออายุ ขอใบกำกับภาษีเต็มรูปแบบ</div>
+                <div class="ar-desc">PromptPay, Auto-Renew และ e-Tax Invoice สำหรับนิติบุคคล</div>
+                <div class="ar-meta"><span class="ar-mt">👁 6.4K</span><span class="ar-mt">⏱ 4 นาที</span></div>
+              </div><span class="ar-arr">›</span>
+            </div>
+            <div class="art-row" onclick="openArt('backup')">
+              <div class="ar-ico" style="background:var(--orange-l)">💾</div>
+              <div style="flex:1;min-width:0">
+                <div class="ar-cat" style="color:var(--orange)">cPanel</div>
+                <div class="ar-title">Backup และ Restore ข้อมูลผ่าน cPanel</div>
+                <div class="ar-desc">Full Backup, Backup Database และวิธี Restore เมื่อเกิดปัญหา</div>
+                <div class="ar-meta"><span class="ar-mt">👁 5.9K</span><span class="ar-mt">⏱ 6 นาที</span></div>
+              </div><span class="ar-arr">›</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- TRACK -->
+        <section class="sec" style="padding-top:0;padding-bottom:40px">
+          <div class="track-band">
+            <div>
+              <div class="tb-h3">ติดตามสถานะ Ticket</div>
+              <p class="tb-p">ดูความคืบหน้าแบบ Realtime · ลอง: TK-2481, TK-2479</p>
+              <div class="tb-row">
+                <input class="tb-inp" id="trackId" type="text" placeholder="TK-2481" onkeydown="if(event.key==='Enter')doTrack()">
+                <button class="btn btn-r" onclick="doTrack()">ติดตาม →</button>
+              </div>
+            </div>
+            <div class="tb-emu">🎫</div>
+          </div>
+        </section>
+
+        <footer>© 2025 Z.com — GMO-Z.com NetDesign Co., Ltd.&nbsp;|&nbsp;<a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">ติดต่อเรา</a></footer>
+      </div><!-- #homeSec -->
+    </div><!-- .wrap -->
+  </div><!-- .main-area -->
+
+  <!-- ══════════════════════════════════
+    RIGHT PANEL — EMBEDDED HELP PANEL
+  ══════════════════════════════════ -->
+  <aside class="right-panel">
+
+    <!-- Header -->
+    <div class="rp-head">
+      <div class="rp-head-top">
+        <div class="rp-agent-ava">🔍</div>
+        <div>
+          <div class="rp-agent-name">ค้นหาคำตอบ</div>
+          <div class="rp-agent-status">248 บทความ · ครอบคลุมทุกบริการ Z.com</div>
+        </div>
+      </div>
+      <div class="rp-search">
+        <span class="rp-search-ico">🔍</span>
+        <input id="panelSearch" type="text" placeholder="พิมพ์ปัญหาที่พบ เช่น DNS ไม่ทำงาน, SSL หมดอายุ..." onkeydown="if(event.key==='Enter')panelSendMsg(this.value,true)">
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="rp-tabs">
+      <button class="rp-tab active" id="tab-chat" onclick="switchTab('chat')">💡 ถามตอบ</button>
+      <button class="rp-tab" id="tab-kb" onclick="switchTab('kb')">📚 บทความทั้งหมด</button>
+    </div>
+
+    <!-- Thinking bar -->
+    <div class="thinking-bar" id="thinkBar"></div>
+
+    <!-- Pane: Chat -->
+    <div class="rp-body">
+      <div class="rp-pane active" id="pane-chat">
+        <div class="chat-messages" id="chatMessages">
+          <!-- Welcome -->
+          <div class="msg agent">
+            <div class="msg-ava">🔍</div>
+            <div class="msg-content">
+              <div class="msg-bubble">
+                ยินดีต้อนรับสู่ Help Center ครับ 👋<br><br>
+                อธิบายปัญหาที่พบ หรือเลือกหัวข้อด้านล่าง เพื่อดูบทความที่เกี่ยวข้อง
+              </div>
+              <div class="msg-time"></div>
+              <div class="quick-replies">
+                <button class="qr" onclick="panelSendMsg('ตั้งค่า DNS ยังไง')">DNS Records</button>
+                <button class="qr" onclick="panelSendMsg('SSL หมดอายุ ต้องทำอะไร')">SSL หมดอายุ</button>
+                <button class="qr" onclick="panelSendMsg('Email ส่งไม่ออก ต้องแก้ยังไง')">Email ส่งไม่ออก</button>
+                <button class="qr" onclick="panelSendMsg('วิธีชำระเงินและต่ออายุ')">ชำระเงิน / ต่ออายุ</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pane: KB Browser -->
+      <div class="rp-pane" id="pane-kb">
+        <div class="kb-section-lbl">🌐 Domain</div>
+        <div class="kb-mini-list">
+          <div class="kb-mini" onclick="openArt('dns')"><span class="kb-mini-ico">🌐</span><div class="kb-mini-body"><div class="kb-mini-title">การตั้งค่า DNS Records</div><div class="kb-mini-meta">👁 10.2K · ⏱ 7 นาที</div></div><span class="kb-mini-arr">›</span></div>
+          <div class="kb-mini" onclick="openArt('domain-transfer')"><span class="kb-mini-ico">🚚</span><div class="kb-mini-body"><div class="kb-mini-title">ย้าย Domain Transfer</div><div class="kb-mini-meta">👁 9.4K · ⏱ 5 นาที</div></div><span class="kb-mini-arr">›</span></div>
+        </div>
+        <div class="kb-section-lbl">🔒 SSL</div>
+        <div class="kb-mini-list">
+          <div class="kb-mini" onclick="openArt('ssl')"><span class="kb-mini-ico">🔒</span><div class="kb-mini-body"><div class="kb-mini-title">ติดตั้ง SSL / HTTPS</div><div class="kb-mini-meta">👁 8.7K · ⏱ 5 นาที</div></div><span class="kb-mini-arr">›</span></div>
+        </div>
+        <div class="kb-section-lbl">✉️ Email</div>
+        <div class="kb-mini-list">
+          <div class="kb-mini" onclick="openArt('email')"><span class="kb-mini-ico">✉️</span><div class="kb-mini-body"><div class="kb-mini-title">แก้ปัญหา Email ส่ง/รับไม่ได้</div><div class="kb-mini-meta">👁 7.1K · ⏱ 8 นาที</div></div><span class="kb-mini-arr">›</span></div>
+        </div>
+        <div class="kb-section-lbl">🖥️ Web Hosting</div>
+        <div class="kb-mini-list">
+          <div class="kb-mini" onclick="openArt('wordpress')"><span class="kb-mini-ico">🔵</span><div class="kb-mini-body"><div class="kb-mini-title">ติดตั้ง WordPress</div><div class="kb-mini-meta">👁 8.2K · ⏱ 4 นาที</div></div><span class="kb-mini-arr">›</span></div>
+          <div class="kb-mini" onclick="openArt('backup')"><span class="kb-mini-ico">💾</span><div class="kb-mini-body"><div class="kb-mini-title">Backup & Restore</div><div class="kb-mini-meta">👁 5.9K · ⏱ 6 นาที</div></div><span class="kb-mini-arr">›</span></div>
+        </div>
+        <div class="kb-section-lbl">💳 Billing</div>
+        <div class="kb-mini-list">
+          <div class="kb-mini" onclick="openArt('billing')"><span class="kb-mini-ico">💳</span><div class="kb-mini-body"><div class="kb-mini-title">ชำระเงิน / ใบกำกับภาษี</div><div class="kb-mini-meta">👁 6.4K · ⏱ 4 นาที</div></div><span class="kb-mini-arr">›</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Input -->
+    <div class="chat-input-area" id="chatInputArea">
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chatInput" rows="1" placeholder="อธิบายปัญหาที่พบ..."
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFromInput();}"
+          oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,90)+'px'"></textarea>
+        <button class="send-btn" onclick="sendFromInput()">➤</button>
+      </div>
+      <div class="chat-hint">ยังไม่ได้คำตอบ? <a onclick="openTicket()">ส่งเรื่องให้ทีมงานดูแล</a></div>
+    </div>
+  </aside>
+
+</div><!-- .body-split -->
+</div><!-- .layout -->
+
+<!-- ARTICLE MODAL -->
+<div class="art-ov" id="artOv" onclick="if(event.target===this)closeArt()">
+  <div class="art-mod" id="artMod"></div>
+</div>
+
+<!-- TICKET MODAL -->
+<div class="tkt-ov" id="tktOv" onclick="if(event.target===this)closeTicket()">
+  <div class="tkt-mod">
+    <div class="tm-head"><h2>🎫 แจ้งปัญหา</h2><button class="close-x" onclick="closeTicket()">✕</button></div>
+    <div class="tm-body">
+      <div class="ai-hints">
+        <div class="aih-lbl">ปัญหาที่พบบ่อย</div>
+        <div class="aih-item" onclick="fillTkt('SSL Certificate หมดอายุ Chrome แสดง Not Secure','SSL Certificate','High')">SSL หมดอายุ — Chrome แสดง Warning</div>
+        <div class="aih-item" onclick="fillTkt('DNS ไม่ propagate หลังเปลี่ยน A Record','Domain','Medium')">DNS ไม่ propagate</div>
+        <div class="aih-item" onclick="fillTkt('Email ส่งไม่ได้ Error 550','Email Hosting','Medium')">Email ส่งไม่ได้ — Error 550</div>
+        <div class="aih-item" onclick="fillTkt('Website เข้าไม่ได้ Error 500','Web Hosting','Critical')">Website ล่ม — Error 500</div>
+      </div>
+      <div class="fg"><label class="fl">ชื่อ <span>*</span></label><input class="fi" id="fNm" type="text" placeholder="สมชาย ใจดี"></div>
+      <div class="fg"><label class="fl">อีเมล <span>*</span></label><input class="fi" id="fEm" type="email" placeholder="your@email.com"></div>
+      <div class="frow">
+        <div class="fg"><label class="fl">หมวดหมู่</label><select class="fs" id="fCat"><option value="">-- เลือก --</option><option>Domain</option><option>Web Hosting</option><option>SSL Certificate</option><option>Email Hosting</option><option>Billing & Payment</option><option>อื่นๆ</option></select></div>
+        <div class="fg"><label class="fl">ความเร่งด่วน</label><select class="fs" id="fPri"><option>Low</option><option selected>Medium</option><option>High</option><option>Critical</option></select></div>
+      </div>
+      <div class="fg"><label class="fl">หัวข้อปัญหา <span>*</span></label><input class="fi" id="fTtl" type="text" placeholder="อธิบายปัญหาสั้นๆ"></div>
+      <div class="fg"><label class="fl">รายละเอียด</label><textarea class="fta" id="fDesc" placeholder="เกิดขึ้นเมื่อไหร่? Error message? Domain/Service ชื่ออะไร?"></textarea></div>
+    </div>
+    <div class="tm-foot"><button class="btn btn-g" onclick="closeTicket()">ยกเลิก</button><button class="btn btn-r" onclick="submitTkt()">ส่ง Ticket →</button></div>
+  </div>
+</div>
+
+<!-- TRACKER MODAL -->
+<div class="trk-ov" id="trkOv" onclick="if(event.target===this)closeTracker()">
+  <div class="trk-mod">
+    <div class="trk-head"><h2>🔍 ติดตามสถานะ Ticket</h2><button class="close-x" onclick="closeTracker()">✕</button></div>
+    <div class="trk-body" id="trkBody">
+      <div style="text-align:center;padding:10px 0">
+        <div style="font-size:34px;margin-bottom:7px">🎫</div>
+        <div style="font-size:12px;color:var(--s);margin-bottom:11px">ลอง: <strong style="font-family:'JetBrains Mono'">TK-2481</strong> · <strong style="font-family:'JetBrains Mono'">TK-2479</strong></div>
+        <div style="display:flex;gap:6px;justify-content:center">
+          <input class="fi" id="trkId2" type="text" placeholder="TK-2481" style="width:140px;text-align:center;font-family:'JetBrains Mono'">
+          <button class="btn btn-r" onclick="doTrkModal()">ค้นหา</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span class="toast-ico" id="tIco"></span>
+  <div><div class="toast-t" id="tT"></div><div class="toast-d" id="tD"></div></div>
+  <button class="toast-x" onclick="this.closest('.toast').classList.remove('show')">✕</button>
+</div>
+
+<script>
+const API = "https://api.anthropic.com/v1/messages";
+
+// ─────────────────────────────────
+// KB DATA
+// ─────────────────────────────────
+const ARTS = {
+dns:{icon:'🌐',cat:'Domain',cs:'color:var(--teal)',views:'10.2K',time:'7',date:'14 ม.ค. 2568',rate:'4.8',
+title:'การตั้งค่า DNS Records สำหรับ Domain ฉบับสมบูรณ์',
+sum:'DNS Records คือชุดข้อมูลที่ระบุว่า Domain ของคุณชี้ไปที่ Server ไหน หากตั้งค่าผิดพลาดแม้แต่ Record เดียว เว็บไซต์หรืออีเมลจะหยุดทำงานทันที ครอบคลุม A, CNAME, MX, TXT พร้อมตัวอย่างจริง',
+body:`<h2>🔍 DNS คืออะไร?</h2>
+<p>DNS (Domain Name System) แปลงชื่อโดเมน <strong>example.com</strong> ให้เป็น IP Address เพื่อให้ Browser รู้ว่าต้องเชื่อมต่อไปที่ Server ไหน</p>
+<div class="note n-info"><span class="n-ico">💡</span><div>หลังเปลี่ยน DNS Records จะต้อง <strong>propagate</strong> ทั่วโลก ใช้เวลา <strong>1–48 ชั่วโมง</strong> ขึ้นอยู่กับค่า TTL</div></div>
+<h2>📋 ประเภทของ DNS Records</h2>
+<div class="tbl"><table>
+<tr><th>Record</th><th>หน้าที่</th><th>ตัวอย่าง</th></tr>
+<tr><td><span class="tag" style="background:var(--teal-l);color:var(--teal)">A</span></td><td>ชี้ Domain → IPv4</td><td>example.com → 203.0.113.1</td></tr>
+<tr><td><span class="tag" style="background:var(--blue-l);color:var(--blue)">CNAME</span></td><td>สร้าง Alias ของ Domain</td><td>www → example.com</td></tr>
+<tr><td><span class="tag" style="background:var(--amber-l);color:var(--amber)">MX</span></td><td>กำหนด Mail Server</td><td>Priority 10 mail.z.com</td></tr>
+<tr><td><span class="tag" style="background:var(--green-l);color:var(--green)">TXT</span></td><td>SPF, DKIM, Verification</td><td>"v=spf1 include:z.com ~all"</td></tr>
+</table></div>
+<h2>⚙️ A Record</h2>
+<div class="code-block"><button class="copy-btn" onclick="toast('📋','คัดลอกแล้ว!')">Copy</button>Type    Name           Value          TTL
+A       example.com    203.0.113.1    3600
+A       www            203.0.113.1    3600</div>
+<h2>🔗 CNAME Record</h2>
+<div class="code-block">CNAME   blog     myblog.wordpress.com
+CNAME   shop     mystore.shopify.com</div>
+<div class="note n-warn"><span class="n-ico">⚠️</span><div>ไม่สามารถใช้ CNAME กับ Root Domain ได้ ต้องใช้ A Record เสมอ</div></div>
+<h2>📧 MX Record</h2>
+<div class="code-block"><button class="copy-btn" onclick="toast('📋','คัดลอกแล้ว!')">Copy</button>MX   example.com   10   mail1.z.com
+MX   example.com   20   mail2.z.com</div>
+<h2>🛡️ TXT Record (SPF)</h2>
+<div class="code-block"><button class="copy-btn" onclick="toast('📋','คัดลอกแล้ว!')">Copy</button>TXT  example.com  "v=spf1 include:z.com ~all"</div>
+<h2>🚀 ขั้นตอนตั้งค่าใน Z.com</h2>
+<div class="steps">
+<div class="step"><div class="st-n"></div><div class="st-body">เข้า <strong>Z.com Control Panel</strong> → เลือก Domain</div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">คลิก <strong>DNS Management</strong> หรือ <strong>Zone Editor</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">กด <strong>Add Record</strong> → เลือก Type → กรอก Name, Value, TTL → Save</div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">รอ <strong>1–48 ชั่วโมง</strong> → ตรวจสอบที่ <strong>dnschecker.org</strong></div></div>
+</div>`,
+related:['ตั้งค่า SPF และ DKIM สำหรับ Email','ย้าย Domain Transfer มายัง Z.com','ตรวจสอบ DNS Propagation']},
+
+ssl:{icon:'🔒',cat:'SSL Certificate',cs:'color:var(--amber)',views:'8.7K',time:'5',date:'22 ม.ค. 2568',rate:'4.9',
+title:'ติดตั้ง SSL / HTTPS บนเว็บไซต์ ทีละขั้นตอน',
+sum:'SSL Certificate เข้ารหัสการเชื่อมต่อ Browser กับ Server Chrome จะแสดง "Not Secure" หากไม่มี SSL ครอบคลุม Let\'s Encrypt ฟรี, Mixed Content และ Force Redirect HTTP→HTTPS',
+body:`<h2>🔒 ทำไมต้องมี SSL?</h2>
+<p>SSL ทำ 3 อย่าง: <strong>เข้ารหัสข้อมูล</strong>, <strong>ยืนยันตัวตน</strong> ของเว็บ, และ <strong>ช่วย SEO</strong> — Google ให้คะแนน HTTPS มากกว่า HTTP</p>
+<div class="note n-warn"><span class="n-ico">⚠️</span><div>Chrome แสดง <strong>"Not Secure"</strong> สำหรับทุก HTTP Page ส่งผลเสียต่อ Conversion Rate</div></div>
+<h2>📦 ประเภท SSL</h2>
+<div class="tbl"><table>
+<tr><th>ประเภท</th><th>เหมาะสำหรับ</th><th>ราคา</th></tr>
+<tr><td><strong>Let's Encrypt</strong></td><td>เว็บทั่วไป</td><td>ฟรี</td></tr>
+<tr><td><strong>DV SSL</strong></td><td>SME, E-Commerce</td><td>~500–2K/ปี</td></tr>
+<tr><td><strong>Wildcard SSL</strong></td><td>ทุก Subdomain</td><td>~5K–15K/ปี</td></tr>
+</table></div>
+<h2>🚀 ติดตั้ง Let's Encrypt ผ่าน cPanel</h2>
+<div class="steps">
+<div class="step"><div class="st-n"></div><div class="st-body">cPanel → Security → <strong>Let's Encrypt™ SSL</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">เลือก Domain (รวม www.) → กด <strong>Issue</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">รอ ~1 นาที → Certificate ติดตั้งอัตโนมัติ</div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">ทดสอบ: พิมพ์ <strong>https://example.com</strong> → เห็นไอคอน 🔒</div></div>
+</div>
+<h2>🔀 Force Redirect HTTP → HTTPS</h2>
+<div class="code-block"><button class="copy-btn" onclick="toast('📋','คัดลอกแล้ว!')">Copy</button>RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]</div>
+<h2>🖼️ แก้ Mixed Content</h2>
+<div class="steps">
+<div class="step"><div class="st-n"></div><div class="st-body">DevTools (F12) → Console → ดู Warning ว่าไฟล์ไหนยังเป็น HTTP</div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">เปลี่ยน URL จาก <code>http://</code> เป็น <code>https://</code></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">WordPress: ติดตั้ง Plugin <strong>Really Simple SSL</strong></div></div>
+</div>`,
+related:['แก้ Mixed Content บน HTTPS','ติดตั้ง Wildcard SSL','ตรวจสอบ SSL ด้วย SSL Labs']},
+
+email:{icon:'✉️',cat:'Email Hosting',cs:'color:var(--purple)',views:'7.1K',time:'8',date:'5 ก.พ. 2568',rate:'4.7',
+title:'แก้ปัญหา Email ส่ง/รับไม่ได้ — วินิจฉัยทุก Error',
+sum:'ปัญหา Email ส่วนใหญ่เกิดจาก MX Record ผิด, SPF/DKIM ไม่ครบ หรือ IP ติด Blacklist มี Checklist วินิจฉัยตามลำดับ แก้ได้ 90% ของปัญหา พร้อมตาราง Error Code ครบถ้วน',
+body:`<h2>🩺 Checklist วินิจฉัย</h2>
+<div class="tbl"><table>
+<tr><th>อาการ</th><th>สาเหตุ</th><th>วิธีแก้</th></tr>
+<tr><td>รับไม่ได้เลย</td><td>MX Record ผิด</td><td>ตรวจ MX ที่ MXToolbox</td></tr>
+<tr><td>ส่งไป Spam</td><td>ไม่มี SPF/DKIM</td><td>เพิ่ม SPF และ DKIM</td></tr>
+<tr><td>ส่งไม่ออกเลย</td><td>IP ติด Blacklist</td><td>ตรวจและ Delist</td></tr>
+<tr><td>Error 550/553</td><td>SPF ไม่ตรง</td><td>แก้ SPF Record</td></tr>
+</table></div>
+<h2>1️⃣ ตรวจสอบ MX Record</h2>
+<div class="code-block"><button class="copy-btn" onclick="toast('📋','คัดลอกแล้ว!')">Copy</button>dig MX yourdomain.com +short
+nslookup -type=MX yourdomain.com</div>
+<div class="note n-info"><span class="n-ico">💡</span><div>ตรวจที่ <strong>mxtoolbox.com/mx</strong> ใส่ Domain กด MX Lookup</div></div>
+<h2>2️⃣ ตั้งค่า SPF</h2>
+<div class="code-block"><button class="copy-btn" onclick="toast('📋','คัดลอกแล้ว!')">Copy</button>; Z.com Email อย่างเดียว
+TXT  @  "v=spf1 include:z.com ~all"
+
+; Z.com + Google Workspace
+TXT  @  "v=spf1 include:z.com include:_spf.google.com ~all"</div>
+<div class="note n-warn"><span class="n-ico">⚠️</span><div>ห้ามมี SPF ซ้ำกัน ในโดเมนเดียว — รวมทุก include ไว้ใน Record เดียว</div></div>
+<h2>3️⃣ ตรวจ Blacklist</h2>
+<div class="steps">
+<div class="step"><div class="st-n"></div><div class="st-body">เข้า <strong>mxtoolbox.com/blacklists</strong> → ใส่ IP ของ Mail Server</div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">ถ้าติด Blacklist → คลิกชื่อเพื่อดูวิธี <strong>Delist</strong></div></div>
+</div>
+<h2>📱 ตั้งค่า SMTP / IMAP</h2>
+<div class="tbl"><table>
+<tr><th>Setting</th><th>IMAP</th><th>SMTP</th></tr>
+<tr><td>Server</td><td>mail.z.com</td><td>mail.z.com</td></tr>
+<tr><td>Port</td><td>993 (SSL)</td><td>465 (SSL)</td></tr>
+<tr><td>Username</td><td colspan="2">your@domain.com</td></tr>
+</table></div>`,
+related:['ตั้งค่า DKIM สำหรับ Z.com Email','เปิด Webmail Roundcube','Blacklist ตรวจสอบและ Delist']},
+
+wordpress:{icon:'🔵',cat:'Web Hosting',cs:'color:var(--blue)',views:'8.2K',time:'4',date:'15 ก.พ. 2568',rate:'4.8',
+title:'ติดตั้ง WordPress ผ่าน Softaculous ใน cPanel',
+sum:'Softaculous ช่วยติดตั้ง WordPress ใน 2 นาที โดยไม่ต้องสร้าง Database เอง ระบบสร้างและตั้งค่าให้อัตโนมัติ พร้อมรายการ Plugin ที่ควรติดตั้งทันที',
+body:`<h2>✅ ทำไมต้องใช้ Softaculous?</h2>
+<ul>
+<li>ติดตั้งใน <strong>2 นาที</strong> ไม่ต้องสร้าง Database เอง</li>
+<li>ระบบสร้าง <strong>Database + User</strong> อัตโนมัติ</li>
+<li>รองรับ Backup และ Restore ผ่าน Softaculous</li>
+</ul>
+<h2>🚀 ขั้นตอนติดตั้ง</h2>
+<div class="steps">
+<div class="step"><div class="st-n"></div><div class="st-body">cPanel → Software → <strong>Softaculous Apps Installer</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">ค้นหา <strong>WordPress</strong> → คลิก <strong>Install Now</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">เลือก Domain, ตั้ง Admin Username/Password → คลิก <strong>Install</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">รอ ~2 นาที → คลิก URL เข้า WordPress Dashboard ได้เลย</div></div>
+</div>
+<h2>🔌 Plugin ที่ควรติดตั้งทันที</h2>
+<div class="tbl"><table>
+<tr><th>Plugin</th><th>หน้าที่</th><th>ราคา</th></tr>
+<tr><td><strong>Yoast SEO</strong></td><td>SEO + Sitemap</td><td>ฟรี</td></tr>
+<tr><td><strong>Really Simple SSL</strong></td><td>Force HTTPS</td><td>ฟรี</td></tr>
+<tr><td><strong>UpdraftPlus</strong></td><td>Backup อัตโนมัติ</td><td>ฟรี</td></tr>
+<tr><td><strong>Wordfence</strong></td><td>ป้องกัน Hack</td><td>ฟรี/Pro</td></tr>
+</table></div>
+<div class="note n-tip"><span class="n-ico">✅</span><div>เปลี่ยน Login URL จาก <code>/wp-admin</code> เป็น URL อื่นเพื่อป้องกัน Brute Force</div></div>`,
+related:['ติดตั้ง WooCommerce','ย้าย WordPress ไปยัง Domain ใหม่','ปรับ PHP Version สำหรับ WordPress']},
+
+billing:{icon:'💳',cat:'Billing',cs:'color:var(--green)',views:'6.4K',time:'4',date:'18 ก.พ. 2568',rate:'4.9',
+title:'ชำระเงิน ต่ออายุ และขอใบกำกับภาษีเต็มรูปแบบ',
+sum:'Z.com รองรับ Credit Card, QR PromptPay, Internet Banking และ True Money Wallet ตั้ง Auto-Renew ได้ และขอ e-Tax Invoice ตามกฎหมายได้ทันที',
+body:`<h2>💳 ช่องทางชำระเงิน</h2>
+<div class="tbl"><table>
+<tr><th>ช่องทาง</th><th>ระยะเวลา</th></tr>
+<tr><td>Credit/Debit Card</td><td>ทันที</td></tr>
+<tr><td>QR PromptPay</td><td>ทันที</td></tr>
+<tr><td>Internet Banking (KBank, SCB, BBL)</td><td>ทันที</td></tr>
+<tr><td>Bank Transfer</td><td>1 วันทำการ</td></tr>
+</table></div>
+<h2>🔁 ตั้งค่า Auto-Renew</h2>
+<div class="steps">
+<div class="step"><div class="st-n"></div><div class="st-body">Control Panel → <strong>Services</strong> → เลือก Service</div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">คลิก <strong>Auto-Renew Settings</strong> → Enable → Save</div></div>
+</div>
+<h2>🧾 ขอใบกำกับภาษี</h2>
+<div class="steps">
+<div class="step"><div class="st-n"></div><div class="st-body">กรอกข้อมูลบริษัทใน Control Panel → <strong>Account Profile</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">ชำระเงิน → ระบบออก <strong>e-Tax Invoice</strong> อัตโนมัติ</div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">ดาวน์โหลด PDF → Control Panel → <strong>Billing → Invoices</strong></div></div>
+</div>
+<div class="note n-info"><span class="n-ico">💡</span><div>e-Tax Invoice รับรองโดย <strong>กรมสรรพากร</strong> สามารถใช้เบิกค่าใช้จ่ายได้</div></div>`,
+related:['ขอ Refund และยกเลิกบริการ','Z.com Reseller สำหรับ Agency','FAQ ชำระเงิน']},
+
+'domain-transfer':{icon:'🚚',cat:'Domain',cs:'color:var(--teal)',views:'9.4K',time:'5',date:'8 ม.ค. 2568',rate:'4.7',
+title:'ย้าย Domain (Transfer) มายัง Z.com จากผู้ให้บริการอื่น',
+sum:'การ Transfer Domain ใช้เวลา 5–7 วันทำการ ต้องมี Auth Code (EPP Code), Unlock Domain และ Domain มีอายุมากกว่า 60 วัน',
+body:`<h2>📋 เตรียมก่อน Transfer</h2>
+<ul>
+<li>Domain อายุมากกว่า <strong>60 วัน</strong></li>
+<li>ไม่หมดอายุและไม่อยู่ใน Redemption Period</li>
+<li>เข้าถึงอีเมล <strong>Registrant</strong> ได้</li>
+<li>สามารถ <strong>Unlock Domain</strong> ได้</li>
+</ul>
+<div class="note n-warn"><span class="n-ico">⚠️</span><div>Transfer สำเร็จจะ <strong>ต่ออายุ 1 ปี</strong> อัตโนมัติ</div></div>
+<h2>🔑 ขอ Auth Code</h2>
+<div class="steps">
+<div class="step"><div class="st-n"></div><div class="st-body">Login ผู้ให้บริการเดิม → Domain Management</div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">ค้นหา <strong>"Get Auth Code"</strong> หรือ <strong>"EPP Code"</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body"><strong>Unlock Domain</strong> (ปิด Domain Lock)</div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">รับ Auth Code ทางอีเมลภายใน 10 นาที</div></div>
+</div>
+<h2>🚀 Transfer มายัง Z.com</h2>
+<div class="steps">
+<div class="step"><div class="st-n"></div><div class="st-body">z.com → Domain Transfer → พิมพ์ชื่อ Domain</div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">กรอก <strong>Auth Code</strong> → ชำระค่าธรรมเนียม</div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">ตรวจอีเมล Registrant → กด <strong>Approve</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">รอ <strong>5–7 วันทำการ</strong></div></div>
+</div>`,
+related:['จดทะเบียน Domain ใหม่','ตั้งค่า Nameserver หลัง Transfer','Domain Transfer FAQ']},
+
+backup:{icon:'💾',cat:'cPanel',cs:'color:var(--orange)',views:'5.9K',time:'6',date:'10 ก.พ. 2568',rate:'4.6',
+title:'Backup และ Restore ข้อมูลเว็บไซต์ผ่าน cPanel',
+sum:'cPanel มี Backup Wizard ที่ใช้งานง่าย รองรับ Full Backup, Backup Database และ Restore กลับได้ทันที แนะนำให้ Backup ก่อนเปลี่ยนแปลงสำคัญทุกครั้ง',
+body:`<h2>🛡️ ทำไมต้อง Backup?</h2>
+<p>ป้องกัน: แก้โค้ดผิด, ไฟล์ถูก Hack, เสียหายจาก Migration, ลบไฟล์ผิดพลาด</p>
+<div class="note n-info"><span class="n-ico">💡</span><div>Z.com มี <strong>Automatic Backup ทุกวัน</strong> แต่แนะนำ Backup เองก่อนเปลี่ยนแปลงสำคัญ</div></div>
+<h2>📦 Full Backup</h2>
+<div class="steps">
+<div class="step"><div class="st-n"></div><div class="st-body">cPanel → Files → <strong>Backup Wizard</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">คลิก <strong>Back Up</strong> → เลือก <strong>Full Backup</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">Destination: Home Directory → ใส่ Email → <strong>Generate Backup</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">รับ Email → ดาวน์โหลดไฟล์ .tar.gz</div></div>
+</div>
+<h2>🗄️ Backup Database</h2>
+<div class="code-block"><button class="copy-btn" onclick="toast('📋','คัดลอกแล้ว!')">Copy</button>mysqldump -u username -p database_name > backup_$(date +%Y%m%d).sql</div>
+<h2>♻️ Restore</h2>
+<div class="steps">
+<div class="step"><div class="st-n"></div><div class="st-body">cPanel → Backup Wizard → <strong>Restore</strong></div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">เลือกประเภท: Home Directory หรือ MySQL DB</div></div>
+<div class="step"><div class="st-n"></div><div class="st-body">Upload ไฟล์ Backup → กด <strong>Restore</strong></div></div>
+</div>
+<div class="note n-warn"><span class="n-ico">⚠️</span><div>Restore จะ <strong>เขียนทับข้อมูลปัจจุบัน</strong> — Backup ก่อนทุกครั้ง</div></div>`,
+related:['ใช้งาน JetBackup','Restore จาก Snapshot Z.com','ตั้งค่า Cron Job Auto Backup']}
+};
+
+// Search index
+const SIDX = [
+  {id:'dns',kw:['dns','a record','cname','mx','txt','ns','nameserver','propagate','zone','record','domain','โดเมน']},
+  {id:'ssl',kw:['ssl','https','certificate','lets encrypt','mixed content','http','redirect','tls','secure','ใบรับรอง','ความปลอดภัย']},
+  {id:'email',kw:['email','smtp','imap','mail','spf','blacklist','550','relay','dkim','ส่งไม่ได้','รับไม่ได้','อีเมล']},
+  {id:'wordpress',kw:['wordpress','softaculous','plugin','wp','cms','บล็อก','เว็บ','ติดตั้ง','install']},
+  {id:'billing',kw:['billing','payment','ชำระ','ต่ออายุ','invoice','ใบกำกับ','renew','refund','เงิน','จ่าย','promtpay','kbank']},
+  {id:'domain-transfer',kw:['transfer','auth code','epp','unlock','ย้าย','โอน','godaddy','namecheap']},
+  {id:'backup',kw:['backup','restore','สำรอง','ข้อมูล','database','mysqldump','cpanel']},
+];
+
+function findRelatedArts(text){
+  const q=text.toLowerCase();
+  return SIDX.filter(i=>i.kw.some(k=>q.includes(k))).slice(0,3);
+}
+
+// ─────────────────────────────────
+// PANEL TABS
+// ─────────────────────────────────
+function switchTab(tab){
+  document.querySelectorAll('.rp-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.rp-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.getElementById('pane-'+tab).classList.add('active');
+  document.getElementById('chatInputArea').style.display = tab==='chat'?'block':'none';
+}
+
+// ─────────────────────────────────
+// CHAT
+// ─────────────────────────────────
+let isTyping = false;
+
+function sendFromInput(){
+  const inp = document.getElementById('chatInput');
+  const txt = inp.value.trim();
+  if(!txt || isTyping) return;
+  inp.value=''; inp.style.height='auto';
+  panelSendMsg(txt);
+}
+
+function panelSendMsg(text, fromSearch=false){
+  if(!text.trim()) return;
+  // Switch to chat tab
+  switchTab('chat');
+  // Show user bubble
+  addBubble(text, 'user');
+  // Send to assistant
+  if(fromSearch){
+    document.getElementById('panelSearch').value='';
+  }
+  getAssistantResponse(text);
+}
+
+function addBubble(text, role, extra=''){
+  const msgs = document.getElementById('chatMessages');
+  const d = document.createElement('div');
+  d.className = `msg ${role}`;
+  const ava = role==='agent' ? '<div class="msg-ava">🔍</div>' : '';
+  d.innerHTML = `${ava}<div class="msg-content"><div class="msg-bubble">${text}</div><div class="msg-time"></div>${extra}</div>`;
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+  return d;
+}
+
+function showTypingIndicator(){
+  const msgs = document.getElementById('chatMessages');
+  const d = document.createElement('div');
+  d.className = 'msg agent'; d.id = 'typingInd';
+  d.innerHTML = '<div class="msg-ava">🔍</div><div class="msg-content"><div class="msg-bubble"><div class="typing-bubble"><div class="ty"></div><div class="ty"></div><div class="ty"></div></div></div></div>';
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+  document.getElementById('thinkBar').classList.add('on');
+}
+
+function removeTypingIndicator(){
+  const t=document.getElementById('typingInd');
+  if(t) t.remove();
+  document.getElementById('thinkBar').classList.remove('on');
+}
+
+function buildKBExtra(relatedIds){
+  if(!relatedIds.length) return '';
+  const cards = relatedIds.map(r=>{
+    const a = ARTS[r.id];
+    return `<div class="kb-card" onclick="openArt('${r.id}')">
+      <span class="kb-card-ico">${a.icon}</span>
+      <div class="kb-card-body">
+        <div class="kb-card-cat">${a.cat}</div>
+        <div class="kb-card-title">${a.title}</div>
+      </div>
+      <span class="kb-card-arr">→</span>
+    </div>`;
+  }).join('');
+  return `<div class="kb-card-group"><div class="kb-group-lbl">บทความที่เกี่ยวข้อง</div>${cards}</div>`;
+}
+
+async function getAssistantResponse(userMsg){
+  isTyping = true;
+  showTypingIndicator();
+
+  const related = findRelatedArts(userMsg);
+  const relatedContext = related.map(r=>`- "${ARTS[r.id].title}" (${ARTS[r.id].cat}): ${ARTS[r.id].sum.substring(0,120)}`).join('\n');
+
+  const sys = `คุณคือ Help Assistant ของ Z.com ศูนย์ช่วยเหลือลูกค้า
+ตอบภาษาไทย เป็นมิตร สุภาพ กระชับ ไม่เกิน 100 คำ
+ห้ามบอกว่าตัวเองเป็น AI หรือ bot — ตอบในนาม "ทีมงาน Z.com"
+ใช้ "ครับ" ลงท้ายเสมอ
+
+บทความ Knowledge Base ที่มีในระบบ:
+${relatedContext || 'มีบทความครอบคลุม: DNS, SSL, Email, WordPress, Billing, Backup, Domain Transfer'}
+
+วิธีตอบ:
+- ตอบสรุปสั้นๆ และบอกว่ามีบทความละเอียดให้อ่านเพิ่มเติม
+- ใช้ <strong> สำหรับคำสำคัญ และ <br> สำหรับขึ้นบรรทัดใหม่ได้
+- ถ้าแก้เองไม่ได้หรือซับซ้อนให้แนะนำ "แจ้ง Ticket"`;
+
+  try {
+    const r = await fetch(API, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:280,
+        system: sys,
+        messages:[{role:'user',content:userMsg}]
+      })
+    });
+    const d = await r.json();
+    removeTypingIndicator();
+    isTyping = false;
+    const reply = d.content?.[0]?.text || 'ขอโทษครับ ไม่สามารถตอบได้ในขณะนี้ กรุณาแจ้ง Ticket เพื่อให้ทีมงานช่วยเหลือครับ';
+    const extra = buildKBExtra(related);
+    addBubble(reply, 'agent', extra);
+  } catch(e) {
+    removeTypingIndicator();
+    isTyping = false;
+    // Fallback: keyword-based response
+    let fallback = 'ขอบคุณสำหรับคำถามครับ';
+    if(related.length){
+      fallback = `มีบทความที่เกี่ยวข้องกับเรื่องที่คุณถามครับ กดอ่านบทความด้านล่างได้เลย หากยังไม่ได้คำตอบสามารถแจ้ง Ticket ให้ทีมงานช่วยเหลือครับ`;
+    } else {
+      fallback = 'ขออภัยครับ ขอให้ทีมงานช่วยดูเรื่องนี้ให้ครับ กด "แจ้งปัญหา" ด้านล่างได้เลย';
+    }
+    const extra = buildKBExtra(related);
+    addBubble(fallback, 'agent', extra);
+  }
+}
+
+// ─────────────────────────────────
+// MAIN CONTENT SEARCH
+// ─────────────────────────────────
+function doSearch(q){
+  if(!q||!q.trim()){showHome();return;}
+  const query=q.toLowerCase().trim();
+  const results=SIDX.filter(i=>i.kw.some(k=>k.includes(query)||query.includes(k))||(ARTS[i.id]&&(ARTS[i.id].title.toLowerCase().includes(query)||ARTS[i.id].cat.toLowerCase().includes(query))));
+  document.getElementById('homeSec').style.display='none';
+  document.getElementById('srchSec').style.display='block';
+  let html=`<div class="srch-hd"><span class="srch-q">ผลการค้นหา: "${q}"</span><span class="srch-c">${results.length} บทความ</span><button class="srch-clear" onclick="showHome()">✕ กลับ</button></div>`;
+  if(!results.length){html+=`<div style="text-align:center;padding:40px 0;color:var(--s)"><div style="font-size:32px;margin-bottom:8px;opacity:.4">🔍</div><p style="font-size:13px">ไม่พบบทความ "<strong>${q}</strong>"<br><a href="#" onclick="openTicket()" style="color:var(--red)">แจ้งปัญหาโดยตรง</a></p></div>`;}
+  else{html+=`<div class="art-list">`;results.forEach(r=>{const a=ARTS[r.id];if(!a)return;html+=`<div class="art-row" onclick="openArt('${r.id}')"><div class="ar-ico" style="background:var(--s2)">${a.icon}</div><div style="flex:1;min-width:0"><div class="ar-cat" style="${a.cs}">${a.cat}</div><div class="ar-title">${a.title}</div><div class="ar-meta"><span class="ar-mt">👁 ${a.views}</span><span class="ar-mt">⏱ ${a.time} นาที</span></div></div><span class="ar-arr">›</span></div>`;});html+=`</div>`;}
+  document.getElementById('srchWrap').innerHTML=html;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function triggerSearch(){const v=document.getElementById('heroInp').value.trim();if(!v)return;doSearch(v);document.getElementById('heroInp').value='';}
+function showHome(){document.getElementById('srchSec').style.display='none';document.getElementById('homeSec').style.display='block';}
+function showAll(){
+  document.getElementById('homeSec').style.display='none';
+  document.getElementById('srchSec').style.display='block';
+  let html=`<div class="srch-hd"><span class="srch-q">บทความทั้งหมด</span><button class="srch-clear" onclick="showHome()">✕ กลับ</button></div><div class="art-list">`;
+  Object.keys(ARTS).forEach(id=>{const a=ARTS[id];html+=`<div class="art-row" onclick="openArt('${id}')"><div class="ar-ico" style="background:var(--s2)">${a.icon}</div><div style="flex:1;min-width:0"><div class="ar-cat" style="${a.cs}">${a.cat}</div><div class="ar-title">${a.title}</div><div class="ar-meta"><span class="ar-mt">👁 ${a.views}</span><span class="ar-mt">⏱ ${a.time} นาที</span></div></div><span class="ar-arr">›</span></div>`;});
+  document.getElementById('srchWrap').innerHTML=html+'</div>';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showCat(cat){
+  const m={domain:['dns','domain-transfer'],hosting:['wordpress','backup'],ssl:['ssl'],email:['email'],billing:['billing'],cpanel:['backup','wordpress']};
+  const l={domain:'Domain',hosting:'Web Hosting',ssl:'SSL Certificate',email:'Email Hosting',billing:'Billing & Payment',cpanel:'cPanel & Tools'};
+  document.getElementById('homeSec').style.display='none';
+  document.getElementById('srchSec').style.display='block';
+  const ids=m[cat]||[];
+  let html=`<div class="srch-hd"><span class="srch-q">${l[cat]||cat}</span><button class="srch-clear" onclick="showHome()">✕ กลับ</button></div><div class="art-list">`;
+  ids.forEach(id=>{const a=ARTS[id];if(!a)return;html+=`<div class="art-row" onclick="openArt('${id}')"><div class="ar-ico" style="background:var(--s2)">${a.icon}</div><div style="flex:1;min-width:0"><div class="ar-cat" style="${a.cs}">${a.cat}</div><div class="ar-title">${a.title}</div></div><span class="ar-arr">›</span></div>`;});
+  document.getElementById('srchWrap').innerHTML=html+'</div>';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─────────────────────────────────
+// ARTICLE MODAL
+// ─────────────────────────────────
+function openArt(id){
+  const a=ARTS[id]; if(!a)return;
+  document.getElementById('artMod').innerHTML=`
+    <div class="am-head">
+      <span class="am-cat-ico">${a.icon}</span>
+      <span class="am-cat-nm">${a.cat}</span>
+      <button class="close-x" onclick="closeArt()">✕</button>
+    </div>
+    <div class="am-body">
+      <h1>${a.title}</h1>
+      <div class="am-meta">
+        <span class="am-mi">👁 ${a.views} ครั้ง</span>
+        <span class="am-mi">⏱ ${a.time} นาที</span>
+        <span class="am-mi">📅 ${a.date}</span>
+        <span class="am-mi" style="color:var(--amber)">⭐ ${a.rate}/5</span>
+      </div>
+      <div class="ai-sum">
+        <div class="ai-sum-lbl">📌 สรุปบทความ</div>
+        <div class="ai-sum-txt">${a.sum}</div>
+      </div>
+      ${a.body}
+    </div>
+    <div class="am-related">
+      <div class="rl-lbl">📎 บทความที่เกี่ยวข้อง</div>
+      <div class="rl-list">${a.related.map(r=>`<div class="rl-item"><span>📄</span>${r}</div>`).join('')}</div>
+    </div>
+    <div class="am-fb">
+      <span class="fb-lbl">บทความนี้มีประโยชน์ไหม?</span>
+      <button class="fb-y" onclick="toast('👍','ขอบคุณสำหรับ Feedback!')">👍 มีประโยชน์</button>
+      <button class="fb-n" onclick="toast('📝','รับทราบแล้วครับ')">👎 ยังไม่ชัดเจน</button>
+      <button class="fb-tkt" onclick="closeArt();openTicket()">🎫 แจ้งปัญหา →</button>
+    </div>`;
+  document.getElementById('artMod').scrollTop=0;
+  document.getElementById('artOv').classList.add('open');
+}
+function closeArt(){document.getElementById('artOv').classList.remove('open');}
+
+// ─────────────────────────────────
+// TICKET
+// ─────────────────────────────────
+function openTicket(){document.getElementById('tktOv').classList.add('open');}
+function closeTicket(){document.getElementById('tktOv').classList.remove('open');}
+function fillTkt(t,c,p){document.getElementById('fTtl').value=t;document.getElementById('fCat').value=c;document.getElementById('fPri').value=p;}
+function submitTkt(){
+  const t=document.getElementById('fTtl').value.trim();
+  const e=document.getElementById('fEm').value.trim();
+  if(!t||!e){toast('⚠️','กรุณากรอกข้อมูลให้ครบ');return;}
+  const id='#TK-'+(2490+Math.floor(Math.random()*100));
+  closeTicket();
+  toast('✅',`สร้าง ${id} สำเร็จ!`,'ทีมงานจะตอบกลับภายใน 2–4 ชั่วโมง');
+}
+
+// ─────────────────────────────────
+// TRACKER
+// ─────────────────────────────────
+function openTracker(){document.getElementById('trkOv').classList.add('open');const v=document.getElementById('trackId').value.trim();if(v){document.getElementById('trkId2').value=v;setTimeout(doTrkModal,200);}}
+function closeTracker(){document.getElementById('trkOv').classList.remove('open');}
+function doTrack(){const v=document.getElementById('trackId').value.trim();if(!v)return;openTracker();document.getElementById('trkId2').value=v;setTimeout(doTrkModal,280);}
+function doTrkModal(){
+  const raw=document.getElementById('trkId2').value.trim().toUpperCase();
+  const id=raw.startsWith('TK-')?raw:'TK-'+raw.replace(/\D/g,'');
+  const db={
+    'TK-2481':{s:'escalated',t:'Website ล่ม ลูกค้า Enterprise',c:'Web Hosting',p:'Critical',step:2,ag:'ทีม Technical',msg:'ทีม Technical กำลังตรวจสอบอยู่ครับ คาดแก้ไขเสร็จภายใน 2 ชั่วโมง'},
+    'TK-2479':{s:'open',t:'Domain Transfer จาก GoDaddy',c:'Domain',p:'Medium',step:1,ag:'ทีม Support A',msg:'รอ Auth Code จากคุณครับ กรุณาตรวจอีเมลและ Reply กลับพร้อม EPP Code'},
+    'TK-2476':{s:'pending',t:'SSL Certificate หมดอายุ',c:'SSL',p:'High',step:2,ag:'ทีม Support B',msg:'กำลังออก Certificate ใหม่ให้ครับ คาดเสร็จภายใน 30 นาที'},
+    'TK-2471':{s:'resolved',t:'Email ส่งไม่ได้ SPF ผิด',c:'Email',p:'Medium',step:3,ag:'ทีม Support A',msg:'✅ แก้ไขแล้วครับ อัปเดต SPF Record เรียบร้อย'}
+  };
+  const t=db[id];
+  const body=document.getElementById('trkBody');
+  if(!t){body.innerHTML=`<div style="text-align:center;padding:10px 0"><div style="font-size:30px;margin-bottom:7px">🔍</div><div style="font-size:12px;color:var(--s);margin-bottom:11px">ไม่พบ Ticket <strong style="font-family:'JetBrains Mono'">${id}</strong></div><div style="display:flex;gap:6px;justify-content:center"><input class="fi" id="trkId2" type="text" value="${raw}" style="width:136px;text-align:center;font-family:'JetBrains Mono'"><button class="btn btn-r" onclick="doTrkModal()">ค้นหา</button></div></div>`;return;}
+  const sd=n=>n<t.step?'done':n===t.step?'active':'';
+  const ld=n=>n<t.step?'done':'';
+  const bc=t.s==='resolved'?'b-done':t.s==='pending'?'b-pend':t.s==='escalated'?'b-esc':'b-open';
+  const bt=t.s==='resolved'?'✅ แก้ไขแล้ว':t.s==='pending'?'⏳ รอดำเนินการ':t.s==='escalated'?'🚨 Escalated':'🔵 กำลังดำเนินการ';
+  body.innerHTML=`<div class="progress-track">
+    <div class="pt-step ${sd(1)}"><div class="pt-circle">1</div><div class="pt-lbl">รับเรื่อง</div></div>
+    <div class="pt-line ${ld(1)}"></div>
+    <div class="pt-step ${sd(2)}"><div class="pt-circle">2</div><div class="pt-lbl">กำลังแก้</div></div>
+    <div class="pt-line ${ld(2)}"></div>
+    <div class="pt-step ${sd(3)}"><div class="pt-circle">3</div><div class="pt-lbl">เสร็จสิ้น</div></div>
+  </div>
+  <div class="trk-card">
+    <div class="td-row"><span class="td-k">Ticket ID</span><span class="td-v">${id}</span></div>
+    <div class="td-row"><span class="td-k">หัวข้อ</span><span class="td-v nm" style="max-width:200px;text-align:right">${t.t}</span></div>
+    <div class="td-row"><span class="td-k">หมวดหมู่</span><span class="td-v nm">${t.c}</span></div>
+    <div class="td-row"><span class="td-k">ผู้รับผิดชอบ</span><span class="td-v nm">${t.ag}</span></div>
+    <div class="td-row"><span class="td-k">สถานะ</span><span class="td-badge ${bc}">${bt}</span></div>
+  </div>
+  <div class="trk-msg"><span style="font-size:14px;flex-shrink:0">💬</span><div>${t.msg}</div></div>
+  <div style="display:flex;gap:6px;margin-top:11px">
+    <input class="fi" id="trkId2" type="text" placeholder="ค้นหา Ticket อื่น" style="flex:1;font-family:'JetBrains Mono'">
+    <button class="btn btn-r" onclick="doTrkModal()">ค้นหา</button>
+  </div>`;
+}
+
+// ─────────────────────────────────
+// TOAST
+// ─────────────────────────────────
+let toastTmr;
+function toast(ico,title,desc=''){
+  document.getElementById('tIco').textContent=ico;
+  document.getElementById('tT').textContent=title;
+  document.getElementById('tD').textContent=desc;
+  const el=document.getElementById('toast');
+  el.classList.add('show');
+  clearTimeout(toastTmr);
+  toastTmr=setTimeout(()=>el.classList.remove('show'),4000);
+}
+</script>
+</body>
+</html>
