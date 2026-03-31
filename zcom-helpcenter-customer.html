@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Z.com Help Center — ศูนย์ช่วยเหลือ</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #e0242a;
+  --red-dark: #b91c20;
+  --red-light: #fef2f2;
+  --red-mid: rgba(224,36,42,0.08);
+  --blue: #1e6fdc;
+  --blue-light: #eff6ff;
+  --teal: #0891b2;
+  --teal-light: #ecfeff;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --purple: #7c3aed;
+  --purple-light: #f5f3ff;
+  --bg: #f8f9fc;
+  --surface: #ffffff;
+  --surface2: #f1f3f9;
+  --border: #e8eaf0;
+  --border-strong: #d1d5e0;
+  --text-h: #0f1724;
+  --text-b: #374151;
+  --text-s: #6b7280;
+  --text-m: #9ca3af;
+  --shadow-sm: 0 1px 4px rgba(15,23,36,0.06), 0 1px 2px rgba(15,23,36,0.04);
+  --shadow: 0 4px 16px rgba(15,23,36,0.08), 0 1px 4px rgba(15,23,36,0.04);
+  --shadow-lg: 0 12px 40px rgba(15,23,36,0.12), 0 4px 12px rgba(15,23,36,0.06);
+  --shadow-xl: 0 24px 60px rgba(15,23,36,0.16);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 7px;
+  --radius-pill: 100px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Noto Sans Thai','Sora',sans-serif;
+  background:var(--bg); color:var(--text-b);
+  min-height:100vh; overflow-x:hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border-strong); border-radius:3px; }
+
+/* ── TOPNAV ── */
+.topnav {
+  position:sticky; top:0; z-index:50;
+  background:rgba(255,255,255,0.92); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  height:60px; display:flex; align-items:center;
+  padding:0 24px; gap:16px;
+}
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0; }
+.logo-box {
+  width:36px; height:36px; background:var(--red);
+  border-radius:10px; display:flex; align-items:center; justify-content:center;
+  font-family:'Sora'; font-weight:800; color:#fff; font-size:16px;
+  box-shadow:0 4px 12px rgba(224,36,42,0.3);
+}
+.logo-name { font-family:'Sora'; font-weight:700; font-size:17px; color:var(--text-h); letter-spacing:-0.3px; }
+.logo-name span { color:var(--red); }
+
+.nav-search {
+  flex:1; max-width:400px; margin:0 auto;
+  position:relative;
+}
+.nav-search-input {
+  width:100%; height:36px; background:var(--bg);
+  border:1px solid var(--border); border-radius:var(--radius-pill);
+  padding:0 14px 0 36px; font-size:13px; font-family:inherit;
+  color:var(--text-b); outline:none; transition:all 0.2s;
+}
+.nav-search-input:focus { background:#fff; border-color:var(--red); box-shadow:0 0 0 3px rgba(224,36,42,0.08); }
+.nav-search-input::placeholder { color:var(--text-m); }
+.nav-search-icon { position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:14px; color:var(--text-m); }
+
+.nav-actions { display:flex; align-items:center; gap:8px; margin-left:auto; }
+.btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:8px 16px; border-radius:var(--radius-xs);
+  font-size:13px; font-weight:600; font-family:inherit;
+  cursor:pointer; border:none; transition:all 0.18s;
+}
+.btn-ghost { background:transparent; color:var(--text-s); }
+.btn-ghost:hover { background:var(--surface2); color:var(--text-b); }
+.btn-outline { background:transparent; color:var(--text-b); border:1.5px solid var(--border-strong); }
+.btn-outline:hover { border-color:var(--red); color:var(--red); background:var(--red-light); }
+.btn-red { background:var(--red); color:#fff; box-shadow:0 4px 12px rgba(224,36,42,0.25); }
+.btn-red:hover { background:var(--red-dark); box-shadow:0 6px 20px rgba(224,36,42,0.35); transform:translateY(-1px); }
+.btn-blue { background:var(--blue); color:#fff; }
+.btn-blue:hover { background:#1a5fc4; transform:translateY(-1px); }
+
+/* ── HERO ── */
+.hero {
+  background:linear-gradient(160deg, #0f1724 0%, #1a2540 50%, #0f1724 100%);
+  padding:64px 24px 80px; text-align:center; position:relative; overflow:hidden;
+}
+.hero::before {
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(224,36,42,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 80% 30%, rgba(30,111,220,0.1) 0%, transparent 60%);
+}
+.hero-grid {
+  position:absolute; inset:0; opacity:0.04;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
+  background-size:40px 40px;
+}
+.hero-content { position:relative; z-index:1; max-width:680px; margin:0 auto; }
+.hero-badge {
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12);
+  border-radius:var(--radius-pill); padding:5px 14px; margin-bottom:20px;
+  font-size:12px; color:rgba(255,255,255,0.7); font-weight:500;
+}
+.hero-badge-dot { width:7px; height:7px; border-radius:50%; background:#4ade80; animation:pulse-green 2s infinite; }
+@keyframes pulse-green { 0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.4)} 50%{box-shadow:0 0 0 5px rgba(74,222,128,0)} }
+.hero-title {
+  font-family:'Sora'; font-size:clamp(28px,5vw,44px); font-weight:800;
+  color:#fff; line-height:1.2; letter-spacing:-1px; margin-bottom:12px;
+}
+.hero-title span { color:var(--red); position:relative; }
+.hero-sub { font-size:16px; color:rgba(255,255,255,0.55); line-height:1.6; margin-bottom:32px; }
+
+/* HERO SEARCH BOX */
+.hero-searchbox {
+  background:rgba(255,255,255,0.07); backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.12); border-radius:var(--radius);
+  padding:8px 8px 8px 20px;
+  display:flex; align-items:center; gap:10px; max-width:560px; margin:0 auto 20px;
+  transition:all 0.2s;
+}
+.hero-searchbox:focus-within {
+  background:rgba(255,255,255,0.1);
+  border-color:rgba(224,36,42,0.5);
+  box-shadow:0 0 0 4px rgba(224,36,42,0.12);
+}
+.hero-search-ico { font-size:18px; flex-shrink:0; color:rgba(255,255,255,0.4); }
+.hero-search-inp {
+  flex:1; background:none; border:none; outline:none;
+  font-size:15px; color:#fff; font-family:inherit;
+}
+.hero-search-inp::placeholder { color:rgba(255,255,255,0.35); }
+.hero-ask-btn {
+  background:var(--red); color:#fff; border:none; border-radius:var(--radius-xs);
+  padding:10px 20px; font-size:13px; font-weight:700; font-family:inherit;
+  cursor:pointer; transition:all 0.18s; display:flex; align-items:center; gap:6px;
+  flex-shrink:0; white-space:nowrap;
+}
+.hero-ask-btn:hover { background:var(--red-dark); }
+
+.hero-tags { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; }
+.hero-tag {
+  background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1);
+  color:rgba(255,255,255,0.6); font-size:12px; font-weight:500;
+  padding:5px 13px; border-radius:var(--radius-pill); cursor:pointer; transition:all 0.18s;
+}
+.hero-tag:hover { background:rgba(224,36,42,0.2); border-color:rgba(224,36,42,0.4); color:#fff; }
+
+/* WAVE */
+.wave {
+  margin-top:-1px;
+  background:var(--bg); height:40px; position:relative; overflow:hidden;
+}
+.wave::before {
+  content:''; position:absolute; bottom:0; left:-10%; right:-10%;
+  height:80px; background:#1a2540;
+  border-radius:0 0 50% 50%;
+}
+
+/* ── MAIN CONTENT ── */
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.section { padding:48px 0; }
+.section-hd { display:flex; align-items:baseline; gap:10px; margin-bottom:24px; }
+.section-hd h2 { font-family:'Sora'; font-size:20px; font-weight:700; color:var(--text-h); letter-spacing:-0.3px; }
+.section-hd p { font-size:13px; color:var(--text-s); }
+.section-hd .see-all { margin-left:auto; font-size:13px; color:var(--red); font-weight:600; cursor:pointer; background:none; border:none; font-family:inherit; }
+.section-hd .see-all:hover { text-decoration:underline; }
+
+/* ── CATEGORY GRID ── */
+.cat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+@media(max-width:640px){ .cat-grid { grid-template-columns:repeat(2,1fr); } }
+.cat-card {
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:var(--radius); padding:22px 20px;
+  cursor:pointer; transition:all 0.22s; position:relative; overflow:hidden;
+  display:flex; align-items:flex-start; gap:14px;
+}
+.cat-card::after {
+  content:''; position:absolute; inset:0; opacity:0; transition:opacity 0.22s;
+  background:linear-gradient(135deg, var(--cat-color-a,rgba(224,36,42,0.04)), var(--cat-color-b,transparent));
+}
+.cat-card:hover { border-color:var(--cat-border,var(--red)); transform:translateY(-2px); box-shadow:var(--shadow); }
+.cat-card:hover::after { opacity:1; }
+.cat-icon-wrap {
+  width:44px; height:44px; border-radius:12px; display:flex;
+  align-items:center; justify-content:center; font-size:22px; flex-shrink:0;
+  position:relative; z-index:1;
+}
+.cat-body { flex:1; position:relative; z-index:1; }
+.cat-name { font-size:14px; font-weight:700; color:var(--text-h); margin-bottom:3px; }
+.cat-desc { font-size:12px; color:var(--text-s); line-height:1.5; }
+.cat-count { font-size:11px; font-weight:600; color:var(--text-m); margin-top:6px; }
+.cat-arr { margin-left:auto; font-size:16px; color:var(--text-m); opacity:0; transition:all 0.2s; align-self:center; position:relative; z-index:1; }
+.cat-card:hover .cat-arr { opacity:1; transform:translateX(3px); }
+
+/* ── ARTICLE CARDS ── */
+.article-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+@media(max-width:640px){ .article-grid { grid-template-columns:1fr; } }
+.art-card {
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:var(--radius); padding:20px 20px 16px;
+  cursor:pointer; transition:all 0.22s; display:flex; flex-direction:column;
+}
+.art-card:hover { border-color:var(--border-strong); transform:translateY(-2px); box-shadow:var(--shadow); }
+.art-cat-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11px; font-weight:700; letter-spacing:0.3px;
+  padding:3px 9px; border-radius:var(--radius-pill); margin-bottom:10px; width:fit-content;
+}
+.art-title { font-size:14px; font-weight:700; color:var(--text-h); line-height:1.4; margin-bottom:6px; }
+.art-desc { font-size:12px; color:var(--text-s); line-height:1.6; flex:1; }
+.art-footer { display:flex; align-items:center; gap:10px; margin-top:14px; padding-top:12px; border-top:1px solid var(--border); }
+.art-meta { font-size:11px; color:var(--text-m); display:flex; align-items:center; gap:4px; }
+.art-ai-badge {
+  margin-left:auto; font-size:10px; font-weight:700;
+  background:rgba(30,111,220,0.08); color:var(--blue); padding:2px 8px; border-radius:4px;
+  display:flex; align-items:center; gap:4px;
+}
+
+/* ── TICKET TRACK SECTION ── */
+.track-banner {
+  background:linear-gradient(135deg, #0f1724 0%, #1e2d4a 100%);
+  border-radius:var(--radius); padding:28px 28px 28px 32px;
+  display:flex; align-items:center; gap:24px; position:relative; overflow:hidden;
+}
+.track-banner::before {
+  content:''; position:absolute; right:-30px; top:-30px;
+  width:180px; height:180px; border-radius:50%;
+  background:radial-gradient(circle, rgba(224,36,42,0.15), transparent 70%);
+}
+.track-text h3 { font-family:'Sora'; font-size:18px; font-weight:700; color:#fff; margin-bottom:6px; }
+.track-text p { font-size:13px; color:rgba(255,255,255,0.5); }
+.track-input-group { display:flex; gap:8px; margin-top:14px; }
+.track-input {
+  background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12);
+  border-radius:var(--radius-xs); padding:10px 14px; color:#fff;
+  font-size:13px; font-family:'JetBrains Mono'; outline:none; width:220px;
+  transition:all 0.2s;
+}
+.track-input::placeholder { color:rgba(255,255,255,0.3); }
+.track-input:focus { border-color:rgba(224,36,42,0.5); background:rgba(255,255,255,0.1); }
+.track-illus { font-size:64px; flex-shrink:0; opacity:0.8; margin-left:auto; }
+
+/* ── AI CHAT WIDGET ── */
+.chat-fab {
+  position:fixed; bottom:24px; right:24px; z-index:200;
+  width:56px; height:56px; background:var(--red); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  box-shadow:0 6px 24px rgba(224,36,42,0.4); border:none;
+  transition:all 0.25s; font-size:22px;
+}
+.chat-fab:hover { transform:scale(1.08); box-shadow:0 8px 32px rgba(224,36,42,0.5); }
+.chat-fab .notif-dot {
+  position:absolute; top:4px; right:4px; width:12px; height:12px;
+  background:#4ade80; border-radius:50%; border:2px solid #fff;
+  animation:pulse-green 2s infinite;
+}
+.chat-fab.open { background:var(--text-b); }
+
+.chat-window {
+  position:fixed; bottom:92px; right:24px; z-index:200;
+  width:368px; height:560px;
+  background:var(--surface); border-radius:var(--radius);
+  box-shadow:var(--shadow-xl); border:1.5px solid var(--border);
+  display:flex; flex-direction:column; overflow:hidden;
+  transform:scale(0.95) translateY(20px); opacity:0; pointer-events:none;
+  transform-origin:bottom right; transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.chat-window.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
+
+.chat-head {
+  background:linear-gradient(135deg, #0f1724, #1e2d4a);
+  padding:16px 18px; display:flex; align-items:center; gap:12px;
+}
+.chat-head-avatar {
+  width:40px; height:40px; border-radius:12px; flex-shrink:0;
+  background:linear-gradient(135deg, var(--red), #f97316);
+  display:flex; align-items:center; justify-content:center; font-size:20px;
+  box-shadow:0 4px 12px rgba(224,36,42,0.3);
+}
+.chat-head-info .chat-name { font-size:14px; font-weight:700; color:#fff; font-family:'Sora'; }
+.chat-head-info .chat-status { font-size:11px; color:rgba(255,255,255,0.5); display:flex; align-items:center; gap:5px; margin-top:2px; }
+.chat-online { width:6px; height:6px; border-radius:50%; background:#4ade80; animation:pulse-green 2s infinite; }
+.chat-head-close { margin-left:auto; background:rgba(255,255,255,0.1); border:none; color:rgba(255,255,255,0.7); width:28px; height:28px; border-radius:8px; font-size:14px; cursor:pointer; transition:all 0.15s; }
+.chat-head-close:hover { background:rgba(255,255,255,0.2); color:#fff; }
+
+.chat-thinking { height:2px; background:linear-gradient(90deg,transparent,var(--red),var(--blue),transparent); background-size:200%; animation:scan 1.5s linear infinite; display:none; }
+.chat-thinking.active { display:block; }
+@keyframes scan { 0%{background-position:200%} 100%{background-position:-200%} }
+
+.chat-msgs { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:14px; }
+
+.c-msg { display:flex; align-items:flex-end; gap:8px; }
+.c-msg.bot { flex-direction:row; }
+.c-msg.user { flex-direction:row-reverse; }
+.c-msg-avatar {
+  width:28px; height:28px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,var(--red),#f97316);
+  display:flex; align-items:center; justify-content:center; font-size:13px; margin-bottom:2px;
+}
+.c-bubble { max-width:82%; }
+.c-bubble-inner {
+  padding:10px 13px; border-radius:14px; font-size:13px; line-height:1.6;
+}
+.bot .c-bubble-inner {
+  background:var(--surface2); color:var(--text-b);
+  border-bottom-left-radius:4px;
+}
+.user .c-bubble-inner {
+  background:var(--red); color:#fff;
+  border-bottom-right-radius:4px;
+}
+.c-time { font-size:10px; color:var(--text-m); margin-top:3px; padding:0 3px; }
+.bot .c-time { text-align:left; }
+.user .c-time { text-align:right; }
+
+.c-chips { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+.c-chip {
+  background:#fff; border:1.5px solid var(--border);
+  border-radius:var(--radius-xs); padding:7px 11px;
+  font-size:12px; color:var(--blue); font-weight:600; cursor:pointer;
+  transition:all 0.15s; text-align:left; font-family:inherit;
+  display:flex; align-items:center; gap:6px;
+}
+.c-chip:hover { border-color:var(--red); color:var(--red); background:var(--red-light); }
+
+.typing-ind .c-bubble-inner { display:flex; align-items:center; gap:4px; padding:12px 14px; }
+.t-dot { width:7px; height:7px; border-radius:50%; background:var(--text-m); animation:bounce 1.4s infinite; }
+.t-dot:nth-child(2){ animation-delay:.2s; }
+.t-dot:nth-child(3){ animation-delay:.4s; }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-7px)} }
+
+/* Ticket card in chat */
+.ticket-card-msg {
+  background:#fff; border:1.5px solid var(--border);
+  border-radius:var(--radius-xs); padding:11px 13px;
+  margin-top:8px; font-size:12px;
+}
+.tcm-header { display:flex; align-items:center; gap:6px; margin-bottom:5px; }
+.tcm-icon { font-size:16px; }
+.tcm-status { font-size:10px; font-weight:700; color:var(--green); background:var(--green-light); padding:2px 8px; border-radius:4px; }
+.tcm-id { font-family:'JetBrains Mono'; font-size:12px; font-weight:600; color:var(--text-h); }
+.tcm-title { color:var(--text-s); line-height:1.4; }
+
+/* KB ref card in chat */
+.kb-ref-card {
+  background:#fff; border:1.5px solid var(--border);
+  border-radius:var(--radius-xs); padding:10px 12px; margin-top:6px; cursor:pointer;
+  transition:all 0.15s;
+}
+.kb-ref-card:hover { border-color:var(--blue); background:var(--blue-light); }
+.kb-ref-cat { font-size:10px; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; }
+.kb-ref-title { font-size:12px; font-weight:600; color:var(--text-h); }
+.kb-ref-arrow { font-size:12px; color:var(--text-m); }
+
+.chat-actions { padding:8px 12px; display:flex; gap:6px; border-top:1px solid var(--border); flex-wrap:wrap; }
+.c-action-pill {
+  font-size:11px; font-weight:600; color:var(--text-s);
+  background:var(--surface2); border:1px solid var(--border);
+  padding:5px 10px; border-radius:var(--radius-pill); cursor:pointer; transition:all 0.15s; border:none;
+  font-family:inherit;
+}
+.c-action-pill:hover { background:var(--red-light); color:var(--red); }
+
+.chat-inp-area { padding:12px; border-top:1px solid var(--border); }
+.chat-inp-row { display:flex; gap:8px; align-items:center; }
+.chat-inp {
+  flex:1; background:var(--surface2); border:1.5px solid var(--border);
+  border-radius:var(--radius-xs); padding:9px 12px; font-size:13px;
+  font-family:inherit; color:var(--text-b); outline:none; transition:all 0.2s;
+  resize:none;
+}
+.chat-inp:focus { background:#fff; border-color:var(--red); box-shadow:0 0 0 3px rgba(224,36,42,0.07); }
+.chat-inp::placeholder { color:var(--text-m); }
+.chat-send {
+  width:36px; height:36px; background:var(--red); border:none;
+  border-radius:var(--radius-xs); cursor:pointer; color:#fff; font-size:15px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  transition:all 0.18s; box-shadow:0 3px 10px rgba(224,36,42,0.3);
+}
+.chat-send:hover { background:var(--red-dark); transform:scale(1.05); }
+
+/* ── ARTICLE OVERLAY ── */
+.art-overlay {
+  position:fixed; inset:0; z-index:100;
+  background:rgba(15,23,36,0.65); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  opacity:0; pointer-events:none; transition:opacity 0.25s;
+}
+.art-overlay.open { opacity:1; pointer-events:all; }
+.art-modal {
+  background:var(--surface); border-radius:var(--radius);
+  width:100%; max-width:680px; max-height:88vh; overflow-y:auto;
+  box-shadow:var(--shadow-xl);
+  transform:translateY(24px) scale(0.98); transition:transform 0.28s cubic-bezier(0.34,1.2,0.64,1);
+}
+.art-overlay.open .art-modal { transform:translateY(0) scale(1); }
+.art-modal-head {
+  padding:18px 24px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:12px; position:sticky; top:0; background:#fff; z-index:1;
+}
+.art-modal-cat-icon { font-size:22px; }
+.art-modal-cat-name { font-size:11px; font-weight:700; color:var(--text-s); text-transform:uppercase; letter-spacing:0.5px; }
+.art-close { margin-left:auto; background:var(--surface2); border:none; width:30px; height:30px; border-radius:8px; font-size:14px; cursor:pointer; color:var(--text-s); transition:all 0.15s; }
+.art-close:hover { background:var(--border); color:var(--text-h); }
+
+.art-body { padding:24px 28px 20px; }
+.art-body h1 { font-family:'Sora'; font-size:22px; font-weight:800; color:var(--text-h); margin-bottom:10px; line-height:1.3; letter-spacing:-0.3px; }
+.art-meta-row { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:20px; }
+.art-meta-item { font-size:12px; color:var(--text-m); display:flex; align-items:center; gap:4px; }
+
+.ai-sum-box {
+  background:linear-gradient(135deg, var(--blue-light), #f0f9ff);
+  border:1.5px solid rgba(30,111,220,0.15); border-radius:var(--radius);
+  padding:16px 18px; margin-bottom:22px;
+}
+.ai-sum-label { font-size:11px; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.ai-sum-label::before { content:'✨'; }
+.ai-sum-text { font-size:13px; color:var(--text-b); line-height:1.7; }
+
+.art-body h2 { font-family:'Sora'; font-size:16px; font-weight:700; color:var(--text-h); margin:22px 0 8px; }
+.art-body p { font-size:13px; color:var(--text-b); line-height:1.75; margin-bottom:12px; }
+.code-box {
+  background:var(--text-h); border-radius:var(--radius-xs); padding:14px 16px;
+  font-family:'JetBrains Mono'; font-size:12.5px; color:#a5f3fc; margin:10px 0 16px;
+  overflow-x:auto; line-height:1.65;
+}
+.art-note {
+  background:var(--amber-light); border:1.5px solid rgba(217,119,6,0.2);
+  border-radius:var(--radius-xs); padding:12px 14px; font-size:13px;
+  color:var(--text-b); margin:12px 0; display:flex; gap:8px; align-items:flex-start;
+}
+.art-note-icon { flex-shrink:0; font-size:15px; }
+.art-steps { counter-reset:step; display:flex; flex-direction:column; gap:10px; margin:12px 0 20px; }
+.art-step {
+  display:flex; gap:12px; padding:12px 14px;
+  background:var(--surface2); border-radius:var(--radius-xs); align-items:flex-start;
+}
+.art-step-num {
+  counter-increment:step; min-width:26px; height:26px; border-radius:50%;
+  background:var(--red); color:#fff; font-size:12px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  font-family:'Sora';
+}
+.art-step-num::before { content:counter(step); }
+.art-step-body { font-size:13px; color:var(--text-b); line-height:1.6; }
+
+.art-related { padding:0 28px 16px; }
+.art-rel-title { font-size:13px; font-weight:700; color:var(--text-s); margin-bottom:10px; }
+.art-rel-list { display:flex; flex-direction:column; gap:6px; }
+.art-rel-item {
+  display:flex; align-items:center; gap:8px; padding:9px 12px;
+  border:1.5px solid var(--border); border-radius:var(--radius-xs);
+  font-size:13px; color:var(--text-b); cursor:pointer; transition:all 0.15s;
+}
+.art-rel-item:hover { border-color:var(--red); color:var(--red); background:var(--red-light); }
+.art-rel-icon { font-size:15px; }
+
+.art-feedback { padding:14px 28px 20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.art-fb-label { font-size:13px; color:var(--text-s); }
+.fb-btn { background:var(--surface2); border:1.5px solid var(--border); border-radius:var(--radius-xs); padding:6px 14px; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.15s; font-family:inherit; color:var(--text-s); }
+.fb-btn:hover { border-color:var(--border-strong); color:var(--text-b); }
+.art-ticket-btn { margin-left:auto; }
+
+/* ── TICKET FORM OVERLAY ── */
+.tkt-overlay {
+  position:fixed; inset:0; z-index:150;
+  background:rgba(15,23,36,0.65); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  opacity:0; pointer-events:none; transition:opacity 0.25s;
+}
+.tkt-overlay.open { opacity:1; pointer-events:all; }
+.tkt-modal {
+  background:var(--surface); border-radius:var(--radius);
+  width:100%; max-width:540px; max-height:90vh; overflow-y:auto;
+  box-shadow:var(--shadow-xl);
+  transform:translateY(24px); transition:transform 0.28s cubic-bezier(0.34,1.2,0.64,1);
+}
+.tkt-overlay.open .tkt-modal { transform:translateY(0); }
+.tkt-head { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.tkt-head h2 { font-family:'Sora'; font-size:17px; font-weight:700; color:var(--text-h); display:flex; align-items:center; gap:8px; }
+.tkt-body { padding:22px 24px; display:flex; flex-direction:column; gap:14px; }
+.f-group { display:flex; flex-direction:column; gap:5px; }
+.f-label { font-size:12px; font-weight:700; color:var(--text-s); }
+.f-input, .f-select, .f-textarea {
+  background:var(--surface2); border:1.5px solid var(--border);
+  border-radius:var(--radius-xs); padding:10px 13px; font-size:13px;
+  font-family:inherit; color:var(--text-b); outline:none; transition:all 0.2s;
+}
+.f-input:focus,.f-select:focus,.f-textarea:focus { background:#fff; border-color:var(--red); box-shadow:0 0 0 3px rgba(224,36,42,0.07); }
+.f-textarea { resize:vertical; min-height:90px; }
+.f-select { cursor:pointer; }
+.f-select option { background:#fff; }
+.f-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.f-ai-hint {
+  background:var(--blue-light); border:1.5px solid rgba(30,111,220,0.15);
+  border-radius:var(--radius-xs); padding:11px 13px;
+}
+.f-ai-hint-label { font-size:10px; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; display:flex; align-items:center; gap:5px; }
+.f-ai-hint-item { font-size:12px; color:var(--text-s); padding:3px 0; cursor:pointer; display:flex; align-items:center; gap:6px; }
+.f-ai-hint-item:hover { color:var(--blue); }
+.f-ai-hint-item::before { content:'→'; color:var(--blue); }
+.tkt-foot { padding:14px 24px 18px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; }
+
+/* ── TRACKER VIEW ── */
+.tracker-overlay {
+  position:fixed; inset:0; z-index:150;
+  background:rgba(15,23,36,0.65); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  opacity:0; pointer-events:none; transition:opacity 0.25s;
+}
+.tracker-overlay.open { opacity:1; pointer-events:all; }
+.tracker-modal {
+  background:var(--surface); border-radius:var(--radius);
+  width:100%; max-width:500px;
+  box-shadow:var(--shadow-xl);
+  transform:translateY(24px); transition:transform 0.28s cubic-bezier(0.34,1.2,0.64,1);
+}
+.tracker-overlay.open .tracker-modal { transform:translateY(0); }
+.tracker-head { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.tracker-head h2 { font-family:'Sora'; font-size:17px; font-weight:700; color:var(--text-h); }
+.tracker-body { padding:22px 24px; }
+.tracker-status-bar { display:flex; align-items:center; margin-bottom:24px; }
+.ts-step { display:flex; flex-direction:column; align-items:center; flex:1; }
+.ts-circle {
+  width:32px; height:32px; border-radius:50%; border:2.5px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; color:var(--text-m);
+  background:var(--surface2); transition:all 0.3s; font-family:'Sora';
+}
+.ts-step.done .ts-circle { background:var(--green); border-color:var(--green); color:#fff; }
+.ts-step.active .ts-circle { background:var(--blue); border-color:var(--blue); color:#fff; box-shadow:0 0 0 4px rgba(30,111,220,0.15); }
+.ts-label { font-size:10px; font-weight:600; color:var(--text-m); margin-top:5px; text-align:center; }
+.ts-step.done .ts-label, .ts-step.active .ts-label { color:var(--text-s); }
+.ts-line { flex:1; height:2.5px; background:var(--border); border-radius:2px; margin:0 4px; margin-bottom:18px; }
+.ts-line.done { background:var(--green); }
+.ticket-detail-card { background:var(--surface2); border-radius:var(--radius-xs); padding:14px 16px; }
+.td-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--border); }
+.td-row:last-child { border-bottom:none; }
+.td-key { font-size:12px; color:var(--text-m); }
+.td-val { font-size:12px; font-weight:600; color:var(--text-b); font-family:'JetBrains Mono'; }
+.td-badge { font-size:11px; font-weight:700; padding:2px 8px; border-radius:4px; }
+.badge-open { background:rgba(30,111,220,0.1); color:var(--blue); }
+.badge-pending { background:var(--amber-light); color:var(--amber); }
+.badge-resolved { background:var(--green-light); color:var(--green); }
+.tracker-msg { background:var(--blue-light); border:1.5px solid rgba(30,111,220,0.15); border-radius:var(--radius-xs); padding:12px 14px; margin-top:14px; font-size:13px; color:var(--text-b); line-height:1.6; display:flex; gap:8px; }
+.tracker-msg-icon { font-size:16px; flex-shrink:0; }
+
+/* ── TOAST ── */
+.toast {
+  position:fixed; bottom:24px; left:24px; z-index:300;
+  background:var(--text-h); border-radius:var(--radius-xs);
+  padding:13px 16px; display:flex; align-items:center; gap:11px;
+  box-shadow:var(--shadow-xl); min-width:280px;
+  transform:translateY(20px); opacity:0; transition:all 0.3s;
+  pointer-events:none;
+}
+.toast.show { transform:translateY(0); opacity:1; pointer-events:all; }
+.toast-ico { font-size:18px; flex-shrink:0; }
+.toast-body .toast-t { font-size:13px; font-weight:700; color:#fff; }
+.toast-body .toast-d { font-size:12px; color:rgba(255,255,255,0.5); margin-top:1px; }
+.toast-x { margin-left:auto; background:none; border:none; color:rgba(255,255,255,0.4); cursor:pointer; font-size:14px; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+.fu { animation:fadeUp 0.5s ease forwards; }
+.fu-1 { animation-delay:0.05s; opacity:0; }
+.fu-2 { animation-delay:0.1s; opacity:0; }
+.fu-3 { animation-delay:0.15s; opacity:0; }
+.fu-4 { animation-delay:0.2s; opacity:0; }
+.fu-5 { animation-delay:0.25s; opacity:0; }
+
+/* ── FOOTER ── */
+footer { background:var(--text-h); color:rgba(255,255,255,0.4); text-align:center; padding:24px; font-size:12px; margin-top:40px; }
+footer a { color:rgba(255,255,255,0.6); margin:0 8px; }
+</style>
+</head>
+<body>
+
+<!-- ── TOP NAV ── -->
+<nav class="topnav">
+  <a class="nav-logo" href="#">
+    <div class="logo-box">Z</div>
+    <span class="logo-name">Z<span>.com</span> Help</span>
+  </a>
+  <div class="nav-search">
+    <span class="nav-search-icon">🔍</span>
+    <input class="nav-search-input" type="text" placeholder="ค้นหาบทความ..." onkeydown="if(event.key==='Enter'){document.getElementById('heroInp').value=this.value;triggerSearch();}">
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-ghost" onclick="openTracker()">🎫 ติดตาม Ticket</button>
+    <button class="btn btn-outline" onclick="openTicket()">+ แจ้งปัญหา</button>
+    <button class="btn btn-red" onclick="window.open('#','_blank')">เข้าสู่ระบบ</button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge fu fu-1">
+      <span class="hero-badge-dot"></span>
+      AI พร้อมให้ความช่วยเหลือ 24/7
+    </div>
+    <h1 class="hero-title fu fu-2">
+      เราพร้อมช่วยคุณ<br>ทุกปัญหา<span> Z.com</span>
+    </h1>
+    <p class="hero-sub fu fu-3">ค้นหาคำตอบจากบทความกว่า 248 บทความ<br>หรือคุยกับ AI Assistant ได้ตลอด 24 ชั่วโมง</p>
+    <div class="hero-searchbox fu fu-4">
+      <span class="hero-search-ico">🔍</span>
+      <input class="hero-search-inp" id="heroInp" type="text" placeholder="ลองพิมพ์: ตั้งค่า DNS, SSL หมดอายุ, ต่ออายุ Domain..." onkeydown="if(event.key==='Enter')triggerSearch()">
+      <button class="hero-ask-btn" onclick="triggerSearch()">✨ ถาม AI</button>
+    </div>
+    <div class="hero-tags fu fu-5">
+      <span class="hero-tag" onclick="quickAsk('ตั้งค่า DNS Records')">DNS Records</span>
+      <span class="hero-tag" onclick="quickAsk('ติดตั้ง SSL Certificate')">SSL Certificate</span>
+      <span class="hero-tag" onclick="quickAsk('Email ส่งไม่ได้')">Email ส่งไม่ได้</span>
+      <span class="hero-tag" onclick="quickAsk('ต่ออายุ Domain')">ต่ออายุ Domain</span>
+      <span class="hero-tag" onclick="quickAsk('Backup ข้อมูล')">Backup ข้อมูล</span>
+      <span class="hero-tag" onclick="openTicket()">แจ้งปัญหา</span>
+    </div>
+  </div>
+</section>
+<div class="wave"></div>
+
+<!-- ── MAIN ── -->
+<main>
+<div class="container">
+
+  <!-- CATEGORIES -->
+  <section class="section">
+    <div class="section-hd">
+      <h2>หมวดหมู่บริการ</h2>
+      <p>เลือกหัวข้อที่ต้องการ</p>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card" style="--cat-border:#0891b2;--cat-color-a:rgba(8,145,178,0.05)" onclick="filterCat('domain')">
+        <div class="cat-icon-wrap" style="background:var(--teal-light)">🌐</div>
+        <div class="cat-body">
+          <div class="cat-name">Domain</div>
+          <div class="cat-desc">DNS, Transfer, Whois, ต่ออายุ</div>
+          <div class="cat-count">52 บทความ</div>
+        </div>
+        <span class="cat-arr">›</span>
+      </div>
+      <div class="cat-card" style="--cat-border:#1e6fdc;--cat-color-a:rgba(30,111,220,0.05)" onclick="filterCat('hosting')">
+        <div class="cat-icon-wrap" style="background:var(--blue-light)">🖥️</div>
+        <div class="cat-body">
+          <div class="cat-name">Web Hosting</div>
+          <div class="cat-desc">cPanel, FTP, Backup, Database</div>
+          <div class="cat-count">74 บทความ</div>
+        </div>
+        <span class="cat-arr">›</span>
+      </div>
+      <div class="cat-card" style="--cat-border:#d97706;--cat-color-a:rgba(217,119,6,0.05)" onclick="filterCat('ssl')">
+        <div class="cat-icon-wrap" style="background:var(--amber-light)">🔒</div>
+        <div class="cat-body">
+          <div class="cat-name">SSL Certificate</div>
+          <div class="cat-desc">Let's Encrypt, Paid SSL, HTTPS</div>
+          <div class="cat-count">28 บทความ</div>
+        </div>
+        <span class="cat-arr">›</span>
+      </div>
+      <div class="cat-card" style="--cat-border:#7c3aed;--cat-color-a:rgba(124,58,237,0.05)" onclick="filterCat('email')">
+        <div class="cat-icon-wrap" style="background:var(--purple-light)">✉️</div>
+        <div class="cat-body">
+          <div class="cat-name">Email Hosting</div>
+          <div class="cat-desc">SMTP, IMAP, SPF, DKIM, Webmail</div>
+          <div class="cat-count">41 บทความ</div>
+        </div>
+        <span class="cat-arr">›</span>
+      </div>
+      <div class="cat-card" style="--cat-border:#059669;--cat-color-a:rgba(5,150,105,0.05)" onclick="filterCat('billing')">
+        <div class="cat-icon-wrap" style="background:var(--green-light)">💳</div>
+        <div class="cat-body">
+          <div class="cat-name">Billing & Payment</div>
+          <div class="cat-desc">ชำระเงิน, ใบกำกับภาษี, ต่ออายุ</div>
+          <div class="cat-count">33 บทความ</div>
+        </div>
+        <span class="cat-arr">›</span>
+      </div>
+      <div class="cat-card" style="--cat-border:#e0242a;--cat-color-a:rgba(224,36,42,0.05)" onclick="filterCat('cpanel')">
+        <div class="cat-icon-wrap" style="background:var(--red-light)">⚙️</div>
+        <div class="cat-body">
+          <div class="cat-name">cPanel & Tools</div>
+          <div class="cat-desc">File Manager, phpMyAdmin, Cron</div>
+          <div class="cat-count">20 บทความ</div>
+        </div>
+        <span class="cat-arr">›</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- POPULAR ARTICLES -->
+  <section class="section" style="padding-top:0">
+    <div class="section-hd">
+      <h2>บทความยอดนิยม</h2>
+      <p>อ่านมากที่สุดเดือนนี้</p>
+      <button class="see-all">ดูทั้งหมด →</button>
+    </div>
+    <div class="article-grid">
+      <div class="art-card" onclick="openArticle('dns')">
+        <span class="art-cat-badge" style="background:var(--teal-light);color:var(--teal)">🌐 Domain</span>
+        <div class="art-title">การตั้งค่า DNS Records สำหรับ Domain</div>
+        <div class="art-desc">เรียนรู้วิธีกำหนดค่า A Record, CNAME, MX Record และ TXT Record สำหรับโดเมนของคุณ ทีละขั้นตอน</div>
+        <div class="art-footer">
+          <span class="art-meta">👁 10.2K</span>
+          <span class="art-meta">⏱ 7 นาที</span>
+          <span class="art-ai-badge">✨ AI Summary</span>
+        </div>
+      </div>
+      <div class="art-card" onclick="openArticle('ssl')">
+        <span class="art-cat-badge" style="background:var(--amber-light);color:var(--amber)">🔒 SSL</span>
+        <div class="art-title">ติดตั้ง SSL Certificate บน cPanel ด้วย Let's Encrypt</div>
+        <div class="art-desc">คู่มือการเปิดใช้งาน HTTPS บนเว็บไซต์ของคุณ ฟรีและใช้งานง่าย ไม่ต้องมีความรู้ด้านเทคนิค</div>
+        <div class="art-footer">
+          <span class="art-meta">👁 8.7K</span>
+          <span class="art-meta">⏱ 5 นาที</span>
+          <span class="art-ai-badge">✨ AI Summary</span>
+        </div>
+      </div>
+      <div class="art-card" onclick="openArticle('email')">
+        <span class="art-cat-badge" style="background:var(--purple-light);color:var(--purple)">✉️ Email</span>
+        <div class="art-title">แก้ปัญหา Email ส่ง/รับไม่ได้ ฉบับสมบูรณ์</div>
+        <div class="art-desc">วิธีตรวจสอบ MX Record, SPF, DKIM และแก้ปัญหา Blacklist ด้วยตัวเอง ครอบคลุมทุก error ที่พบบ่อย</div>
+        <div class="art-footer">
+          <span class="art-meta">👁 7.1K</span>
+          <span class="art-meta">⏱ 8 นาที</span>
+          <span class="art-ai-badge">✨ AI Summary</span>
+        </div>
+      </div>
+      <div class="art-card" onclick="openArticle('billing')">
+        <span class="art-cat-badge" style="background:var(--green-light);color:var(--green)">💳 Billing</span>
+        <div class="art-title">วิธีการชำระเงิน ต่ออายุ และขอใบกำกับภาษี</div>
+        <div class="art-desc">ช่องทางชำระเงินทั้งหมด การตั้งค่าต่ออายุอัตโนมัติ และวิธีขอใบกำกับภาษีเต็มรูปแบบ</div>
+        <div class="art-footer">
+          <span class="art-meta">👁 6.4K</span>
+          <span class="art-meta">⏱ 4 นาที</span>
+          <span class="art-ai-badge">✨ AI Summary</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKET TRACK BANNER -->
+  <section class="section" style="padding-top:0">
+    <div class="track-banner">
+      <div class="track-text">
+        <h3>ติดตามสถานะ Ticket ของคุณ</h3>
+        <p>ใส่รหัส Ticket เพื่อดูความคืบหน้าแบบ Realtime</p>
+        <div class="track-input-group">
+          <input class="track-input" id="trackId" type="text" placeholder="TK-2481" onkeydown="if(event.key==='Enter')doTrack()">
+          <button class="btn btn-red" onclick="doTrack()">ติดตาม →</button>
+        </div>
+      </div>
+      <div class="track-illus">🎫</div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer>
+  <p>© 2025 Z.com — GMO-Z.com NetDesign Co., Ltd. &nbsp;|&nbsp; <a href="#">Privacy Policy</a> <a href="#">Terms of Service</a> <a href="#">Contact Us</a></p>
+</footer>
+
+<!-- ── AI CHAT FAB ── -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()">
+  💬
+  <span class="notif-dot"></span>
+</button>
+
+<!-- ── CHAT WINDOW ── -->
+<div class="chat-window" id="chatWin">
+  <div class="chat-head">
+    <div class="chat-head-avatar">🤖</div>
+    <div class="chat-head-info">
+      <div class="chat-name">Z.com AI Assistant</div>
+      <div class="chat-status"><span class="chat-online"></span>พร้อมให้ความช่วยเหลือ</div>
+    </div>
+    <button class="chat-head-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-thinking" id="chatThink"></div>
+  <div class="chat-msgs" id="chatMsgs">
+    <div class="c-msg bot">
+      <div class="c-msg-avatar">🤖</div>
+      <div class="c-bubble">
+        <div class="c-bubble-inner">
+          สวัสดีครับ! 👋 ผมคือ AI Assistant ของ Z.com ยินดีช่วยเหลือคุณนะครับ<br><br>
+          วันนี้มีอะไรให้ช่วยไหมครับ? 😊
+        </div>
+        <div class="c-time">เพิ่งเริ่ม</div>
+        <div class="c-chips">
+          <button class="c-chip" onclick="sendQ('DNS ของผมยังไม่ propagate หลังจาก 24 ชั่วโมง')">⏱ DNS ไม่ propagate</button>
+          <button class="c-chip" onclick="sendQ('SSL Certificate ของผมหมดอายุ ต้องทำอะไรบ้าง?')">🔒 SSL หมดอายุ</button>
+          <button class="c-chip" onclick="sendQ('อยากแจ้งปัญหา website ล่ม')">🚨 แจ้งปัญหาด่วน</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="chat-actions">
+    <button class="c-action-pill" onclick="sendQ('บทความที่แนะนำสำหรับ DNS')">📚 บทความ</button>
+    <button class="c-action-pill" onclick="openTicket()">🎫 แจ้งปัญหา</button>
+    <button class="c-action-pill" onclick="openTracker()">🔍 ติดตาม Ticket</button>
+  </div>
+  <div class="chat-inp-area">
+    <div class="chat-inp-row">
+      <textarea class="chat-inp" id="chatInp" rows="1" placeholder="พิมพ์ถามได้เลยครับ..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"></textarea>
+      <button class="chat-send" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ARTICLE OVERLAY ── -->
+<div class="art-overlay" id="artOverlay" onclick="if(event.target===this)closeArticle()">
+  <div class="art-modal" id="artModal"></div>
+</div>
+
+<!-- ── TICKET FORM ── -->
+<div class="tkt-overlay" id="tktOverlay" onclick="if(event.target===this)closeTicket()">
+  <div class="tkt-modal">
+    <div class="tkt-head">
+      <h2>🎫 แจ้งปัญหา / สร้าง Ticket</h2>
+      <button class="art-close" onclick="closeTicket()">✕</button>
+    </div>
+    <div class="tkt-body">
+      <div class="f-ai-hint" id="tktAiHint">
+        <div class="f-ai-hint-label">✨ AI แนะนำ — ปัญหาที่พบบ่อย</div>
+        <div class="f-ai-hint-item" onclick="fillTicket('SSL Certificate หมดอายุ Chrome แสดง Not Secure','SSL Certificate','High')">SSL Certificate หมดอายุ — Chrome แสดง Warning</div>
+        <div class="f-ai-hint-item" onclick="fillTicket('DNS ไม่ propagate หลังเปลี่ยน A Record','Domain','Medium')">DNS ไม่ propagate หลังเปลี่ยน Record</div>
+        <div class="f-ai-hint-item" onclick="fillTicket('Email ส่งไม่ได้ได้รับ Error 550','Email Hosting','Medium')">Email ส่งไม่ได้ — Error 550</div>
+        <div class="f-ai-hint-item" onclick="fillTicket('Website ล่ม ไม่สามารถเข้าถึงได้','Web Hosting','Critical')">Website ล่ม — ไม่สามารถเข้าถึงได้</div>
+      </div>
+      <div class="f-group">
+        <label class="f-label">ชื่อ-นามสกุล *</label>
+        <input class="f-input" id="fName" type="text" placeholder="สมชาย ใจดี">
+      </div>
+      <div class="f-group">
+        <label class="f-label">อีเมลของคุณ *</label>
+        <input class="f-input" id="fEmail" type="email" placeholder="your@email.com">
+      </div>
+      <div class="f-row">
+        <div class="f-group">
+          <label class="f-label">หมวดหมู่</label>
+          <select class="f-select" id="fCat">
+            <option value="">-- เลือกหมวดหมู่ --</option>
+            <option>Domain</option>
+            <option>Web Hosting</option>
+            <option>SSL Certificate</option>
+            <option>Email Hosting</option>
+            <option>Billing & Payment</option>
+            <option>อื่นๆ</option>
+          </select>
+        </div>
+        <div class="f-group">
+          <label class="f-label">ความเร่งด่วน</label>
+          <select class="f-select" id="fPri">
+            <option>Low — ไม่เร่งด่วน</option>
+            <option selected>Medium — ปกติ</option>
+            <option>High — เร่งด่วน</option>
+            <option>Critical — ด่วนมาก</option>
+          </select>
+        </div>
+      </div>
+      <div class="f-group">
+        <label class="f-label">หัวข้อปัญหา *</label>
+        <input class="f-input" id="fTitle" type="text" placeholder="อธิบายปัญหาสั้นๆ เช่น: DNS ไม่ propagate">
+      </div>
+      <div class="f-group">
+        <label class="f-label">รายละเอียด</label>
+        <textarea class="f-textarea" id="fDesc" placeholder="อธิบายให้ละเอียดมากขึ้น: เกิดขึ้นเมื่อไหร่? Error message คืออะไร? Domain/Service ชื่ออะไร?"></textarea>
+      </div>
+    </div>
+    <div class="tkt-foot">
+      <button class="btn btn-ghost" onclick="closeTicket()">ยกเลิก</button>
+      <button class="btn btn-red" onclick="submitTicket()">ส่ง Ticket →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TRACKER OVERLAY ── -->
+<div class="tracker-overlay" id="trackerOv" onclick="if(event.target===this)closeTracker()">
+  <div class="tracker-modal">
+    <div class="tracker-head">
+      <h2>🔍 ติดตามสถานะ Ticket</h2>
+      <button class="art-close" onclick="closeTracker()">✕</button>
+    </div>
+    <div class="tracker-body" id="trackerBody">
+      <div style="text-align:center;padding:20px 0;">
+        <div style="font-size:40px;margin-bottom:10px;">🎫</div>
+        <div style="font-size:14px;color:var(--text-s)">ใส่รหัส Ticket ด้านล่างเพื่อตรวจสอบสถานะ</div>
+        <div style="display:flex;gap:8px;margin-top:16px;justify-content:center;">
+          <input class="f-input" id="trackId2" type="text" placeholder="เช่น TK-2481" style="width:180px;text-align:center;font-family:'JetBrains Mono'">
+          <button class="btn btn-red" onclick="doTrackModal()">ค้นหา</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-ico" id="toastIco">✅</span>
+  <div class="toast-body">
+    <div class="toast-t" id="toastT"></div>
+    <div class="toast-d" id="toastD"></div>
+  </div>
+  <button class="toast-x" onclick="this.closest('.toast').classList.remove('show')">✕</button>
+</div>
+
+<!-- ──── SCRIPTS ──── -->
+<script>
+const API = "https://api.anthropic.com/v1/messages";
+let chatOpen = false, aiTyping = false;
+
+/* ── CHAT FAB ── */
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('chatFab').classList.toggle('open', chatOpen);
+  document.getElementById('chatFab').innerHTML = chatOpen ? '✕' : '💬<span class="notif-dot"></span>';
+  document.getElementById('chatWin').classList.toggle('open', chatOpen);
+}
+
+/* ── CHAT SEND ── */
+async function sendChat() {
+  const inp = document.getElementById('chatInp');
+  const txt = inp.value.trim();
+  if (!txt || aiTyping) return;
+  inp.value = ''; inp.style.height = 'auto';
+  aiTyping = true;
+  addMsg(txt, 'user');
+  showTyping();
+  await callAI(txt);
+}
+function sendQ(txt) {
+  if (!chatOpen) toggleChat();
+  setTimeout(() => {
+    document.getElementById('chatInp').value = txt;
+    sendChat();
+  }, 300);
+}
+function quickAsk(txt) {
+  if (!chatOpen) toggleChat();
+  setTimeout(() => {
+    document.getElementById('chatInp').value = txt;
+    sendChat();
+  }, 350);
+}
+function triggerSearch() {
+  const v = document.getElementById('heroInp').value.trim();
+  if (!v) return;
+  quickAsk(v);
+  document.getElementById('heroInp').value = '';
+}
+function filterCat(cat) {
+  const labels = {domain:'Domain & DNS',hosting:'Web Hosting',ssl:'SSL Certificate',email:'Email Hosting',billing:'Billing & Payment',cpanel:'cPanel & Tools'};
+  quickAsk(`มีบทความเกี่ยวกับ ${labels[cat]||cat} ช่วยแนะนำให้หน่อยได้ไหมครับ?`);
+}
+
+function addMsg(txt, role, extra='') {
+  const msgs = document.getElementById('chatMsgs');
+  const now = new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+  const d = document.createElement('div');
+  d.className = `c-msg ${role}`;
+  const ava = role === 'bot' ? '<div class="c-msg-avatar">🤖</div>' : '';
+  d.innerHTML = `${ava}<div class="c-bubble"><div class="c-bubble-inner">${txt}</div><div class="c-time">${now}</div>${extra}</div>`;
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function showTyping() {
+  const msgs = document.getElementById('chatMsgs');
+  const d = document.createElement('div');
+  d.className = 'c-msg bot typing-ind'; d.id = 'typin';
+  d.innerHTML = '<div class="c-msg-avatar">🤖</div><div class="c-bubble"><div class="c-bubble-inner"><div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div></div></div>';
+  msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
+  document.getElementById('chatThink').classList.add('active');
+}
+function hideTyping() {
+  const t = document.getElementById('typin');
+  if (t) t.remove();
+  document.getElementById('chatThink').classList.remove('active');
+}
+
+async function callAI(txt) {
+  const sys = `คุณคือ AI Assistant ของ Z.com ศูนย์ช่วยเหลือลูกค้า ตอบเป็นภาษาไทยเสมอ ใช้น้ำเสียงที่เป็นมิตร สุภาพ ใช้คำลงท้ายว่า "ครับ" เสมอ
+
+ขอบเขตความช่วยเหลือ:
+1. ให้ข้อมูลและแนะนำวิธีแก้ปัญหาเกี่ยวกับ: Domain, DNS Records, Web Hosting, SSL Certificate, Email Hosting, Billing & Payment
+2. แนะนำบทความที่เกี่ยวข้องจาก Knowledge Base
+3. ช่วยสร้าง Support Ticket หากลูกค้ามีปัญหาเร่งด่วน
+4. ประเมินความเร่งด่วนของปัญหา
+
+กฎการตอบ:
+- ตอบกระชับ ชัดเจน ไม่เกิน 120 คำ
+- ถ้าปัญหาซับซ้อนหรือแก้เองไม่ได้ ให้แนะนำสร้าง Ticket
+- ใช้ HTML ได้: <strong>, <br>, bullets (•)
+- ไม่ตอบเรื่องที่ไม่เกี่ยวกับ Z.com Services`;
+
+  try {
+    const r = await fetch(API, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:350, system:sys, messages:[{role:'user',content:txt}] })
+    });
+    const d = await r.json();
+    hideTyping(); aiTyping = false;
+    const reply = d.content?.[0]?.text || 'ขออภัยครับ ไม่สามารถตอบได้ในขณะนี้';
+
+    // KB card extra
+    let extra = '';
+    const lo = txt.toLowerCase();
+    if (lo.includes('dns') || lo.includes('a record') || lo.includes('cname') || lo.includes('mx')) {
+      extra = `<div class="kb-ref-card" onclick="openArticle('dns');"><div class="kb-ref-cat">📚 Knowledge Base</div><div class="kb-ref-title">การตั้งค่า DNS Records สำหรับ Domain <span class="kb-ref-arrow">→</span></div></div>`;
+    } else if (lo.includes('ssl') || lo.includes('https') || lo.includes('certificate')) {
+      extra = `<div class="kb-ref-card" onclick="openArticle('ssl');"><div class="kb-ref-cat">📚 Knowledge Base</div><div class="kb-ref-title">ติดตั้ง SSL Certificate บน cPanel <span class="kb-ref-arrow">→</span></div></div>`;
+    } else if (lo.includes('email') || lo.includes('spf') || lo.includes('mail')) {
+      extra = `<div class="kb-ref-card" onclick="openArticle('email');"><div class="kb-ref-cat">📚 Knowledge Base</div><div class="kb-ref-title">แก้ปัญหา Email ส่ง/รับไม่ได้ <span class="kb-ref-arrow">→</span></div></div>`;
+    }
+
+    // Ticket card
+    const isUrgent = lo.includes('ล่ม') || lo.includes('ด่วน') || lo.includes('ใช้ไม่ได้') || lo.includes('หมดอายุ') || lo.includes('แจ้งปัญหา');
+    if (isUrgent) {
+      const tid = '#TK-' + (2490 + Math.floor(Math.random()*50));
+      extra += `<div class="ticket-card-msg"><div class="tcm-header"><span class="tcm-icon">🎫</span><span class="tcm-status">สร้าง Ticket แล้ว</span></div><div class="tcm-id">${tid}</div><div class="tcm-title">${txt.substring(0,60)}${txt.length>60?'...':''}</div></div>`;
+    }
+    addMsg(reply, 'bot', extra);
+  } catch(e) {
+    hideTyping(); aiTyping = false;
+    addMsg('ขออภัยครับ เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง หรือติดต่อเราทาง Live Chat ครับ', 'bot');
+  }
+}
+
+/* ── ARTICLE ── */
+const ARTICLES = {
+  dns: {
+    icon:'🌐', cat:'Domain', catStyle:'background:var(--teal-light);color:var(--teal)',
+    title:'การตั้งค่า DNS Records สำหรับ Domain',
+    views:'10.2K', time:'7', date:'14 ม.ค. 2568',
+    summary:'DNS Records คือชุดคำสั่งที่บอกโลกอินเทอร์เน็ตว่าโดเมนของคุณชี้ไปที่ server ไหน ประกอบด้วย A Record (ชี้ไป IP), CNAME (สร้าง Alias), MX (สำหรับ Email) และ TXT (ยืนยันตัวตน) — การตั้งค่าผิดพลาดแค่ตัวเดียวอาจทำให้เว็บหรืออีเมลของคุณใช้งานไม่ได้ทันที',
+    body: `<h2>DNS Records คืออะไร?</h2>
+<p>DNS (Domain Name System) ทำงานเหมือน "สมุดโทรศัพท์" ของอินเทอร์เน็ต เมื่อคุณพิมพ์ชื่อเว็บไซต์ ระบบ DNS จะแปลงชื่อนั้นเป็น IP Address เพื่อให้ browser รู้ว่าต้องเชื่อมต่อไปที่ไหน</p>
+<h2>A Record</h2>
+<p>ใช้ชี้ชื่อโดเมนไปยัง IP Address ของ server เป็น Record พื้นฐานที่สุดและสำคัญที่สุด</p>
+<div class="code-box">example.com    A    192.0.2.1
+www            A    192.0.2.1</div>
+<h2>CNAME Record</h2>
+<p>ใช้สร้าง "ชื่อเล่น" ให้กับโดเมนอื่น เหมาะสำหรับการชี้ subdomain ไปที่ service ภายนอก</p>
+<div class="code-box">blog.example.com    CNAME    myblog.wordpress.com
+shop                CNAME    mystore.shopify.com</div>
+<h2>MX Record</h2>
+<p>กำหนดว่า email ที่ส่งมาที่ domain ของคุณจะถูก route ไปยัง mail server ไหน ค่า Priority ยิ่งน้อยยิ่งสำคัญกว่า</p>
+<div class="code-box">example.com    MX    10    mail.z.com
+example.com    MX    20    mail2.z.com</div>
+<h2>ขั้นตอนการตั้งค่า</h2>
+<div class="art-steps">
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body">เข้าสู่ระบบ Z.com Control Panel และคลิกที่ Domain ที่ต้องการแก้ไข</div></div>
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body">เลือกเมนู <strong>DNS Management</strong> หรือ <strong>Zone Editor</strong></div></div>
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body">กด <strong>Add Record</strong> เลือกประเภท Record ที่ต้องการ และกรอกค่าให้ครบถ้วน</div></div>
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body">กด <strong>Save</strong> และรอ DNS propagate ประมาณ 24–48 ชั่วโมง</div></div>
+</div>
+<div class="art-note"><span class="art-note-icon">⚠️</span><div>หลังเปลี่ยน DNS Records ระบบจะใช้เวลา <strong>24–48 ชั่วโมง</strong> ในการ propagate ทั่วโลก คุณสามารถตรวจสอบด้วย <strong>MXToolbox.com</strong> หรือ <strong>dnschecker.org</strong></div></div>`,
+    related: ['เพิ่ม SPF Record เพื่อป้องกัน Email Spoofing', 'ตรวจสอบ DNS Propagation ด้วย Online Tools', 'ย้าย Domain มา Z.com — คู่มือฉบับสมบูรณ์']
+  },
+  ssl: {
+    icon:'🔒', cat:'SSL Certificate', catStyle:'background:var(--amber-light);color:var(--amber)',
+    title:'ติดตั้ง SSL Certificate บน cPanel ด้วย Let\'s Encrypt',
+    views:'8.7K', time:'5', date:'22 ม.ค. 2568',
+    summary:'SSL Certificate ทำให้เว็บไซต์ของคุณใช้ HTTPS ได้ ช่วยเข้ารหัสข้อมูลและเพิ่มความน่าเชื่อถือ cPanel ของ Z.com มี Let\'s Encrypt ให้ใช้ฟรี ทำได้เองใน 3 นาที ไม่ต้องมีความรู้เทคนิค',
+    body:`<h2>ทำไม HTTPS ถึงสำคัญ?</h2>
+<p>SSL/TLS Certificate เข้ารหัสข้อมูลระหว่าง browser ของผู้เยี่ยมชมกับ server ของคุณ ช่วยป้องกันการดักข้อมูล และ Chrome จะแสดง "Not Secure" หากเว็บไซต์ไม่มี SSL</p>
+<h2>ติดตั้ง Let's Encrypt (ฟรี)</h2>
+<div class="art-steps">
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body">เข้า <strong>cPanel</strong> → หมวด <strong>Security</strong> → <strong>Let's Encrypt™ SSL</strong></div></div>
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body">เลือก Domain ที่ต้องการติดตั้ง (รวม www. ด้วย) แล้วกด <strong>Issue</strong></div></div>
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body">รอประมาณ 1–2 นาที ระบบจะออก Certificate ให้อัตโนมัติ</div></div>
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body">ทดสอบโดยพิมพ์ https://yourdomain.com — ควรเห็นไอคอนกุญแจ 🔒 ในเบราว์เซอร์</div></div>
+</div>
+<h2>ตรวจสอบ SSL ด้วย Command Line</h2>
+<div class="code-box">openssl s_client -connect yourdomain.com:443 -servername yourdomain.com | grep "Verify return code"</div>
+<div class="art-note"><span class="art-note-icon">💡</span><div>Let's Encrypt Certificate มีอายุ <strong>90 วัน</strong> แต่ cPanel ของ Z.com จะต่ออายุให้อัตโนมัติ คุณไม่ต้องทำอะไรเพิ่มเติม</div></div>`,
+    related: ['แก้ปัญหา Mixed Content หลังเปิด HTTPS', 'ติดตั้ง Wildcard SSL (*.domain.com)', 'Force Redirect HTTP ไป HTTPS ด้วย .htaccess']
+  },
+  email: {
+    icon:'✉️', cat:'Email Hosting', catStyle:'background:var(--purple-light);color:var(--purple)',
+    title:'แก้ปัญหา Email ส่ง/รับไม่ได้ ฉบับสมบูรณ์',
+    views:'7.1K', time:'8', date:'5 ก.พ. 2568',
+    summary:'ปัญหา Email มักมาจาก 3 สาเหตุหลัก: 1) MX Record ไม่ถูกต้อง ทำให้รับ email ไม่ได้ 2) SPF/DKIM ผิดพลาด ทำให้ email ถูกส่งไป Spam 3) Domain อยู่ใน Blacklist ทำให้ส่งไม่ได้เลย — ตรวจสอบตามขั้นตอนนี้แก้ได้ 90% ของปัญหา',
+    body:`<h2>ตรวจสอบ MX Record ก่อน</h2>
+<p>MX Record บอกว่า email ที่ส่งมาที่ domain ของคุณจะถูกส่งต่อไปยัง mail server ไหน หาก MX Record ผิด จะรับ email ไม่ได้เลย</p>
+<div class="code-box">dig MX yourdomain.com +short
+nslookup -type=MX yourdomain.com</div>
+<h2>ตั้งค่า SPF Record</h2>
+<p>SPF (Sender Policy Framework) ระบุว่า server ไหนมีสิทธิ์ส่ง email ในนาม domain ของคุณ ขาด SPF อาจทำให้ email ถูกมองว่า Spam</p>
+<div class="code-box">v=spf1 include:z.com include:_spf.google.com ~all</div>
+<h2>ตรวจสอบ Blacklist</h2>
+<div class="art-steps">
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body">เข้า <strong>mxtoolbox.com/blacklists</strong> และใส่ IP ของ mail server หรือ domain ของคุณ</div></div>
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body">หากพบว่าติด Blacklist ให้ทำการ Delist ผ่านเว็บของ Blacklist นั้นๆ</div></div>
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body">หากแก้ไขเองไม่ได้ให้แจ้ง Support ของ Z.com เพื่อขอความช่วยเหลือ</div></div>
+</div>
+<div class="art-note"><span class="art-note-icon">📧</span><div>สามารถทดสอบ Email Deliverability ได้ที่ <strong>mail-tester.com</strong> โดยการส่ง email ไปยัง address ที่เว็บให้ จะได้คะแนนและคำแนะนำในการปรับปรุง</div></div>`,
+    related: ['ตั้งค่า DKIM สำหรับ Z.com Email', 'ตั้งค่า Email บน Outlook และ Thunderbird', 'เปิดใช้งาน Webmail (Roundcube)']
+  },
+  billing: {
+    icon:'💳', cat:'Billing & Payment', catStyle:'background:var(--green-light);color:var(--green)',
+    title:'วิธีการชำระเงิน ต่ออายุ และขอใบกำกับภาษี',
+    views:'6.4K', time:'4', date:'18 ก.พ. 2568',
+    summary:'Z.com รองรับการชำระเงินหลายช่องทาง ทั้ง Credit Card, Internet Banking (KBank, SCB, BBL), QR PromptPay และ True Money Wallet สามารถตั้งค่าต่ออายุอัตโนมัติได้ และขอใบกำกับภาษีแบบเต็มรูปแบบ (Full Tax Invoice) ได้ทันที',
+    body:`<h2>ช่องทางการชำระเงิน</h2>
+<p>Z.com รองรับช่องทางการชำระเงินหลากหลาย เพื่อความสะดวกสบายของลูกค้า</p>
+<div class="art-steps">
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body"><strong>Credit/Debit Card</strong> — Visa, Mastercard, JCB (ชำระทันที)</div></div>
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body"><strong>Internet Banking</strong> — KBank, SCB, Krungthai, Bangkok Bank</div></div>
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body"><strong>QR PromptPay</strong> — สแกนจ่ายผ่าน mobile banking ทุกธนาคาร</div></div>
+<div class="art-step"><div class="art-step-num"></div><div class="art-step-body"><strong>True Money Wallet</strong> — สำหรับผู้ใช้ TrueMoney</div></div>
+</div>
+<h2>ตั้งค่าต่ออายุอัตโนมัติ</h2>
+<p>เปิด Auto-Renew เพื่อป้องกันบริการหมดอายุกะทันหัน ระบบจะแจ้งเตือนทาง email 30 วันก่อนหมดอายุ</p>
+<div class="code-box">Control Panel → Services → เลือก Service → Auto-Renew → Enable</div>
+<h2>ขอใบกำกับภาษี</h2>
+<div class="art-note"><span class="art-note-icon">🧾</span><div>กรอกข้อมูลบริษัทในโปรไฟล์ก่อนชำระเงิน เพื่อให้ระบบออกใบกำกับภาษีอิเล็กทรอนิกส์ (e-Tax Invoice) ให้อัตโนมัติ สามารถดาวน์โหลดได้ใน Control Panel → Billing → Invoices</div></div>`,
+    related: ['ขอ Refund และยกเลิกบริการ', 'โปรแกรมพาร์ทเนอร์ Z.com Reseller', 'Z.com Points — สะสมและแลกส่วนลด']
+  }
+};
+
+function openArticle(id) {
+  const a = ARTICLES[id]; if (!a) return;
+  document.getElementById('artModal').innerHTML = `
+    <div class="art-modal-head">
+      <span class="art-modal-cat-icon">${a.icon}</span>
+      <div><div class="art-modal-cat-name">${a.cat}</div></div>
+      <button class="art-close" onclick="closeArticle()">✕</button>
+    </div>
+    <div class="art-body">
+      <h1>${a.title}</h1>
+      <div class="art-meta-row">
+        <span class="art-meta-item">👁 ${a.views} ครั้ง</span>
+        <span class="art-meta-item">⏱ ${a.time} นาที</span>
+        <span class="art-meta-item">📅 อัปเดต ${a.date}</span>
+        <span class="art-meta-item" style="color:var(--green)">⭐ 4.8/5</span>
+      </div>
+      <div class="ai-sum-box">
+        <div class="ai-sum-label">AI สรุปให้</div>
+        <div class="ai-sum-text">${a.summary}</div>
+      </div>
+      ${a.body}
+    </div>
+    <div class="art-related">
+      <div class="art-rel-title">📎 บทความที่เกี่ยวข้อง</div>
+      <div class="art-rel-list">
+        ${a.related.map(r=>`<div class="art-rel-item"><span class="art-rel-icon">📄</span>${r}</div>`).join('')}
+      </div>
+    </div>
+    <div class="art-feedback">
+      <span class="art-fb-label">บทความนี้มีประโยชน์ไหม?</span>
+      <button class="fb-btn" onclick="toast('👍','ขอบคุณสำหรับ feedback ครับ!','เราจะนำไปปรับปรุงบทความต่อไป')">👍 ใช่ มีประโยชน์</button>
+      <button class="fb-btn" onclick="toast('📝','รับทราบแล้วครับ','ทีมเนื้อหาจะปรับปรุงให้ดียิ่งขึ้น')">👎 ยังไม่ชัดเจน</button>
+      <button class="btn btn-red art-ticket-btn" onclick="closeArticle();openTicket()">🎫 ยังมีปัญหา? แจ้ง Ticket →</button>
+    </div>`;
+  document.getElementById('artOverlay').classList.add('open');
+}
+function closeArticle() { document.getElementById('artOverlay').classList.remove('open'); }
+
+/* ── TICKET ── */
+function openTicket() { document.getElementById('tktOverlay').classList.add('open'); }
+function closeTicket() { document.getElementById('tktOverlay').classList.remove('open'); }
+function fillTicket(title, cat, pri) {
+  document.getElementById('fTitle').value = title;
+  document.getElementById('fCat').value = cat;
+  document.getElementById('fPri').value = pri + (pri==='Low'?' — ไม่เร่งด่วน':pri==='Medium'?' — ปกติ':pri==='High'?' — เร่งด่วน':' — ด่วนมาก');
+}
+function submitTicket() {
+  const title = document.getElementById('fTitle').value.trim();
+  const email = document.getElementById('fEmail').value.trim();
+  if (!title || !email) { toast('⚠️','กรุณากรอกข้อมูลให้ครบ','หัวข้อปัญหาและอีเมลจำเป็นต้องกรอก'); return; }
+  const tid = '#TK-' + (2490 + Math.floor(Math.random()*100));
+  closeTicket();
+  toast('✅',`สร้าง Ticket ${tid} สำเร็จ!`,'ทีม Support จะตอบกลับภายใน 2–4 ชั่วโมงครับ');
+  setTimeout(() => {
+    sendQ(`ผมเพิ่งสร้าง Ticket ${tid} เรื่อง: ${title.substring(0,50)} — ขอบคุณมากครับ`);
+  }, 800);
+}
+
+/* ── TRACKER ── */
+function openTracker() {
+  document.getElementById('trackerOv').classList.add('open');
+  const v = document.getElementById('trackId').value;
+  if (v) { document.getElementById('trackId2').value = v; setTimeout(doTrackModal,200); }
+}
+function closeTracker() { document.getElementById('trackerOv').classList.remove('open'); }
+function doTrack() {
+  const v = document.getElementById('trackId').value.trim();
+  if (!v) return;
+  document.getElementById('trackId2').value = v;
+  openTracker();
+  setTimeout(doTrackModal, 300);
+}
+function doTrackModal() {
+  const raw = document.getElementById('trackId2').value.trim().toUpperCase();
+  const id = raw.startsWith('TK-') ? raw : 'TK-' + raw.replace(/\D/g,'');
+  const tickets = {
+    'TK-2481': {status:'open', title:'Website ล่ม ไม่สามารถเข้าถึงได้', cat:'Web Hosting', pri:'High', step:1, msg:'ทีม Technical กำลังตรวจสอบปัญหาอยู่ครับ คาดว่าจะแก้ไขเสร็จภายใน 2 ชั่วโมง'},
+    'TK-2479': {status:'pending', title:'Domain Transfer จาก GoDaddy', cat:'Domain', pri:'Medium', step:2, msg:'รอ Auth Code จากคุณอยู่ครับ กรุณาตรวจสอบอีเมลและตอบกลับ Ticket'},
+    'TK-2476': {status:'pending', title:'SSL Certificate หมดอายุ', cat:'SSL', pri:'High', step:2, msg:'ทีม Support กำลังดำเนินการออก SSL ใหม่ให้ครับ'},
+    'TK-2471': {status:'resolved', title:'Email ส่งไม่ได้ SPF Record ผิด', cat:'Email', pri:'Medium', step:3, msg:'แก้ไขแล้วครับ ได้อัปเดต SPF Record ให้เรียบร้อย ถ้ายังมีปัญหากรุณาแจ้ง Ticket ใหม่'},
+  };
+  const t = tickets[id];
+  const body = document.getElementById('trackerBody');
+  if (!t) {
+    body.innerHTML = `<div style="text-align:center;padding:16px 0;">
+      <div style="font-size:36px;margin-bottom:10px">🔍</div>
+      <div style="font-size:14px;color:var(--text-s);margin-bottom:16px">ไม่พบ Ticket <strong style="font-family:'JetBrains Mono'">${id}</strong><br>กรุณาตรวจสอบรหัสอีกครั้ง</div>
+      <div style="display:flex;gap:8px;justify-content:center;">
+        <input class="f-input" id="trackId2" type="text" value="${raw}" style="width:160px;text-align:center;font-family:'JetBrains Mono'">
+        <button class="btn btn-red" onclick="doTrackModal()">ค้นหา</button>
+      </div></div>`;
+    return;
+  }
+  const stepDone = (n) => n < t.step ? 'done' : n === t.step ? 'active' : '';
+  const lineDone = (n) => n < t.step ? 'done' : '';
+  const badgeClass = t.status==='resolved'?'badge-resolved':t.status==='pending'?'badge-pending':'badge-open';
+  const badgeText = t.status==='resolved'?'✅ แก้ไขแล้ว':t.status==='pending'?'⏳ รอดำเนินการ':'🔵 กำลังดำเนินการ';
+  body.innerHTML = `
+    <div class="tracker-status-bar">
+      <div class="ts-step ${stepDone(1)}"><div class="ts-circle">1</div><div class="ts-label">รับเรื่อง</div></div>
+      <div class="ts-line ${lineDone(1)}"></div>
+      <div class="ts-step ${stepDone(2)}"><div class="ts-circle">2</div><div class="ts-label">กำลังแก้</div></div>
+      <div class="ts-line ${lineDone(2)}"></div>
+      <div class="ts-step ${stepDone(3)}"><div class="ts-circle">3</div><div class="ts-label">เสร็จสิ้น</div></div>
+    </div>
+    <div class="ticket-detail-card">
+      <div class="td-row"><span class="td-key">Ticket ID</span><span class="td-val">${id}</span></div>
+      <div class="td-row"><span class="td-key">หัวข้อ</span><span class="td-val" style="font-family:inherit;max-width:240px;text-align:right">${t.title}</span></div>
+      <div class="td-row"><span class="td-key">หมวดหมู่</span><span class="td-val" style="font-family:inherit">${t.cat}</span></div>
+      <div class="td-row"><span class="td-key">ความเร่งด่วน</span><span class="td-val" style="font-family:inherit">${t.pri}</span></div>
+      <div class="td-row"><span class="td-key">สถานะ</span><span class="td-badge ${badgeClass}">${badgeText}</span></div>
+    </div>
+    <div class="tracker-msg"><span class="tracker-msg-icon">💬</span><div>${t.msg}</div></div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <input class="f-input" id="trackId2" type="text" placeholder="รหัส Ticket อื่น" style="flex:1;font-family:'JetBrains Mono'">
+      <button class="btn btn-red" onclick="doTrackModal()">ค้นหา</button>
+    </div>`;
+}
+
+/* ── TOAST ── */
+let toastT;
+function toast(ico, title, desc='') {
+  document.getElementById('toastIco').textContent = ico;
+  document.getElementById('toastT').textContent = title;
+  document.getElementById('toastD').textContent = desc;
+  const el = document.getElementById('toast');
+  el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+/* ── CLICK OUTSIDE ── */
+document.getElementById('tktOverlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeTicket(); });
+document.getElementById('trackerOv').addEventListener('click', e => { if(e.target===e.currentTarget) closeTracker(); });
+</script>
+</body>
+</html>
