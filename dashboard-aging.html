@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AR Aging — Executive Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* ── Z.com Brand Palette ── */
+  --zred:    #E6000A;
+  --zred-d:  #B30008;
+  --zred-l:  #FF1A23;
+  --zred-bg: #FFF0F0;
+  --zred-10: rgba(230,0,10,.10);
+
+  /* ── Surface ── */
+  --page:    #F2F3F5;
+  --white:   #FFFFFF;
+  --topbar:  #1A1A1A;
+  --topbar2: #2A2A2A;
+
+  /* ── Ink ── */
+  --ink:     #111111;
+  --ink-2:   #333333;
+  --ink-3:   #666666;
+  --ink-4:   #999999;
+
+  /* ── Border ── */
+  --line:    #E8E8E8;
+  --line-2:  #D0D0D0;
+
+  /* ── Accent (keep blue→zred) ── */
+  --blue:    #E6000A;
+
+  /* ── Shadow ── */
+  --s1: 0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.05);
+  --s2: 0 4px 16px rgba(0,0,0,.09);
+
+  /* ── Radius ── */
+  --r:  8px;
+
+  /* ── Bucket colors (unchanged) ── */
+  --b1: #22C55E; --b2: #F59E0B; --b3: #F97316;
+  --b4: #EF4444; --b5: #DC2626; --b6: #991B1B; --b7: #450A0A;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
+html { -webkit-font-smoothing:antialiased; font-size:16px }
+body { font-family:'Sarabun',sans-serif; background:var(--page); color:var(--ink); min-height:100vh }
+b,strong { font-weight:600 }
+
+/* UPLOAD */
+#up { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--white); padding:40px 20px }
+.up-h { font-size:26px; font-weight:700; color:var(--ink); margin-bottom:6px; text-align:center; display:flex; align-items:center; gap:10px; justify-content:center }
+.up-h-z { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; background:var(--zred); border-radius:6px; font-size:17px; font-weight:700; color:#fff }
+.up-p { font-size:13px; color:var(--ink-3); margin-bottom:44px; text-align:center }
+.dz { width:100%; max-width:500px; border:2px dashed var(--line-2); border-radius:12px; padding:52px 36px; text-align:center; cursor:pointer; background:var(--page); transition:all .18s }
+.dz:hover,.dz.over { border-color:var(--zred); background:var(--zred-bg) }
+.dz-ico { font-size:44px; margin-bottom:16px; display:block }
+.dz-h { font-size:16px; font-weight:600; margin-bottom:6px }
+.dz-p { font-size:13px; color:var(--ink-3); margin-bottom:22px }
+.btn-pick { background:var(--zred); color:#fff; border:none; border-radius:7px; padding:10px 24px; font-size:13px; font-weight:600; font-family:'Sarabun',sans-serif; cursor:pointer; transition:all .15s }
+.btn-pick:hover { background:var(--zred-d) }
+#fi { display:none }
+.prog { width:100%; max-width:500px; height:3px; background:var(--line); border-radius:2px; overflow:hidden; margin-top:20px; display:none }
+.prog-b { height:100%; background:var(--zred); border-radius:2px; animation:pa .7s ease-in-out infinite alternate }
+@keyframes pa { from{width:15%} to{width:85%} }
+.up-note { margin-top:28px; font-size:12px; color:var(--ink-4); text-align:center; max-width:420px; line-height:1.8 }
+.up-note b { color:var(--ink-2) }
+
+/* DASHBOARD */
+#dash { display:none }
+
+/* TOPBAR — Z.com dark */
+.topbar {
+  background:var(--topbar);
+  border-bottom:2px solid var(--zred);
+  height:58px; padding:0 32px;
+  display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:100;
+  box-shadow:0 2px 12px rgba(0,0,0,.3);
+}
+.tb-l { display:flex; align-items:center; gap:14px }
+.tb-brand {
+  font-size:17px; font-weight:700; color:#FFFFFF;
+  letter-spacing:.02em; display:flex; align-items:center; gap:8px;
+}
+.tb-brand-z {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:28px; height:28px; background:var(--zred); border-radius:5px;
+  font-size:15px; font-weight:700; color:#fff; letter-spacing:-.02em;
+  font-family:'Noto Sans JP','Sarabun',sans-serif;
+}
+.tb-sep { width:1px; height:18px; background:rgba(255,255,255,.15) }
+.tb-file { font-size:13px; font-weight:400; color:rgba(255,255,255,.55); max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+.tb-r { display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+.chip { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); border-radius:5px; padding:4px 10px; font-size:12.5px; color:rgba(255,255,255,.55) }
+.chip b { color:rgba(255,255,255,.9) }
+.tb-btn { border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.07); border-radius:6px; padding:6px 14px; font-size:12.5px; font-weight:500; color:rgba(255,255,255,.7); cursor:pointer; font-family:'Sarabun',sans-serif; display:flex; align-items:center; gap:5px; transition:all .15s }
+.tb-btn:hover { background:rgba(255,255,255,.14); color:#fff; border-color:rgba(255,255,255,.35) }
+.tb-btn.print { background:rgba(230,0,10,.25); border-color:rgba(230,0,10,.5); color:#FFA0A5 }
+.tb-btn.print:hover { background:rgba(230,0,10,.4); color:#fff }
+
+/* BODY */
+.body { padding:28px 32px; max-width:1440px; margin:0 auto }
+.sec { font-size:10.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-4); margin-bottom:12px; display:flex; align-items:center; gap:8px }
+.sec::before { content:''; display:inline-block; width:3px; height:13px; background:var(--zred); border-radius:2px }
+
+/* KPI */
+.kpi-row { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-bottom:26px }
+.kpi { background:var(--white); border:1px solid var(--line); border-radius:var(--r); padding:18px 20px; box-shadow:var(--s1); border-top:3px solid var(--ck,var(--line-2)); position:relative; overflow:hidden }
+.kpi::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg,color-mix(in srgb,var(--ck,transparent) 4%,transparent),transparent 60%); pointer-events:none }
+.kpi-lbl { font-size:10.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); margin-bottom:10px }
+.kpi-num { font-family:'IBM Plex Mono',monospace; font-size:28px; font-weight:500; color:var(--ink); line-height:1; margin-bottom:5px }
+.kpi-unit { font-size:13px; font-family:'Sarabun',sans-serif; color:var(--ink-3) }
+.kpi-note { font-size:11.5px; color:var(--ink-3); line-height:1.5 }
+.kpi-delta { font-size:11.5px; font-weight:600; margin-top:5px }
+
+/* BUCKET STRIP */
+.bstrip { background:var(--white); border:1px solid var(--line); border-radius:var(--r); overflow:hidden; box-shadow:var(--s1); margin-bottom:26px }
+.bs-head { padding:16px 24px 12px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between }
+.bs-title { font-size:15px; font-weight:600 }
+.bs-grand { font-family:'IBM Plex Mono',monospace; font-size:15px; font-weight:500; color:var(--ink-2) }
+.bkts { display:grid; grid-template-columns:repeat(7,1fr) }
+.bkt { padding:16px 14px; border-right:1px solid var(--line); cursor:pointer; transition:background .15s; position:relative; border-top:3px solid var(--bc,transparent) }
+.bkt:last-child { border-right:none }
+.bkt:hover { background:var(--page) }
+.bkt.sel { background:color-mix(in srgb,var(--bc) 7%,white) }
+.bkt.sel::after { content:'▲'; position:absolute; bottom:-1px; left:50%; transform:translateX(-50%); color:var(--bc); font-size:9px }
+.bkt-lbl { font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--bc); margin-bottom:6px }
+.bkt-amt { font-family:'IBM Plex Mono',monospace; font-size:18px; font-weight:500; color:var(--ink); line-height:1; margin-bottom:4px }
+.bkt-inv { font-size:12px; color:var(--ink-3); margin-bottom:10px }
+.bkt-bg { height:4px; background:var(--line); border-radius:2px; overflow:hidden }
+.bkt-fill { height:100%; background:var(--bc); border-radius:2px; transition:width .9s cubic-bezier(.4,0,.2,1) }
+.bkt-pct { font-size:11px; font-weight:600; color:var(--bc); margin-top:4px }
+
+/* ─── CHARTS — 3-col grid ─── */
+.chart-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; align-items:stretch }
+.chart-grid .cc { display:flex; flex-direction:column }
+.chart-grid .cc .cc-body { flex:1 }
+
+.cc { background:var(--white); border:1px solid var(--line); border-radius:var(--r); box-shadow:var(--s1); overflow:hidden }
+.cc-head { padding:14px 18px 10px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between }
+.cc-title { font-size:14px; font-weight:600 }
+.cc-sub { font-size:12px; color:var(--ink-3) }
+.cc-body { padding:16px 18px }
+.donut-wrap { display:flex; align-items:center; gap:16px }
+.donut-canvas-wrap { position:relative; width:160px; height:160px; flex-shrink:0 }
+.donut-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; pointer-events:none }
+.donut-v { font-family:'IBM Plex Mono',monospace; font-size:16px; font-weight:500; color:var(--ink); line-height:1 }
+.donut-l { font-size:12px; color:var(--ink-3); margin-top:3px }
+.dlegend { display:flex; flex-direction:column; gap:5px; flex:1; overflow:hidden }
+.dleg-item { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--ink-2) }
+.dleg-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0 }
+.dleg-name { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.dleg-pct { font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-3); flex-shrink:0 }
+
+/* Customer horizontal strip */
+.cust-strip { background:var(--white); border:1px solid var(--line); border-radius:var(--r); box-shadow:var(--s1); margin-bottom:26px; overflow:hidden }
+.cust-strip-head { padding:13px 20px 10px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between }
+.cust-strip-title { font-size:14px; font-weight:600 }
+.cust-strip-scroll { display:flex; gap:0; overflow-x:auto; scrollbar-width:thin; scrollbar-color:var(--line-2) var(--page) }
+.cust-strip-scroll::-webkit-scrollbar { height:4px }
+.cust-strip-scroll::-webkit-scrollbar-track { background:var(--page) }
+.cust-strip-scroll::-webkit-scrollbar-thumb { background:var(--line-2); border-radius:2px }
+.cust-card { min-width:200px; max-width:220px; padding:14px 16px; border-right:1px solid var(--line); flex-shrink:0 }
+.cust-card:last-child { border-right:none }
+.cc-rank { font-size:10px; font-weight:700; color:var(--ink-4); margin-bottom:4px }
+.cc-name { font-size:12.5px; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:6px }
+.cc-amt { font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:500; color:var(--ink); margin-bottom:6px }
+.cc-bar-bg { height:3px; background:var(--line); border-radius:2px; overflow:hidden; margin-bottom:5px }
+.cc-bar-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--b1),var(--b2),var(--b4)) }
+.cc-share { font-size:11px; color:var(--ink-3) }
+
+.card { background:var(--white); border:1px solid var(--line); border-radius:var(--r); overflow:hidden; box-shadow:var(--s1) }
+.card-head { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px; flex-wrap:wrap }
+.card-title { font-size:14px; font-weight:600; margin-right:auto }
+.sw { position:relative }
+.si { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--ink-4); font-size:12px; pointer-events:none }
+.sinput { background:var(--page); border:1px solid var(--line); border-radius:7px; padding:7px 12px 7px 30px; font-size:13px; font-family:'Sarabun',sans-serif; color:var(--ink); outline:none; width:190px; transition:border-color .15s }
+.sinput:focus { border-color:var(--zred); background:var(--white) }
+.rc { font-size:12px; color:var(--ink-3); white-space:nowrap }
+.tag-row { display:none }
+.tag { font-size:12px; font-weight:700; letter-spacing:.04em; padding:4px 11px; border-radius:20px; border:1px solid; cursor:pointer; white-space:nowrap; transition:all .12s; color:var(--tc); border-color:color-mix(in srgb,var(--tc) 35%,transparent); background:color-mix(in srgb,var(--tc) 8%,white) }
+.tag.on { background:var(--tc); color:#fff; border-color:var(--tc) }
+
+/* TABLE */
+.ts { overflow:auto; max-height:480px }
+.ts::-webkit-scrollbar { width:5px; height:5px }
+.ts::-webkit-scrollbar-track { background:var(--page) }
+.ts::-webkit-scrollbar-thumb { background:var(--line-2); border-radius:3px }
+table.inv { width:100%; border-collapse:collapse; font-size:13.5px }
+.inv thead { position:sticky; top:0; z-index:5 }
+.inv th { background:var(--page); border-bottom:1px solid var(--line); padding:9px 14px; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-3); white-space:nowrap; cursor:pointer; user-select:none; text-align:left }
+.inv th:hover { color:var(--ink) }
+.inv th.r { text-align:right }
+.inv td { padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:middle }
+.inv tr:last-child td { border-bottom:none }
+.inv tr:hover td { background:#FAFBFD }
+.inv tr.sev-hi td { background:#FEF2F2 }
+.inv tr.sev-hi:hover td { background:#FEE2E2 }
+.inv tr.sev-med td { background:#FFFBEB }
+.inv tr.sev-med:hover td { background:#FEF3C7 }
+.inv tr.sev-partial td { background:#F0FDF4 }
+.inv tr.sev-partial:hover td { background:#DCFCE7 }
+.inv .mn { text-align:right; font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:500 }
+.inv .doc { font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--zred); font-weight:500 }
+.inv .cust { max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500 }
+.inv .dt { font-size:12.5px; color:var(--ink-3); white-space:nowrap }
+.inv .ov { font-size:12.5px; color:var(--ink-3); white-space:nowrap }
+.inv .ov.late { color:#DC2626; font-weight:600 }
+.inv tfoot td { padding:10px 14px; background:var(--page); font-weight:700; border-top:2px solid var(--line); font-family:'IBM Plex Mono',monospace; font-size:13px }
+.bdg { display:inline-block; font-size:11px; font-weight:700; padding:2px 7px; border-radius:4px; border:1px solid var(--bc); color:var(--bc); background:color-mix(in srgb,var(--bc) 10%,white); white-space:nowrap }
+.ptag { display:inline-block; margin-left:5px; font-size:11px; font-weight:700; padding:1px 5px; border-radius:3px; background:#ECFDF5; color:#059669; border:1px solid #A7F3D0 }
+.htag { display:inline-block; margin-left:5px; font-size:11px; font-weight:700; padding:1px 5px; border-radius:3px; background:#FEF2F2; color:#DC2626; border:1px solid #FCA5A5 }
+.sev-legend { padding:6px 20px; border-bottom:1px solid var(--line); background:var(--page); display:flex; align-items:center; gap:16px; font-size:12px; color:var(--ink-3) }
+.sleg { display:flex; align-items:center; gap:4px }
+.sleg-box { width:10px; height:10px; border-radius:2px; flex-shrink:0 }
+
+/* CUSTOMERS */
+.cscroll { overflow-y:auto; max-height:560px }
+.cscroll::-webkit-scrollbar { width:4px }
+.cscroll::-webkit-scrollbar-track { background:var(--page) }
+.cscroll::-webkit-scrollbar-thumb { background:var(--line-2); border-radius:2px }
+.ci { padding:12px 18px; border-bottom:1px solid var(--line); transition:background .12s }
+.ci:hover { background:var(--page) }
+.ci:last-child { border-bottom:none }
+.ci-r1 { display:flex; align-items:flex-start; gap:8px; margin-bottom:7px }
+.ci-rank { width:18px; height:18px; border-radius:50%; background:var(--page); border:1px solid var(--line); display:inline-flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:var(--ink-3); flex-shrink:0; margin-top:1px }
+.ci-name { font-size:13px; font-weight:600; flex:1; line-height:1.4; color:var(--ink) }
+.ci-total { font-family:'IBM Plex Mono',monospace; font-size:13.5px; font-weight:500; color:var(--ink); white-space:nowrap }
+.ci-bg { height:4px; background:var(--line); border-radius:2px; overflow:hidden; margin-bottom:5px }
+.ci-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--b1),var(--b2),var(--b4)) }
+.ci-meta { display:flex; justify-content:space-between; font-size:12px; color:var(--ink-3) }
+
+/* RECON */
+.vsec { margin-top:20px }
+.vgrid { display:grid; grid-template-columns:1fr 1fr; gap:14px }
+.vc { background:var(--white); border:1px solid var(--line); border-radius:var(--r); overflow:hidden; box-shadow:var(--s1) }
+.vc-h { padding:12px 18px; border-bottom:1px solid var(--line); background:var(--page); font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-3) }
+.vt { width:100%; border-collapse:collapse; font-size:13.5px }
+.vt th { background:var(--page); border-bottom:1px solid var(--line); padding:8px 14px; text-align:left; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-3) }
+.vt th.r { text-align:right }
+.vt td { padding:9px 14px; border-bottom:1px solid var(--line) }
+.vt tr:last-child td { border-bottom:none }
+.vt .mn { text-align:right; font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:500 }
+.vt tfoot td { padding:9px 14px; background:var(--page); font-weight:700; font-family:'IBM Plex Mono',monospace; font-size:13px; border-top:2px solid var(--line) }
+.dot { display:inline-block; width:8px; height:8px; border-radius:50%; vertical-align:middle; margin-right:6px; background:var(--dc) }
+
+/* ── SUMMARY BANNER — card-grid layout ── */
+.summary-banner {
+  background:var(--white); border:1px solid var(--line);
+  border-radius:var(--r); margin-bottom:26px; box-shadow:var(--s1);
+  overflow:hidden;
+}
+.sb-head {
+  display:flex; align-items:center; gap:10px;
+  padding:14px 20px 12px;
+  border-bottom:1px solid var(--line);
+  background:var(--topbar);
+}
+.sb-head-ico {
+  width:26px; height:26px; background:var(--zred); border-radius:5px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; flex-shrink:0;
+}
+.sb-head-title {
+  font-size:12px; font-weight:700; letter-spacing:.09em;
+  text-transform:uppercase; color:rgba(255,255,255,.75);
+}
+.sb-head-asof { font-size:12px; color:rgba(255,255,255,.4); margin-left:auto }
+.sb-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+}
+.sb-stat {
+  padding:18px 20px; border-right:1px solid var(--line);
+  position:relative;
+}
+.sb-stat:last-child { border-right:none }
+.sb-stat-label {
+  font-size:10.5px; font-weight:700; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-4); margin-bottom:8px;
+  display:flex; align-items:center; gap:6px;
+}
+.sb-stat-dot {
+  width:7px; height:7px; border-radius:50%;
+  background:var(--sdc,var(--line-2)); flex-shrink:0;
+}
+.sb-stat-amount {
+  font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:500;
+  color:var(--sdc,var(--ink)); line-height:1; margin-bottom:4px;
+}
+.sb-stat-sub {
+  font-size:12px; color:var(--ink-3); line-height:1.5;
+}
+.sb-stat-pct {
+  display:inline-block; margin-top:6px;
+  font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600;
+  padding:2px 8px; border-radius:20px;
+  background:color-mix(in srgb,var(--sdc,#ccc) 12%,white);
+  color:var(--sdc,var(--ink-3));
+  border:1px solid color-mix(in srgb,var(--sdc,#ccc) 25%,white);
+}
+.sb-flags {
+  padding:12px 20px; border-top:1px solid var(--line);
+  background:var(--page); display:flex; flex-wrap:wrap; gap:8px;
+  font-size:12px;
+}
+.sb-flag {
+  display:flex; align-items:center; gap:6px;
+  padding:5px 12px; border-radius:20px;
+  font-size:12px; font-weight:500;
+}
+.sb-flag-red  { background:#FEF2F2; color:#991B1B; border:1px solid #FCA5A5 }
+.sb-flag-green{ background:#F0FDF4; color:#166534; border:1px solid #86EFAC }
+.sb-flag-blue { background:var(--zred-bg); color:var(--zred-d); border:1px solid rgba(230,0,10,.25) }
+
+/* ─── DUE SOON ALERT ─── */
+.alert-strip {
+  background:linear-gradient(135deg,#FFFBEB 0%,#FEF9C3 100%);
+  border:1px solid #FDE047; border-radius:var(--r);
+  padding:16px 20px 18px; margin-bottom:26px;
+  box-shadow:0 2px 8px rgba(245,158,11,.12);
+}
+.alert-header { display:flex; align-items:center; gap:10px; margin-bottom:14px }
+.alert-ico { font-size:22px; flex-shrink:0 }
+.alert-title { font-size:13.5px; font-weight:700; color:#854D0E; flex:1 }
+.alert-summary-chip {
+  background:#FEF3C7; border:1px solid #FCD34D; border-radius:20px;
+  padding:4px 12px; font-size:12px; font-weight:700; color:#92400E;
+  white-space:nowrap; display:flex; align-items:center; gap:5px;
+}
+.alert-items {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(230px, 1fr));
+  gap:10px;
+}
+.alert-item {
+  background:var(--white); border:1px solid rgba(253,224,71,.6); border-radius:10px;
+  padding:12px 14px; font-size:12px; color:#713F12;
+  display:flex; flex-direction:column; gap:6px;
+  cursor:pointer; transition:all .18s; position:relative;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+  overflow:hidden;
+}
+.alert-item::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:var(--ai-accent,#F59E0B); border-radius:10px 0 0 10px;
+}
+.alert-item:hover {
+  background:#FFFBEB; border-color:#F59E0B;
+  box-shadow:0 4px 12px rgba(245,158,11,.18);
+  transform:translateY(-2px);
+}
+.alert-item:active { transform:translateY(0) }
+.alert-item-name { font-size:13px; font-weight:700; color:#451A03; line-height:1.3; padding-right:28px }
+.alert-item-amount { font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; color:#92400E }
+.alert-item-meta { display:flex; align-items:center; gap:6px; flex-wrap:wrap }
+.ai-badge { font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:20px; background:#FEF3C7; color:#92400E; border:1px solid #FDE68A; white-space:nowrap }
+.ai-badge.today-badge { background:#FEF2F2; color:#DC2626; border-color:#FCA5A5 }
+.ai-badge.soon3-badge { background:#FFF7ED; color:#C2410C; border-color:#FDBA74 }
+.ai-badge.week-badge  { background:#FFFBEB; color:#B45309; border-color:#FDE68A }
+.ai-badge.ok-badge    { background:#F0FDF4; color:#16A34A; border-color:#86EFAC }
+.ai-inv-count { font-size:11px; color:#A16207; background:#FEF9C3; padding:2px 7px; border-radius:10px }
+.ai-arrow { position:absolute; top:12px; right:12px; font-size:13px; color:#D97706; opacity:0.6 }
+
+/* ─── DUE SOON MODAL ─── */
+.modal-backdrop {
+  position:fixed; inset:0; background:rgba(0,0,0,.45);
+  z-index:200; backdrop-filter:blur(3px);
+  animation:bfadeIn .18s ease;
+}
+@keyframes bfadeIn { from{opacity:0} to{opacity:1} }
+.modal-box {
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  z-index:201; background:var(--white); border-radius:14px;
+  box-shadow:0 20px 60px rgba(0,0,0,.22);
+  width:min(92vw, 900px); max-height:85vh;
+  display:flex; flex-direction:column;
+  animation:mslideIn .2s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes mslideIn { from{opacity:0;transform:translate(-50%,-46%)} to{opacity:1;transform:translate(-50%,-50%)} }
+.modal-head {
+  padding:18px 22px 14px; border-bottom:1px solid var(--line);
+  display:flex; align-items:flex-start; gap:12px; flex-shrink:0;
+}
+.modal-head-ico { font-size:22px; margin-top:1px }
+.modal-head-info { flex:1 }
+.modal-title { font-size:16px; font-weight:700; color:var(--ink); line-height:1.3 }
+.modal-subtitle { font-size:12px; color:var(--ink-3); margin-top:3px }
+.modal-close {
+  background:var(--page); border:1px solid var(--line); border-radius:7px;
+  width:30px; height:30px; cursor:pointer; font-size:14px; color:var(--ink-3);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; transition:all .12s; font-family:'Sarabun',sans-serif;
+}
+.modal-close:hover { background:var(--line); color:var(--ink) }
+.modal-body { overflow-y:auto; flex:1; padding:0 }
+.modal-body::-webkit-scrollbar { width:5px }
+.modal-body::-webkit-scrollbar-track { background:var(--page) }
+.modal-body::-webkit-scrollbar-thumb { background:var(--line-2); border-radius:3px }
+.modal-footer {
+  padding:12px 22px; border-top:1px solid var(--line); flex-shrink:0;
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--page);
+}
+.modal-footer-info { font-size:12px; color:var(--ink-3) }
+.modal-footer-info b { color:var(--ink) }
+.btn-modal-close { background:var(--white); border:1px solid var(--line-2); border-radius:7px; padding:7px 18px; font-size:13px; font-weight:500; cursor:pointer; font-family:'Sarabun',sans-serif; color:var(--ink-2); transition:all .12s }
+.btn-modal-close:hover { border-color:var(--ink-2); color:var(--ink) }
+
+/* PEAK link button */
+.peak-link {
+  display:inline-flex; align-items:center; gap:4px;
+  font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--zred); font-weight:500;
+  text-decoration:none; padding:2px 6px; border-radius:5px;
+  transition:all .12s; white-space:nowrap;
+}
+.peak-link:hover { background:var(--zred-bg); color:var(--zred-d) }
+.peak-link .ext-ico { font-size:10px; opacity:.6 }
+.doc-no-wrap { display:flex; align-items:center; gap:4px; white-space:nowrap }
+
+/* days badge in modal */
+.days-badge {
+  display:inline-block; font-size:11px; font-weight:700; padding:2px 8px;
+  border-radius:20px; white-space:nowrap;
+}
+.days-badge.today { background:#FEF2F2; color:#DC2626; border:1px solid #FCA5A5 }
+.days-badge.soon3 { background:#FFF7ED; color:#C2410C; border:1px solid #FDBA74 }
+.days-badge.week   { background:#FFFBEB; color:#B45309; border:1px solid #FDE68A }
+.days-badge.ok    { background:#F0FDF4; color:#16A34A; border:1px solid #86EFAC }
+
+/* FILTER BAR */
+.filter-bar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:12px 20px; border-bottom:1px solid var(--line); background:var(--page) }
+.filter-label { font-size:12px; font-weight:600; color:var(--ink-3); white-space:nowrap }
+.date-input { background:var(--white); border:1px solid var(--line); border-radius:7px; padding:6px 10px; font-size:12px; font-family:'Sarabun',sans-serif; color:var(--ink); outline:none; width:130px; cursor:pointer; transition:border-color .15s }
+.date-input:focus { border-color:var(--zred) }
+.btn-clear { font-size:12px; color:var(--ink-3); background:none; border:none; cursor:pointer; padding:4px 8px; border-radius:5px; transition:all .15s; font-family:'Sarabun',sans-serif }
+.btn-clear:hover { background:var(--line); color:var(--ink) }
+.btn-export { margin-left:auto; background:var(--zred); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-size:12px; font-weight:600; font-family:'Sarabun',sans-serif; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all .15s }
+.btn-export:hover { background:var(--zred-d) }
+
+.woff-tag { display:inline-block; margin-left:5px; font-size:9.5px; font-weight:700; padding:1px 5px; border-radius:3px; background:#FEF2F2; color:#991B1B; border:1px solid #FCA5A5 }
+
+@media print {
+  #up, .topbar { display:none !important }
+  body { background:#fff }
+  .body { padding:16px }
+  .ts { max-height:none; overflow:visible }
+  .cscroll { max-height:none; overflow:visible }
+  .bstrip,.chart-row,.kpi-row,.main-grid,.vgrid { page-break-inside:avoid }
+  .tag-row,.sev-legend { display:none }
+  .topbar { display:none }
+  .print-header { display:block !important }
+}
+.print-header { display:none; padding:0 0 20px; border-bottom:2px solid var(--ink); margin-bottom:20px }
+.print-header h1 { font-size:20px; font-weight:700; color:var(--ink) }
+.print-header p { font-size:13px; color:var(--ink-3); margin-top:4px }
+
+@media(max-width:1200px) {
+  .chart-grid { grid-template-columns:1fr 1fr }
+  .chart-grid .cc:last-child { grid-column:1 / -1 }
+  .kpi-row { grid-template-columns:repeat(3,1fr) }
+  .bkts { grid-template-columns:repeat(4,1fr) }
+  .body { padding:20px 16px }
+  .topbar { padding:0 16px }
+  .vgrid { grid-template-columns:1fr }
+  .sb-grid { grid-template-columns:1fr 1fr }
+  .sb-stat:nth-child(2) { border-right:none }
+  .sb-stat:nth-child(1),.sb-stat:nth-child(2) { border-bottom:1px solid var(--line) }
+}
+@media(max-width:680px) {
+  .chart-grid { grid-template-columns:1fr }
+  .chart-grid .cc:last-child { grid-column:1 }
+  .kpi-row { grid-template-columns:1fr 1fr }
+  .bkts { grid-template-columns:repeat(2,1fr) }
+  .tb-r .chip { display:none }
+  .alert-items { grid-template-columns:1fr 1fr }
+  .sb-grid { grid-template-columns:1fr 1fr }
+  .sb-stat:nth-child(2) { border-right:none }
+  .sb-stat:nth-child(1),.sb-stat:nth-child(2) { border-bottom:1px solid var(--line) }
+}
+@media(max-width:480px) {
+  .alert-items { grid-template-columns:1fr }
+  .alert-header { flex-wrap:wrap }
+  .alert-summary-chip { margin-left:32px }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ UPLOAD ══ -->
+<div id="up">
+  <div class="up-h"><span class="up-h-z">Z</span> AR Aging Dashboard</div>
+  <div class="up-p">Accounts Receivable — Executive Report</div>
+  <div class="dz" id="dz" onclick="fi.click()">
+    <span class="dz-ico">📊</span>
+    <div class="dz-h">นำเข้าไฟล์ Aging Report</div>
+    <div class="dz-p">ลากไฟล์มาวางที่นี่ หรือกดปุ่มด้านล่าง</div>
+    <button class="btn-pick" onclick="event.stopPropagation();fi.click()">📁 เลือกไฟล์ .xlsx / .xls</button>
+    <input type="file" id="fi" accept=".xlsx,.xls,.csv">
+  </div>
+  <div class="prog" id="prog"><div class="prog-b"></div></div>
+  <div class="up-note">รองรับรูปแบบ <b>Aging Report - AR</b> จาก PEAK Accounting · ประมวลผลในเบราว์เซอร์ ข้อมูลไม่ถูกส่งออกไป · <b>ใช้ซ้ำได้ทุกเดือน</b></div>
+</div>
+
+<!-- ══ DUE SOON MODAL ══ -->
+<div id="ds-modal" style="display:none">
+  <div class="modal-backdrop" onclick="closeDueSoonModal()"></div>
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-ico">📅</span>
+      <div class="modal-head-info">
+        <div class="modal-title" id="ds-modal-title">Invoice ครบกำหนดชำระ</div>
+        <div class="modal-subtitle" id="ds-modal-sub">—</div>
+      </div>
+      <button class="modal-close" onclick="closeDueSoonModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <table class="inv" style="font-size:13px">
+        <thead><tr>
+          <th>#</th>
+          <th>Document No.</th>
+          <th>Ref. QT</th>
+          <th class="r">วันที่ออก</th>
+          <th class="r">Due Date</th>
+          <th class="r">ครบใน</th>
+          <th class="r">Total Amount</th>
+          <th class="r">Paid</th>
+          <th class="r">Outstanding</th>
+        </tr></thead>
+        <tbody id="ds-modal-body"></tbody>
+        <tfoot id="ds-modal-foot"></tfoot>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <div class="modal-footer-info" id="ds-modal-info">—</div>
+      <button class="btn-modal-close" onclick="closeDueSoonModal()">ปิด</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div id="dash">
+  <div class="print-header" id="print-header">
+    <h1>AR Aging Report — Executive Summary</h1>
+    <p id="print-meta"></p>
+  </div>
+
+  <div class="topbar">
+    <div class="tb-l">
+      <div class="tb-brand">
+        <span class="tb-brand-z">Z</span>
+        AR Aging
+      </div>
+      <div class="tb-sep"></div>
+      <div class="tb-file" id="tb-file">—</div>
+    </div>
+    <div class="tb-r">
+      <div class="chip">As of <b id="tb-date">—</b></div>
+      <div class="chip">Invoice ทั้งหมด <b id="tb-count">—</b></div>
+      <div class="chip">Past Due Total <b id="tb-total">—</b></div>
+      <button class="tb-btn print" onclick="window.print()">🖨 Print / Export PDF</button>
+      <button class="tb-btn" onclick="goUp()">↩ เปลี่ยนไฟล์</button>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div class="sec">ภาพรวมยอดลูกหนี้</div>
+    <div class="kpi-row" id="kpi-row"></div>
+
+    <div class="summary-banner" id="summary-banner">
+      <div class="sb-head">
+        <div class="sb-head-ico">📋</div>
+        <div class="sb-head-title">Executive Summary</div>
+        <div class="sb-head-asof" id="sb-asof">—</div>
+      </div>
+      <div class="sb-grid" id="sb-grid"><!-- filled by JS --></div>
+      <div class="sb-flags" id="sb-flags" style="display:none"><!-- filled by JS --></div>
+    </div>
+
+    <!-- Due Soon Alert — clickable cards -->
+    <div id="due-soon-alert" style="display:none">
+      <div class="alert-strip">
+        <div class="alert-header">
+          <span class="alert-ico">⚠️</span>
+          <div class="alert-title" id="alert-title">Invoice ที่ใกล้ครบกำหนด</div>
+          <div class="alert-summary-chip" id="alert-chip"></div>
+        </div>
+        <div class="alert-items" id="alert-items"></div>
+      </div>
+    </div>
+
+    <div class="sec">Aging Period Breakdown</div>
+    <div class="bstrip">
+      <div class="bs-head">
+        <div class="bs-title">Outstanding แยกตามอายุหนี้ · คลิกช่องเพื่อ Filter</div>
+        <div class="bs-grand" id="bs-grand"></div>
+      </div>
+      <div class="bkts" id="bkts"></div>
+    </div>
+
+    <div class="sec">วิเคราะห์ด้วยกราฟ</div>
+    <!-- 3 distinct chart cards -->
+    <div class="chart-grid">
+
+      <!-- Chart 1: Donut — สัดส่วน bucket -->
+      <div class="cc">
+        <div class="cc-head">
+          <div class="cc-title">สัดส่วนตาม Bucket</div>
+          <div class="cc-sub">Past Due Only</div>
+        </div>
+        <div class="cc-body" style="height:300px">
+          <div class="donut-wrap" style="height:268px;align-items:center">
+            <div class="donut-canvas-wrap" style="width:180px;height:180px;flex-shrink:0">
+              <canvas id="ch-donut"></canvas>
+              <div class="donut-center">
+                <div class="donut-v" id="dv">—</div>
+                <div class="donut-l">Past Due ฿</div>
+              </div>
+            </div>
+            <div class="dlegend" id="dlegend" style="gap:7px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart 2: Horizontal bar — Top 10 customers -->
+      <div class="cc">
+        <div class="cc-head">
+          <div class="cc-title">Top 10 ลูกค้า</div>
+          <div class="cc-sub">ยอด Outstanding สูงสุด</div>
+        </div>
+        <div class="cc-body" style="height:300px">
+          <canvas id="ch-cust" style="max-height:268px"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 3: Combo — จำนวน Invoice & ยอดเฉลี่ยต่อ Invoice -->
+      <div class="cc">
+        <div class="cc-head">
+          <div class="cc-title">จำนวน Invoice vs. ยอดเฉลี่ย/ใบ</div>
+          <div class="cc-sub">แยกตาม Bucket (แท่ง = จำนวน, เส้น = เฉลี่ย)</div>
+        </div>
+        <div class="cc-body" style="height:300px">
+          <canvas id="ch-combo" style="max-height:268px"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Customer horizontal strip -->
+    <div class="cust-strip">
+      <div class="cust-strip-head">
+        <div class="cust-strip-title">ลูกค้า Top Outstanding <span style="font-size:11px;font-weight:400;color:var(--ink-3)">(Past Due เท่านั้น)</span></div>
+        <div class="rc" id="cust-cnt">—</div>
+      </div>
+      <div class="cust-strip-scroll" id="clist"></div>
+    </div>
+
+    <!-- Invoice Table -->
+    <div class="sec">รายการ Invoice (Past Due)</div>
+    <div class="card" style="margin-bottom:28px">
+      <div class="card-head">
+        <div class="card-title">รายการ Invoice ทั้งหมด</div>
+        <div class="tag-row-inline" id="tag-row"></div>
+        <div class="sw">
+          <span class="si">🔍</span>
+          <input class="sinput" id="sinput" placeholder="ค้นหา Document / ลูกค้า…">
+        </div>
+        <div class="rc" id="rc">—</div>
+      </div>
+      <div class="filter-bar">
+        <span class="filter-label">Due Date:</span>
+        <input type="date" class="date-input" id="date-from" onchange="applyFilter()">
+        <span style="font-size:12px;color:var(--ink-3)">ถึง</span>
+        <input type="date" class="date-input" id="date-to" onchange="applyFilter()">
+        <button class="btn-clear" onclick="clearDates()">✕ ล้างวันที่</button>
+        <button class="btn-export" onclick="exportExcel()">⬇ Export Excel</button>
+      </div>
+      <div class="sev-legend">
+        <span style="font-weight:600;margin-right:4px">สี:</span>
+        <span class="sleg"><span class="sleg-box" style="background:#FEE2E2"></span> เกิน 90 วัน</span>
+        <span class="sleg"><span class="sleg-box" style="background:#FEF3C7"></span> 31–90 วัน</span>
+        <span class="sleg"><span class="sleg-box" style="background:#DCFCE7"></span> ชำระบางส่วน</span>
+        <span style="margin-left:auto;display:flex;align-items:center;gap:12px;font-size:12px">
+          <span style="display:flex;align-items:center;gap:4px;color:var(--zred)"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;background:var(--zred-bg);border:1px solid rgba(230,0,10,.2);padding:1px 6px;border-radius:4px">INV···↗</span> คลิกเปิด PEAK</span>
+          <span style="color:var(--ink-4)">·</span>
+          <span>คลิก header เพื่อ Sort</span>
+        </span>
+      </div>
+      <div class="ts" style="max-height:600px">
+        <table class="inv">
+          <thead><tr>
+            <th onclick="srt('no')" style="width:44px">#</th>
+            <th onclick="srt('docNo')">Document No.</th>
+            <th onclick="srt('code')">Contact Code</th>
+            <th>ลูกค้า</th>
+            <th onclick="srt('ref')">Ref. QT</th>
+            <th class="r" onclick="srt('date')">วันที่ออก</th>
+            <th class="r" onclick="srt('dueDate')">Due Date</th>
+            <th class="r" onclick="srt('totalAmt')">Total Amount</th>
+            <th class="r" onclick="srt('paid')">Paid</th>
+            <th class="r" onclick="srt('credited')">Credited</th>
+            <th class="r" onclick="srt('outstanding')">Outstanding</th>
+            <th onclick="srt('bucket')">Bucket</th>
+          </tr></thead>
+          <tbody id="inv-body"></tbody>
+          <tfoot id="inv-foot"></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="vsec">
+      <div class="sec">Reconciliation</div>
+      <div class="vgrid">
+        <div class="vc">
+          <div class="vc-h">ยอดรวมแต่ละ Bucket vs. Grand Total</div>
+          <table class="vt" id="vt-bkt"></table>
+        </div>
+        <div class="vc">
+          <div class="vc-h">Top 10 ลูกค้า — ยอด Outstanding</div>
+          <table class="vt" id="vt-cust"></table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ══ CONFIG ══ */
+const BUCKETS = [
+  { key:'d1_30',    col:12, label:'1–30 วัน',   short:'1-30',    color:'#22C55E' },
+  { key:'d31_60',   col:13, label:'31–60 วัน',  short:'31-60',   color:'#F59E0B' },
+  { key:'d61_90',   col:14, label:'61–90 วัน',  short:'61-90',   color:'#F97316' },
+  { key:'d91_180',  col:15, label:'91–180 วัน', short:'91-180',  color:'#EF4444' },
+  { key:'d181_270', col:16, label:'181–270 วัน',short:'181-270', color:'#DC2626' },
+  { key:'d271_360', col:17, label:'271–360 วัน',short:'271-360', color:'#991B1B' },
+  { key:'d360plus', col:18, label:'360+ วัน',   short:'360+',    color:'#450A0A' },
+];
+
+/* ══ STATE ══ */
+let DATA = [], META = {};
+let activeKey = 'all', searchQ = '', sortCol = 'outstanding', sortDir = -1;
+let dateFrom = null, dateTo = null;
+let chDonut = null, chCust = null, chCombo = null;
+const TODAY = Date.now();
+
+/* ══ UPLOAD ══ */
+const dz = document.getElementById('dz');
+const fi = document.getElementById('fi');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over') });
+dz.addEventListener('dragleave', () => dz.classList.remove('over'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); if (e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0]) });
+fi.addEventListener('change', e => { if (e.target.files[0]) readFile(e.target.files[0]) });
+
+function readFile(file) {
+  document.getElementById('prog').style.display = 'block';
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb  = XLSX.read(new Uint8Array(e.target.result), { type:'array' });
+      const ws  = wb.Sheets[wb.SheetNames[0]];
+      // Extract hyperlinks from Document No. column (col D = index 3)
+      const linkMap = {};
+      if (ws) {
+        Object.keys(ws).forEach(addr => {
+          if (addr.startsWith('!')) return;
+          const cell = ws[addr];
+          if (cell && cell.l && cell.l.Target) {
+            // Only store invoice links (col D)
+            const col = addr.replace(/[0-9]/g,'');
+            if (col === 'D') linkMap[String(cell.v||'').trim()] = cell.l.Target;
+          }
+        });
+      }
+      const raw = XLSX.utils.sheet_to_json(ws, { header:1, defval:'' });
+      parsePEAK(raw, file.name, linkMap);
+    } catch(err) {
+      alert('ไม่สามารถอ่านไฟล์ได้: ' + err.message);
+    } finally {
+      document.getElementById('prog').style.display = 'none';
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+/* ══ PARSE ══ */
+function parsePEAK(raw, filename, linkMap={}) {
+  DATA = []; META = {};
+  for (let i = 0; i < Math.min(6, raw.length); i++) {
+    const k = String(raw[i][21] || '').trim();
+    const v = String(raw[i][22] || '').trim();
+    if (k && v) META[k] = v;
+  }
+  META.filename = filename;
+  for (const row of raw) {
+    if (!row || row.length < 11) continue;
+    const no = row[0];
+    if (typeof no !== 'number' || no !== Math.floor(no) || no <= 0) continue;
+    const docNo = clean(row[3]);
+    DATA.push({
+      no, code:clean(row[1]), customer:clean(row[2]), docNo,
+      ref:clean(row[4]), date:clean(row[5]), dateMs:parseDateTH(clean(row[5])),
+      dueDate:clean(row[6]), dueDateMs:parseDateTH(clean(row[6])),
+      totalAmt:num(row[7]), paid:num(row[8]), credited:num(row[9]),
+      outstanding:num(row[10]), current:num(row[11]),
+      d1_30:num(row[12]), d31_60:num(row[13]), d61_90:num(row[14]),
+      d91_180:num(row[15]), d181_270:num(row[16]), d271_360:num(row[17]), d360plus:num(row[18]),
+      peakUrl: linkMap[docNo] || null,
+    });
+  }
+  if (!DATA.length) { alert('ไม่พบข้อมูล Invoice'); return }
+  initDash();
+}
+
+function parseDateTH(s) {
+  const p = s.split('/');
+  if (p.length !== 3) return null;
+  return new Date(+p[2], +p[1]-1, +p[0]).getTime();
+}
+function daysOverdue(ms) { if (!ms) return 0; return Math.floor((TODAY - ms) / 86400000) }
+function clean(v) { return String(v||'').trim() }
+function num(v) {
+  if (v===''||v===null||v===undefined) return 0;
+  if (typeof v==='number') return isNaN(v)?0:v;
+  const x = parseFloat(String(v).replace(/,/g,''));
+  return isNaN(x)?0:x;
+}
+
+/* ══ INIT ══ */
+function initDash() {
+  document.getElementById('up').style.display   = 'none';
+  document.getElementById('dash').style.display = 'block';
+  activeKey='all'; searchQ=''; sortCol='outstanding'; sortDir=-1;
+
+  const asOf = META['As of Date :'] || META['As of Date:'] || '';
+  const pastDueTotal = BUCKETS.reduce((s,b) => s+sumKey(b.key), 0);
+
+  document.getElementById('tb-file').textContent  = META.filename.replace(/\.[^.]+$/,'');
+  document.getElementById('tb-date').textContent  = asOf;
+  document.getElementById('tb-count').textContent = DATA.length.toLocaleString();
+  document.getElementById('tb-total').textContent = '฿' + fmt(pastDueTotal);
+  document.getElementById('print-meta').textContent =
+    `As of: ${asOf}  ·  ${DATA.length} invoices  ·  Past Due: ฿${fmt(pastDueTotal)}`;
+
+  buildKPI(); buildSummary(); buildDueSoon();
+  buildBuckets(); buildCharts(); buildTags(); buildTable();
+  buildCustomers(); buildRecon();
+}
+
+/* ══ KPI ══ */
+function buildKPI() {
+  const totalAR = sumKey('outstanding');
+  const current = sumKey('current');
+  const pastDue = BUCKETS.reduce((s,b)=>s+sumKey(b.key),0);
+  const over90  = sumKey('d91_180')+sumKey('d181_270')+sumKey('d271_360')+sumKey('d360plus');
+  const over360 = sumKey('d360plus');
+  const custs   = new Set(DATA.map(d=>d.code)).size;
+
+  const kpis = [
+    { label:'Total AR Outstanding',     val:fmtM(totalAR),   unit:'฿', note:`รวม ${DATA.length} invoices · ${custs} ลูกค้า`,                          color:'#E6000A', sub:'ยอดลูกหนี้ทั้งหมด (รวม Current)' },
+    { label:'Current (ยังไม่ถึงกำหนด)',  val:fmtM(current),   unit:'฿', note:`${countKey('current')} inv · ${pct(current,totalAR)}%`,                  color:'#22C55E', sub:'ชำระได้ตามกำหนด' },
+    { label:'Past Due 1–30 วัน',         val:fmtM(sumKey('d1_30')), unit:'฿', note:`${countKey('d1_30')} inv · ${pct(sumKey('d1_30'),totalAR)}%`,      color:'#84CC16', sub:'เกินกำหนด 1–30 วัน' },
+    { label:'Past Due >30 วัน',          val:fmtM(pastDue-sumKey('d1_30')), unit:'฿', note:`${getFiltered().length-countKey('d1_30')} inv · ${pct(pastDue-sumKey('d1_30'),totalAR)}%`, color:'#F59E0B', sub:'เกินกำหนดตั้งแต่ 31 วันขึ้นไป' },
+    { label:'เกิน 90 วัน',              val:fmtM(over90),    unit:'฿', note:`${countKey('d91_180')+countKey('d181_270')+countKey('d271_360')+countKey('d360plus')} inv · ${pct(over90,totalAR)}%`, color:'#EF4444', sub:'91–180 / 181–270 / 271–360 / 360+' },
+    { label:'Overdue 360+ วัน',         val:fmtM(over360),   unit:'฿', note:`${countKey('d360plus')} inv · ${pct(over360,totalAR)}%`,                  color:'#450A0A', sub:'ควร Provision หรือ Write-off' },
+  ];
+  document.getElementById('kpi-row').innerHTML = kpis.map(k=>`
+    <div class="kpi" style="--ck:${k.color}">
+      <div class="kpi-lbl">${k.label}</div>
+      <div class="kpi-num">${k.val}<span class="kpi-unit"> ${k.unit}</span></div>
+      <div class="kpi-note">${k.note}</div>
+      <div class="kpi-delta" style="color:${k.color}">${k.sub}</div>
+    </div>`).join('');
+}
+
+/* ══ BUCKETS ══ */
+function buildBuckets() {
+  const grand = BUCKETS.reduce((s,b)=>s+sumKey(b.key),0);
+  document.getElementById('bs-grand').textContent = '฿' + fmt(grand);
+  document.getElementById('bkts').innerHTML = BUCKETS.map(b => {
+    const amt = sumKey(b.key), cnt = countKey(b.key);
+    const p   = grand>0?(amt/grand*100):0;
+    const sel = activeKey===b.key;
+    return `<div class="bkt ${sel?'sel':''}" style="--bc:${b.color}" onclick="setKey('${b.key}')">
+      <div class="bkt-lbl">${b.label}</div>
+      <div class="bkt-amt">฿${fmtK(amt)}</div>
+      <div class="bkt-inv">${cnt} invoices</div>
+      <div class="bkt-bg"><div class="bkt-fill" style="width:${p}%"></div></div>
+      <div class="bkt-pct">${p.toFixed(1)}%</div>
+    </div>`;
+  }).join('');
+}
+
+/* ══ CHARTS ══ */
+function buildCharts() {
+  const grand = BUCKETS.reduce((s,b)=>s+sumKey(b.key),0);
+  const F = "'Sarabun',sans-serif";
+  Chart.defaults.font.family = F;
+  Chart.defaults.color = '#6B7280';
+
+  /* — Chart 1: Donut — */
+  document.getElementById('dv').textContent = fmtM(grand);
+  document.getElementById('dlegend').innerHTML = BUCKETS.map(b => {
+    const amt = sumKey(b.key);
+    const p   = grand>0?(amt/grand*100).toFixed(1):'0.0';
+    return `<div class="dleg-item">
+      <span class="dleg-dot" style="background:${b.color}"></span>
+      <span class="dleg-name">${b.short}</span>
+      <span class="dleg-pct">${p}%</span>
+    </div>`;
+  }).join('');
+  if (chDonut) chDonut.destroy();
+  chDonut = new Chart(document.getElementById('ch-donut'), {
+    type:'doughnut',
+    data:{ labels:BUCKETS.map(b=>b.short), datasets:[{
+      data:BUCKETS.map(b=>sumKey(b.key)),
+      backgroundColor:BUCKETS.map(b=>b.color),
+      borderWidth:2, borderColor:'#fff', hoverBorderWidth:3
+    }]},
+    options:{
+      cutout:'70%', animation:{duration:600},
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{ label: ctx => ` ฿${fmt(ctx.raw)}  (${grand>0?(ctx.raw/grand*100).toFixed(1):0}%)` }}
+      }
+    }
+  });
+
+  /* — Chart 2: Top 10 customers horizontal bar — */
+  const cm = {};
+  getFiltered().forEach(r => {
+    if(!cm[r.code]) cm[r.code]={name:r.customer, total:0};
+    cm[r.code].total += r.outstanding;
+  });
+  const top10 = Object.values(cm).sort((a,b)=>b.total-a.total).slice(0,10);
+  const sn = n => n.length>22 ? n.slice(0,22)+'…' : n;
+  if (chCust) chCust.destroy();
+  chCust = new Chart(document.getElementById('ch-cust'), {
+    type:'bar',
+    data:{
+      labels: top10.map(c=>sn(c.name)),
+      datasets:[{
+        data: top10.map(c=>c.total),
+        backgroundColor: top10.map((_,i)=>`rgba(29,78,216,${1-i*0.08})`),
+        borderRadius:4, borderSkipped:false
+      }]
+    },
+    options:{
+      indexAxis:'y', animation:{duration:600},
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>` ฿${fmt(ctx.raw)}`}} },
+      scales:{
+        x:{ grid:{color:'#F3F4F6'}, ticks:{font:{size:11,family:F}, callback:v=>fmtK(v)} },
+        y:{ grid:{display:false}, ticks:{font:{size:11,family:F}} }
+      }
+    }
+  });
+
+  /* — Chart 3: Combo — จำนวน Invoice (bar) + ยอดเฉลี่ยต่อ Invoice (line) — */
+  const counts = BUCKETS.map(b => countKey(b.key));
+  const avgs   = BUCKETS.map(b => {
+    const cnt = countKey(b.key);
+    return cnt > 0 ? sumKey(b.key) / cnt : 0;
+  });
+
+  if (chCombo) chCombo.destroy();
+  chCombo = new Chart(document.getElementById('ch-combo'), {
+    type:'bar',
+    data:{
+      labels: BUCKETS.map(b=>b.short),
+      datasets:[
+        {
+          type:'bar',
+          label:'จำนวน Invoice',
+          data: counts,
+          backgroundColor: BUCKETS.map(b=>b.color+'CC'),
+          borderColor: BUCKETS.map(b=>b.color),
+          borderWidth:1,
+          borderRadius:5,
+          borderSkipped:false,
+          yAxisID:'yCount',
+          order:2
+        },
+        {
+          type:'line',
+          label:'ยอดเฉลี่ย/ใบ (฿)',
+          data: avgs,
+          borderColor:'#6366F1',
+          backgroundColor:'rgba(99,102,241,.12)',
+          pointBackgroundColor:'#6366F1',
+          pointBorderColor:'#fff',
+          pointBorderWidth:2,
+          pointRadius:5,
+          pointHoverRadius:7,
+          borderWidth:2.5,
+          tension:.35,
+          fill:true,
+          yAxisID:'yAvg',
+          order:1
+        }
+      ]
+    },
+    options:{
+      animation:{duration:600},
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{
+          display:true,
+          position:'top',
+          align:'end',
+          labels:{ font:{size:12,family:F}, boxWidth:10, boxHeight:10, padding:12 }
+        },
+        tooltip:{
+          callbacks:{
+            label: ctx => ctx.datasetIndex===0
+              ? ` จำนวน: ${ctx.raw} invoice`
+              : ` เฉลี่ย: ฿${fmt(ctx.raw)}`
+          }
+        }
+      },
+      scales:{
+        yCount:{
+          type:'linear', position:'left',
+          grid:{color:'#F3F4F6'},
+          title:{ display:true, text:'จำนวน Invoice', font:{size:11,family:F}, color:'#6B7280' },
+          ticks:{ font:{size:11,family:F}, stepSize:1, precision:0 }
+        },
+        yAvg:{
+          type:'linear', position:'right',
+          grid:{display:false},
+          title:{ display:true, text:'เฉลี่ย/ใบ (฿)', font:{size:11,family:F}, color:'#6366F1' },
+          ticks:{ font:{size:11,family:F}, callback:v=>fmtK(v), color:'#6366F1' }
+        },
+        x:{ grid:{display:false}, ticks:{font:{size:12,family:F}} }
+      }
+    }
+  });
+}
+
+/* ══ TAGS ══ */
+function buildTags() {
+  const all     = activeKey==='all';
+  const currCnt = DATA.filter(d => !BUCKETS.some(b=>d[b.key]>0)).length;
+  document.getElementById('tag-row').innerHTML =
+    `<button class="tag ${all?'on':''}" style="--tc:#374151" onclick="setKey('all')">ทั้งหมด (${DATA.length})</button>` +
+    `<button class="tag ${activeKey==='current'?'on':''}" style="--tc:#22C55E" onclick="setKey('current')">Current (${currCnt})</button>` +
+    BUCKETS.map(b => {
+      const cnt = countKey(b.key); if(!cnt) return '';
+      return `<button class="tag ${activeKey===b.key?'on':''}" style="--tc:${b.color}" onclick="setKey('${b.key}')">${b.short} (${cnt})</button>`;
+    }).join('');
+}
+
+/* ══ TABLE ══ */
+function buildTable() {
+  let rows = getTableRows();
+  if (searchQ) {
+    const q = searchQ.toLowerCase();
+    rows = rows.filter(r =>
+      r.docNo.toLowerCase().includes(q) ||
+      r.customer.toLowerCase().includes(q) ||
+      r.code.toLowerCase().includes(q) ||
+      r.ref.toLowerCase().includes(q)
+    );
+  }
+  rows.sort((a,b) => {
+    if (sortCol==='dueDate'||sortCol==='date') {
+      const ka = sortCol==='dueDate' ? a.dueDateMs : a.dateMs;
+      const kb = sortCol==='dueDate' ? b.dueDateMs : b.dateMs;
+      return ((ka||0)-(kb||0))*sortDir;
+    }
+    const va=a[sortCol]??'', vb=b[sortCol]??'';
+    return typeof va==='number' ? (va-vb)*sortDir : String(va).localeCompare(String(vb),'th')*sortDir;
+  });
+  document.getElementById('rc').textContent = rows.length.toLocaleString() + ' รายการ';
+  const sumOut=rows.reduce((s,r)=>s+r.outstanding,0), sumTot=rows.reduce((s,r)=>s+r.totalAmt,0);
+  const sumPaid=rows.reduce((s,r)=>s+r.paid,0), sumCredited=rows.reduce((s,r)=>s+r.credited,0);
+  document.getElementById('inv-body').innerHTML = rows.map((r,i) => {
+    const bkt  = BUCKETS.find(b=>r[b.key]>0);
+    const badge= bkt ? `<span class="bdg" style="--bc:${bkt.color}">${bkt.label}</span>` : `<span class="bdg" style="--bc:#22C55E">Current</span>`;
+    const ptag = r.paid>0 ? `<span class="ptag">Partial</span>` : '';
+    const woff = r.d360plus>0 ? `<span class="woff-tag">Write-off?</span>` : '';
+    const odo  = daysOverdue(r.dueDateMs);
+    let cls = '';
+    if (r.paid>0) cls='sev-partial';
+    else if (odo>=90) cls='sev-hi';
+    else if (odo>=30) cls='sev-med';
+    const odoCls  = odo>=90 ? 'ov late' : 'ov';
+    const odoNote = odo>0 ? `<span style="font-size:11px;color:#DC2626;margin-left:3px">(+${odo}ว)</span>` : '';
+    const docCell = r.peakUrl
+      ? `<div class="doc-no-wrap"><a class="peak-link" href="${r.peakUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${r.docNo}<span class="ext-ico">↗</span></a></div>`
+      : `<span class="doc">${r.docNo}</span>`;
+    return `<tr class="${cls}">
+      <td class="dt" style="text-align:center;color:var(--ink-3)">${i+1}</td>
+      <td>${docCell}</td>
+      <td class="dt">${r.code}</td>
+      <td class="cust" style="max-width:220px" title="${r.customer}">${r.customer}${ptag}${woff}</td>
+      <td class="dt">${r.ref||'—'}</td>
+      <td class="mn dt">${r.date}</td>
+      <td class="mn"><span class="${odoCls}">${r.dueDate}</span>${odoNote}</td>
+      <td class="mn">${fmt(r.totalAmt)}</td>
+      <td class="mn" style="color:${r.paid>0?'#16A34A':'var(--ink-4)'}">${r.paid>0?fmt(r.paid):'—'}</td>
+      <td class="mn" style="color:${r.credited>0?'#7C3AED':'var(--ink-4)'}">${r.credited>0?fmt(r.credited):'—'}</td>
+      <td class="mn" style="font-weight:700;color:${odo>=90?'#DC2626':odo>=30?'#D97706':'var(--ink)'}">${fmt(r.outstanding)}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('inv-foot').innerHTML = `<tr>
+    <td colspan="7" style="padding:10px 14px;font-weight:700">รวม ${rows.length} รายการ</td>
+    <td class="mn">${fmt(sumTot)}</td>
+    <td class="mn" style="color:#16A34A">${sumPaid>0?fmt(sumPaid):'—'}</td>
+    <td class="mn" style="color:#7C3AED">${sumCredited>0?fmt(sumCredited):'—'}</td>
+    <td class="mn" style="color:var(--zred)">${fmt(sumOut)}</td>
+    <td></td>
+  </tr>`;
+}
+
+/* ══ CUSTOMERS STRIP ══ */
+function buildCustomers() {
+  const map = {};
+  getFiltered().forEach(r => {
+    if(!map[r.code]) map[r.code]={code:r.code,name:r.customer,total:0,inv:0};
+    map[r.code].total+=r.outstanding; map[r.code].inv++;
+  });
+  const list  = Object.values(map).sort((a,b)=>b.total-a.total);
+  const grand = BUCKETS.reduce((s,b)=>s+sumKey(b.key),0);
+  const maxA  = list[0]?.total||1;
+  document.getElementById('cust-cnt').textContent = list.length + ' ลูกค้า';
+  document.getElementById('clist').innerHTML = list.slice(0,20).map((c,i) => {
+    const p     = (c.total/maxA*100).toFixed(1);
+    const share = grand>0?(c.total/grand*100).toFixed(1):'0.0';
+    return `<div class="cust-card">
+      <div class="cc-rank">#${i+1} · ${c.code}</div>
+      <div class="cc-name" title="${c.name}">${c.name}</div>
+      <div class="cc-amt">${fmt(c.total)}</div>
+      <div class="cc-bar-bg"><div class="cc-bar-fill" style="width:${p}%"></div></div>
+      <div class="cc-share">${c.inv} inv · ${share}% ของยอดรวม</div>
+    </div>`;
+  }).join('');
+}
+
+/* ══ RECON ══ */
+function buildRecon() {
+  const totalAR = sumKey('outstanding');
+  const pastDue = BUCKETS.reduce((s,b)=>s+sumKey(b.key),0);
+  const bRows = BUCKETS.map(b => {
+    const amt=sumKey(b.key), inv=countKey(b.key);
+    const uniqCust=new Set(DATA.filter(r=>r[b.key]>0).map(r=>r.code)).size;
+    const partial=DATA.filter(r=>r[b.key]>0&&r.paid>0).length;
+    const avg=inv>0?(amt/inv):0;
+    const sevStyle=b.key==='d1_30'?'color:#16A34A':b.key==='d31_60'||b.key==='d61_90'?'color:#D97706':'color:#DC2626';
+    return `<tr>
+      <td><span class="dot" style="--dc:${b.color}"></span><b>${b.label}</b></td>
+      <td class="mn">${inv}</td><td class="mn">${uniqCust}</td>
+      <td class="mn" style="${sevStyle};font-weight:600">${fmt(amt)}</td>
+      <td class="mn">${pct(amt,pastDue)}%</td>
+      <td class="mn" style="color:var(--ink-3)">${pct(amt,totalAR)}%</td>
+      <td class="mn" style="color:var(--ink-3)">${fmtK(avg)}</td>
+      <td class="mn" style="color:${partial>0?'#059669':'var(--ink-4)'}">${partial>0?partial:'—'}</td>
+    </tr>`;
+  }).join('');
+  const totInv=getFiltered().length, totCusts=new Set(getFiltered().map(r=>r.code)).size;
+  const totPartial=getFiltered().filter(r=>r.paid>0).length, avgAll=totInv>0?(pastDue/totInv):0;
+  document.getElementById('vt-bkt').innerHTML=`
+    <thead><tr><th>Bucket</th><th class="r">Invoice</th><th class="r">ลูกค้า</th><th class="r">Amount (฿)</th><th class="r">% Past Due</th><th class="r">% Total AR</th><th class="r">Avg/Inv (฿)</th><th class="r">Partial</th></tr></thead>
+    <tbody>${bRows}</tbody>
+    <tfoot><tr>
+      <td><b>รวม Past Due</b></td>
+      <td class="mn">${totInv}</td><td class="mn">${totCusts}</td>
+      <td class="mn" style="color:var(--zred)">${fmt(pastDue)}</td>
+      <td class="mn">100%</td>
+      <td class="mn">${pct(pastDue,totalAR)}%</td>
+      <td class="mn">${fmtK(avgAll)}</td>
+      <td class="mn" style="color:#059669">${totPartial>0?totPartial:'—'}</td>
+    </tr></tfoot>`;
+
+  const cm={};
+  DATA.forEach(r=>{
+    if(!cm[r.code]) cm[r.code]={name:r.customer,code:r.code,total:0,cnt:0,partial:0};
+    cm[r.code].total+=r.outstanding; cm[r.code].cnt++;
+    if(r.paid>0) cm[r.code].partial++;
+  });
+  const top10=Object.values(cm).sort((a,b)=>b.total-a.total).slice(0,10);
+  const grandAll=sumKey('outstanding');
+  document.getElementById('vt-cust').innerHTML=`
+    <thead><tr><th>ลูกค้า</th><th class="r">Invoice</th><th class="r">Outstanding (฿)</th><th class="r">% Total AR</th><th class="r">Partial</th></tr></thead>
+    <tbody>${top10.map((c,i)=>`<tr>
+      <td><div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:11px;color:var(--ink-4);width:18px;text-align:right;flex-shrink:0">${i+1}.</span>
+        <div><div style="font-weight:600;font-size:13px">${c.name}</div><div style="font-size:11px;color:var(--ink-3)">${c.code}</div></div>
+      </div></td>
+      <td class="mn">${c.cnt}</td>
+      <td class="mn" style="font-weight:600">${fmt(c.total)}</td>
+      <td class="mn" style="color:var(--ink-3)">${pct(c.total,grandAll)}%</td>
+      <td class="mn" style="color:${c.partial>0?'#059669':'var(--ink-4)'}">${c.partial>0?c.partial:'—'}</td>
+    </tr>`).join('')}</tbody>
+    <tfoot><tr>
+      <td><b>Top 10 รวม</b></td>
+      <td class="mn">${top10.reduce((s,c)=>s+c.cnt,0)}</td>
+      <td class="mn" style="color:var(--zred)">${fmt(top10.reduce((s,c)=>s+c.total,0))}</td>
+      <td class="mn" style="color:var(--ink-3)">${pct(top10.reduce((s,c)=>s+c.total,0),grandAll)}%</td>
+      <td class="mn">${top10.reduce((s,c)=>s+c.partial,0)||'—'}</td>
+    </tr></tfoot>`;
+}
+
+/* ══ SUMMARY ══ */
+function buildSummary() {
+  const totalAR   = sumKey('outstanding');
+  const pastDue   = BUCKETS.reduce((s,b)=>s+sumKey(b.key),0);
+  const current   = sumKey('current');
+  const over90    = sumKey('d91_180')+sumKey('d181_270')+sumKey('d271_360')+sumKey('d360plus');
+  const over360   = sumKey('d360plus');
+  const pastCust  = new Set(getFiltered().map(r=>r.code)).size;
+  const over90c   = new Set(DATA.filter(r=>r.d91_180>0||r.d181_270>0||r.d271_360>0||r.d360plus>0).map(r=>r.code)).size;
+  const partial   = getFiltered().filter(r=>r.paid>0).length;
+  const totalCust = new Set(DATA.map(r=>r.code)).size;
+  const asOf      = META['As of Date :']||META['As of Date:']||'';
+
+  document.getElementById('sb-asof').textContent = asOf ? `ณ วันที่ ${asOf}` : '—';
+
+  const stats = [
+    {
+      label:'ยอดลูกหนี้ทั้งหมด', dot:'#E6000A',
+      amount:'฿'+fmtM(totalAR),
+      sub:`${DATA.length} invoices · ${totalCust} ลูกค้า`,
+      pct:null,
+    },
+    {
+      label:'ยังไม่ถึงกำหนด (Current)', dot:'#22C55E',
+      amount:'฿'+fmtM(current),
+      sub:`${countKey('current')} invoices`,
+      pct: pct(current,totalAR)+'%',
+    },
+    {
+      label:'เกินกำหนดชำระ (Past Due)', dot:'#F59E0B',
+      amount:'฿'+fmtM(pastDue),
+      sub:`${getFiltered().length} inv · ${pastCust} ลูกค้า`,
+      pct: pct(pastDue,totalAR)+'%',
+    },
+    {
+      label:'เกินกำหนด >90 วัน', dot:'#DC2626',
+      amount:'฿'+fmtM(over90),
+      sub:`${countKey('d91_180')+countKey('d181_270')+countKey('d271_360')+countKey('d360plus')} inv · ${over90c} ลูกค้า`,
+      pct: pct(over90,totalAR)+'%',
+    },
+  ];
+
+  document.getElementById('sb-grid').innerHTML = stats.map(s=>`
+    <div class="sb-stat" style="--sdc:${s.dot}">
+      <div class="sb-stat-label">
+        <span class="sb-stat-dot"></span>${s.label}
+      </div>
+      <div class="sb-stat-amount">${s.amount}</div>
+      <div class="sb-stat-sub">${s.sub}</div>
+      ${s.pct ? `<span class="sb-stat-pct">${s.pct} ของยอดรวม</span>` : ''}
+    </div>`).join('');
+
+  // Flags
+  const flags = [];
+  if (over360>0) flags.push(`<span class="sb-flag sb-flag-red">⚠ ${countKey('d360plus')} inv เกิน 360 วัน · ฿${fmt(over360)} — พิจารณา Write-off</span>`);
+  if (partial>0) flags.push(`<span class="sb-flag sb-flag-green">✓ ${partial} inv ชำระบางส่วนแล้ว (Partial)</span>`);
+  const flagEl = document.getElementById('sb-flags');
+  if (flags.length) { flagEl.style.display='flex'; flagEl.innerHTML=flags.join(''); }
+  else flagEl.style.display='none';
+}
+
+/* ══ DUE SOON ALERT ══ */
+function buildDueSoon() {
+  const soon = DATA.filter(r => {
+    if (!r.dueDateMs) return false;
+    const days = Math.floor((r.dueDateMs - TODAY) / 86400000);
+    return days >= 0 && days <= 14 && !BUCKETS.some(b=>r[b.key]>0);
+  });
+  const el = document.getElementById('due-soon-alert');
+  if (soon.length === 0) { el.style.display='none'; return; }
+  el.style.display = 'block';
+
+  // Group by customer
+  const cm = {};
+  soon.forEach(r => {
+    if (!cm[r.code]) cm[r.code]={name:r.customer,code:r.code,total:0,inv:0,minDays:999};
+    cm[r.code].total+=r.outstanding; cm[r.code].inv++;
+    const d = Math.floor((r.dueDateMs - TODAY)/86400000);
+    if (d < cm[r.code].minDays) cm[r.code].minDays = d;
+  });
+  const list = Object.values(cm).sort((a,b)=>b.total-a.total).slice(0,12);
+  const totalSoon = soon.reduce((s,r)=>s+r.outstanding,0);
+
+  document.getElementById('alert-title').textContent =
+    `Invoice ที่ครบกำหนดชำระภายใน 14 วัน`;
+  document.getElementById('alert-chip').innerHTML =
+    `📋 ${soon.length} รายการ · ฿${fmt(totalSoon)}`;
+
+  document.getElementById('alert-items').innerHTML = list.map(c => {
+    const urgClass = c.minDays === 0 ? 'today-badge' : c.minDays <= 3 ? 'soon3-badge' : c.minDays <= 7 ? 'week-badge' : 'ok-badge';
+    const urgText  = c.minDays === 0 ? 'วันนี้!' : `อีก ${c.minDays} วัน`;
+    const accentColor = c.minDays === 0 ? '#EF4444' : c.minDays <= 3 ? '#F97316' : c.minDays <= 7 ? '#F59E0B' : '#22C55E';
+    return `<div class="alert-item" style="--ai-accent:${accentColor}" onclick="showDueSoonInvoices('${c.code}','${c.name.replace(/'/g,"\\'")}')">
+      <span class="ai-arrow">›</span>
+      <div class="alert-item-name">${c.name}</div>
+      <div class="alert-item-amount">฿${fmt(c.total)}</div>
+      <div class="alert-item-meta">
+        <span class="ai-inv-count">${c.inv} inv</span>
+        <span class="ai-badge ${urgClass}">${urgText}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══ DUE SOON MODAL ══ */
+function showDueSoonInvoices(code, name) {
+  // Filter due-soon invoices for this customer
+  const rows = DATA.filter(r => {
+    if (r.code !== code || !r.dueDateMs) return false;
+    const days = Math.floor((r.dueDateMs - TODAY) / 86400000);
+    return days >= 0 && days <= 14 && !BUCKETS.some(b=>r[b.key]>0);
+  }).sort((a,b) => (a.dueDateMs||0)-(b.dueDateMs||0));
+
+  const totalOut = rows.reduce((s,r)=>s+r.outstanding,0);
+
+  document.getElementById('ds-modal-title').textContent = name || code;
+  document.getElementById('ds-modal-sub').textContent =
+    `${rows.length} invoice ที่ครบกำหนดภายใน 14 วัน · รวม ฿${fmt(totalOut)}`;
+
+  document.getElementById('ds-modal-body').innerHTML = rows.map((r,i) => {
+    const days = Math.floor((r.dueDateMs - TODAY) / 86400000);
+    const urgClass = days === 0 ? 'today' : days <= 3 ? 'soon3' : days <= 7 ? 'week' : 'ok';
+    const urgText  = days === 0 ? 'วันนี้' : `${days} วัน`;
+    const docCell = r.peakUrl
+      ? `<div class="doc-no-wrap"><a class="peak-link" href="${r.peakUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${r.docNo}<span class="ext-ico">↗</span></a></div>`
+      : `<span class="doc">${r.docNo}</span>`;
+    return `<tr>
+      <td class="dt" style="text-align:center">${i+1}</td>
+      <td>${docCell}</td>
+      <td class="dt">${r.ref||'—'}</td>
+      <td class="mn dt">${r.date}</td>
+      <td class="mn dt">${r.dueDate}</td>
+      <td class="mn"><span class="days-badge ${urgClass}">${urgText}</span></td>
+      <td class="mn">${fmt(r.totalAmt)}</td>
+      <td class="mn" style="color:${r.paid>0?'#16A34A':'var(--ink-4)'}">${r.paid>0?fmt(r.paid):'—'}</td>
+      <td class="mn" style="font-weight:700;color:var(--zred)">${fmt(r.outstanding)}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('ds-modal-foot').innerHTML = `<tr>
+    <td colspan="6" style="padding:10px 14px;font-weight:700">รวม ${rows.length} รายการ</td>
+    <td class="mn">${fmt(rows.reduce((s,r)=>s+r.totalAmt,0))}</td>
+    <td class="mn" style="color:#16A34A">${rows.some(r=>r.paid>0)?fmt(rows.reduce((s,r)=>s+r.paid,0)):'—'}</td>
+    <td class="mn" style="color:var(--zred);font-weight:700">${fmt(totalOut)}</td>
+  </tr>`;
+
+  document.getElementById('ds-modal-info').innerHTML =
+    `<b>${name}</b> · ${rows.length} invoice · Outstanding รวม <b>฿${fmt(totalOut)}</b>`;
+
+  document.getElementById('ds-modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDueSoonModal() {
+  document.getElementById('ds-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Close modal on Escape
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeDueSoonModal() });
+
+/* ══ DATE FILTER ══ */
+function applyFilter() {
+  const f=document.getElementById('date-from').value, t=document.getElementById('date-to').value;
+  dateFrom=f?new Date(f).getTime():null; dateTo=t?new Date(t).getTime():null;
+  buildTags(); buildTable();
+}
+function clearDates() {
+  document.getElementById('date-from').value=''; document.getElementById('date-to').value='';
+  dateFrom=null; dateTo=null; buildTags(); buildTable();
+}
+
+/* ══ EXPORT ══ */
+function exportExcel() {
+  let rows = getTableRows();
+  if (searchQ) {
+    const q=searchQ.toLowerCase();
+    rows=rows.filter(r=>r.docNo.toLowerCase().includes(q)||r.customer.toLowerCase().includes(q)||r.code.toLowerCase().includes(q));
+  }
+  const header=['#','Document No.','Contact Code','ลูกค้า','Ref. QT','วันที่ออก','Due Date','Total Amount','Paid','Credited','Outstanding','Bucket','เกิน (วัน)','PEAK URL'];
+  const body=rows.map((r,i)=>{
+    const bkt=BUCKETS.find(b=>r[b.key]>0), odo=daysOverdue(r.dueDateMs);
+    return [i+1,r.docNo,r.code,r.customer,r.ref,r.date,r.dueDate,r.totalAmt,r.paid,r.credited,r.outstanding,bkt?bkt.label:'Current',odo>0?odo:0,r.peakUrl||''];
+  });
+  const ws=XLSX.utils.aoa_to_sheet([header,...body]), wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'AR Aging');
+  ws['!cols']=[5,18,14,35,16,12,12,16,14,12,16,14,10,60].map(w=>({wch:w}));
+  const asOf=(META['As of Date :'||'']||'').replace(/\//g,'-');
+  XLSX.writeFile(wb,`AR_Aging_${asOf||'export'}.xlsx`);
+}
+
+/* ══ INTERACTIONS ══ */
+function setKey(k) { activeKey=k; buildBuckets(); buildTags(); buildTable() }
+function srt(col) { if(sortCol===col) sortDir*=-1; else{sortCol=col;sortDir=-1} buildTable() }
+document.getElementById('sinput').addEventListener('input', e=>{ searchQ=e.target.value.trim(); buildTable() });
+function goUp() {
+  DATA=[]; META=[];
+  document.getElementById('fi').value='';
+  document.getElementById('dash').style.display='none';
+  document.getElementById('up').style.display='flex';
+}
+
+/* ══ HELPERS ══ */
+function getFiltered() {
+  let r=DATA.filter(d=>BUCKETS.some(b=>d[b.key]>0));
+  if(activeKey!=='all') r=r.filter(d=>d[activeKey]>0);
+  return r;
+}
+function getTableRows() {
+  let r;
+  if(activeKey==='all') r=[...DATA];
+  else if(activeKey==='current') r=DATA.filter(d=>!BUCKETS.some(b=>d[b.key]>0));
+  else r=DATA.filter(d=>d[activeKey]>0);
+  if(dateFrom) r=r.filter(d=>d.dueDateMs&&d.dueDateMs>=dateFrom);
+  if(dateTo)   r=r.filter(d=>d.dueDateMs&&d.dueDateMs<=dateTo+86399999);
+  return r;
+}
+function sumKey(k)   { return DATA.reduce((s,r)=>s+(r[k]||0),0) }
+function countKey(k) { return DATA.filter(r=>(r[k]||0)>0).length }
+function pct(a,b)    { return b>0?(a/b*100).toFixed(1):'0.0' }
+function fmt(n)  { return new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n||0) }
+function fmtM(n) { if(n>=1e6) return (n/1e6).toFixed(2)+'M'; if(n>=1e3) return (n/1e3).toFixed(1)+'K'; return fmt(n) }
+function fmtK(n) { if(n>=1e6) return (n/1e6).toFixed(2)+'M'; if(n>=1e3) return (n/1e3).toFixed(0)+'K'; return Math.round(n).toLocaleString() }
+</script>
+</body>
+</html>
