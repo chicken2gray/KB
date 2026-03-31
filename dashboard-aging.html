@@ -187,16 +187,16 @@ b,strong { font-weight:600 }
 .tag.on { background:var(--tc); color:#fff; border-color:var(--tc) }
 
 /* TABLE */
-.ts { overflow:auto; max-height:480px }
-.ts::-webkit-scrollbar { width:5px; height:5px }
+.ts { overflow-y:auto; overflow-x:hidden; max-height:560px }
+.ts::-webkit-scrollbar { width:5px }
 .ts::-webkit-scrollbar-track { background:var(--page) }
 .ts::-webkit-scrollbar-thumb { background:var(--line-2); border-radius:3px }
-table.inv { width:100%; border-collapse:collapse; font-size:13.5px }
+table.inv { width:100%; border-collapse:collapse; font-size:12.5px; table-layout:fixed }
 .inv thead { position:sticky; top:0; z-index:5 }
-.inv th { background:var(--page); border-bottom:1px solid var(--line); padding:9px 14px; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-3); white-space:nowrap; cursor:pointer; user-select:none; text-align:left }
+.inv th { background:var(--page); border-bottom:2px solid var(--line); padding:8px 10px; font-size:10px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-3); white-space:nowrap; cursor:pointer; user-select:none; text-align:left; overflow:hidden }
 .inv th:hover { color:var(--ink) }
 .inv th.r { text-align:right }
-.inv td { padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:middle }
+.inv td { padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:middle; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
 .inv tr:last-child td { border-bottom:none }
 .inv tr:hover td { background:#FAFBFD }
 .inv tr.sev-hi td { background:#FEF2F2 }
@@ -205,19 +205,33 @@ table.inv { width:100%; border-collapse:collapse; font-size:13.5px }
 .inv tr.sev-med:hover td { background:#FEF3C7 }
 .inv tr.sev-partial td { background:#F0FDF4 }
 .inv tr.sev-partial:hover td { background:#DCFCE7 }
-.inv .mn { text-align:right; font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:500 }
-.inv .doc { font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--zred); font-weight:500 }
-.inv .cust { max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500 }
-.inv .dt { font-size:12.5px; color:var(--ink-3); white-space:nowrap }
-.inv .ov { font-size:12.5px; color:var(--ink-3); white-space:nowrap }
+.inv .mn { text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:500 }
+.inv .doc { font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--zred); font-weight:500 }
+.inv .cust { font-weight:500 }
+.inv .dt { font-size:11.5px; color:var(--ink-3); white-space:nowrap }
+.inv .ov { font-size:11.5px; color:var(--ink-3); white-space:nowrap }
 .inv .ov.late { color:#DC2626; font-weight:600 }
-.inv tfoot td { padding:10px 14px; background:var(--page); font-weight:700; border-top:2px solid var(--line); font-family:'IBM Plex Mono',monospace; font-size:13px }
-.bdg { display:inline-block; font-size:11px; font-weight:700; padding:2px 7px; border-radius:4px; border:1px solid var(--bc); color:var(--bc); background:color-mix(in srgb,var(--bc) 10%,white); white-space:nowrap }
-.ptag { display:inline-block; margin-left:5px; font-size:11px; font-weight:700; padding:1px 5px; border-radius:3px; background:#ECFDF5; color:#059669; border:1px solid #A7F3D0 }
-.htag { display:inline-block; margin-left:5px; font-size:11px; font-weight:700; padding:1px 5px; border-radius:3px; background:#FEF2F2; color:#DC2626; border:1px solid #FCA5A5 }
-.sev-legend { padding:6px 20px; border-bottom:1px solid var(--line); background:var(--page); display:flex; align-items:center; gap:16px; font-size:12px; color:var(--ink-3) }
-.sleg { display:flex; align-items:center; gap:4px }
-.sleg-box { width:10px; height:10px; border-radius:2px; flex-shrink:0 }
+.inv tfoot td { padding:8px 10px; background:var(--page); font-weight:700; border-top:2px solid var(--line); font-family:'IBM Plex Mono',monospace; font-size:12px }
+
+/* Fixed column widths — fits in ~1200px without horizontal scroll */
+.col-no   { width:38px }
+.col-doc  { width:120px }
+.col-code { width:98px }
+.col-cust { width:auto }          /* flex takes remaining */
+.col-ref  { width:110px }
+.col-date { width:90px }
+.col-due  { width:128px }
+.col-amt  { width:118px }
+.col-paid { width:80px }
+.col-out  { width:118px }
+.col-bkt  { width:90px }
+
+.bdg { display:inline-block; font-size:10.5px; font-weight:700; padding:2px 7px; border-radius:4px; border:1px solid var(--bc); color:var(--bc); background:color-mix(in srgb,var(--bc) 10%,white); white-space:nowrap }
+.ptag { display:inline-block; margin-left:4px; font-size:10px; font-weight:700; padding:1px 5px; border-radius:3px; background:#ECFDF5; color:#059669; border:1px solid #A7F3D0 }
+.htag { display:inline-block; margin-left:4px; font-size:10px; font-weight:700; padding:1px 5px; border-radius:3px; background:#FEF2F2; color:#DC2626; border:1px solid #FCA5A5 }
+.sev-legend { padding:6px 14px; border-bottom:1px solid var(--line); background:var(--page); display:flex; align-items:center; gap:12px; font-size:11.5px; color:var(--ink-3); flex-wrap:wrap }
+.sleg { display:flex; align-items:center; gap:4px; white-space:nowrap }
+.sleg-box { width:9px; height:9px; border-radius:2px; flex-shrink:0 }
 
 /* CUSTOMERS */
 .cscroll { overflow-y:auto; max-height:560px }
@@ -521,7 +535,7 @@ table.inv { width:100%; border-collapse:collapse; font-size:13.5px }
       <button class="modal-close" onclick="closeDueSoonModal()">✕</button>
     </div>
     <div class="modal-body">
-      <table class="inv" style="font-size:13px">
+      <table class="inv" style="font-size:13px;table-layout:auto">
         <thead><tr>
           <th>#</th>
           <th>Document No.</th>
@@ -605,6 +619,58 @@ table.inv { width:100%; border-collapse:collapse; font-size:13.5px }
       <div class="bkts" id="bkts"></div>
     </div>
 
+    <!-- Invoice Table -->
+    <div class="sec">รายการ Invoice (Past Due)</div>
+    <div class="card" style="margin-bottom:28px">
+      <div class="card-head">
+        <div class="card-title">รายการ Invoice ทั้งหมด</div>
+        <div class="tag-row-inline" id="tag-row"></div>
+        <div class="sw">
+          <span class="si">🔍</span>
+          <input class="sinput" id="sinput" placeholder="ค้นหา Document / ลูกค้า…">
+        </div>
+        <div class="rc" id="rc">—</div>
+      </div>
+      <div class="filter-bar">
+        <span class="filter-label">Due Date:</span>
+        <input type="date" class="date-input" id="date-from" onchange="applyFilter()">
+        <span style="font-size:12px;color:var(--ink-3)">ถึง</span>
+        <input type="date" class="date-input" id="date-to" onchange="applyFilter()">
+        <button class="btn-clear" onclick="clearDates()">✕ ล้างวันที่</button>
+        <button class="btn-export" onclick="exportExcel()">⬇ Export Excel</button>
+      </div>
+      <div class="sev-legend">
+        <span style="font-weight:600;margin-right:4px">สี:</span>
+        <span class="sleg"><span class="sleg-box" style="background:#FEE2E2"></span> เกิน 90 วัน</span>
+        <span class="sleg"><span class="sleg-box" style="background:#FEF3C7"></span> 31–90 วัน</span>
+        <span class="sleg"><span class="sleg-box" style="background:#DCFCE7"></span> ชำระบางส่วน</span>
+        <span style="margin-left:auto;display:flex;align-items:center;gap:12px;font-size:12px">
+          <span style="display:flex;align-items:center;gap:4px;color:var(--zred)"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;background:var(--zred-bg);border:1px solid rgba(230,0,10,.2);padding:1px 6px;border-radius:4px">INV···↗</span> คลิกเปิด PEAK</span>
+          <span style="color:var(--ink-4)">·</span>
+          <span>คลิก header เพื่อ Sort</span>
+        </span>
+      </div>
+      <div class="ts">
+        <table class="inv">
+          <thead><tr>
+            <th onclick="srt('no')" class="col-no">#</th>
+            <th onclick="srt('docNo')" class="col-doc">Document No.</th>
+            <th onclick="srt('code')" class="col-code">Contact Code</th>
+            <th class="col-cust">ลูกค้า</th>
+            <th onclick="srt('ref')" class="col-ref">Ref. QT</th>
+            <th class="r col-date" onclick="srt('date')">วันที่ออก</th>
+            <th class="r col-due" onclick="srt('dueDate')">Due Date</th>
+            <th class="r col-amt" onclick="srt('totalAmt')">Total Amount</th>
+            <th class="r col-paid" onclick="srt('paid')">Paid</th>
+            <th class="r col-out" onclick="srt('outstanding')">Outstanding</th>
+            <th class="col-bkt" onclick="srt('bucket')">Bucket</th>
+          </tr></thead>
+          <tbody id="inv-body"></tbody>
+          <tfoot id="inv-foot"></tfoot>
+        </table>
+      </div>
+    </div>
+
     <div class="sec">วิเคราะห์ด้วยกราฟ</div>
     <!-- 3 distinct chart cards -->
     <div class="chart-grid">
@@ -660,59 +726,6 @@ table.inv { width:100%; border-collapse:collapse; font-size:13.5px }
         <div class="rc" id="cust-cnt">—</div>
       </div>
       <div class="cust-strip-scroll" id="clist"></div>
-    </div>
-
-    <!-- Invoice Table -->
-    <div class="sec">รายการ Invoice (Past Due)</div>
-    <div class="card" style="margin-bottom:28px">
-      <div class="card-head">
-        <div class="card-title">รายการ Invoice ทั้งหมด</div>
-        <div class="tag-row-inline" id="tag-row"></div>
-        <div class="sw">
-          <span class="si">🔍</span>
-          <input class="sinput" id="sinput" placeholder="ค้นหา Document / ลูกค้า…">
-        </div>
-        <div class="rc" id="rc">—</div>
-      </div>
-      <div class="filter-bar">
-        <span class="filter-label">Due Date:</span>
-        <input type="date" class="date-input" id="date-from" onchange="applyFilter()">
-        <span style="font-size:12px;color:var(--ink-3)">ถึง</span>
-        <input type="date" class="date-input" id="date-to" onchange="applyFilter()">
-        <button class="btn-clear" onclick="clearDates()">✕ ล้างวันที่</button>
-        <button class="btn-export" onclick="exportExcel()">⬇ Export Excel</button>
-      </div>
-      <div class="sev-legend">
-        <span style="font-weight:600;margin-right:4px">สี:</span>
-        <span class="sleg"><span class="sleg-box" style="background:#FEE2E2"></span> เกิน 90 วัน</span>
-        <span class="sleg"><span class="sleg-box" style="background:#FEF3C7"></span> 31–90 วัน</span>
-        <span class="sleg"><span class="sleg-box" style="background:#DCFCE7"></span> ชำระบางส่วน</span>
-        <span style="margin-left:auto;display:flex;align-items:center;gap:12px;font-size:12px">
-          <span style="display:flex;align-items:center;gap:4px;color:var(--zred)"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;background:var(--zred-bg);border:1px solid rgba(230,0,10,.2);padding:1px 6px;border-radius:4px">INV···↗</span> คลิกเปิด PEAK</span>
-          <span style="color:var(--ink-4)">·</span>
-          <span>คลิก header เพื่อ Sort</span>
-        </span>
-      </div>
-      <div class="ts" style="max-height:600px">
-        <table class="inv">
-          <thead><tr>
-            <th onclick="srt('no')" style="width:44px">#</th>
-            <th onclick="srt('docNo')">Document No.</th>
-            <th onclick="srt('code')">Contact Code</th>
-            <th>ลูกค้า</th>
-            <th onclick="srt('ref')">Ref. QT</th>
-            <th class="r" onclick="srt('date')">วันที่ออก</th>
-            <th class="r" onclick="srt('dueDate')">Due Date</th>
-            <th class="r" onclick="srt('totalAmt')">Total Amount</th>
-            <th class="r" onclick="srt('paid')">Paid</th>
-            <th class="r" onclick="srt('credited')">Credited</th>
-            <th class="r" onclick="srt('outstanding')">Outstanding</th>
-            <th onclick="srt('bucket')">Bucket</th>
-          </tr></thead>
-          <tbody id="inv-body"></tbody>
-          <tfoot id="inv-foot"></tfoot>
-        </table>
-      </div>
     </div>
 
     <div class="vsec">
@@ -1079,42 +1092,40 @@ function buildTable() {
   });
   document.getElementById('rc').textContent = rows.length.toLocaleString() + ' รายการ';
   const sumOut=rows.reduce((s,r)=>s+r.outstanding,0), sumTot=rows.reduce((s,r)=>s+r.totalAmt,0);
-  const sumPaid=rows.reduce((s,r)=>s+r.paid,0), sumCredited=rows.reduce((s,r)=>s+r.credited,0);
+  const sumPaid=rows.reduce((s,r)=>s+r.paid,0);
   document.getElementById('inv-body').innerHTML = rows.map((r,i) => {
     const bkt  = BUCKETS.find(b=>r[b.key]>0);
-    const badge= bkt ? `<span class="bdg" style="--bc:${bkt.color}">${bkt.label}</span>` : `<span class="bdg" style="--bc:#22C55E">Current</span>`;
+    const badge= bkt ? `<span class="bdg" style="--bc:${bkt.color}">${bkt.short}</span>` : `<span class="bdg" style="--bc:#22C55E">Current</span>`;
     const ptag = r.paid>0 ? `<span class="ptag">Partial</span>` : '';
-    const woff = r.d360plus>0 ? `<span class="woff-tag">Write-off?</span>` : '';
+    const woff = r.d360plus>0 ? `<span class="woff-tag">W/O?</span>` : '';
     const odo  = daysOverdue(r.dueDateMs);
     let cls = '';
     if (r.paid>0) cls='sev-partial';
     else if (odo>=90) cls='sev-hi';
     else if (odo>=30) cls='sev-med';
     const odoCls  = odo>=90 ? 'ov late' : 'ov';
-    const odoNote = odo>0 ? `<span style="font-size:11px;color:#DC2626;margin-left:3px">(+${odo}ว)</span>` : '';
+    const odoNote = odo>0 ? `<span style="font-size:10px;color:#DC2626;margin-left:2px">(+${odo}ว)</span>` : (r.dueDateMs > TODAY ? (() => { const d=Math.floor((r.dueDateMs-TODAY)/86400000); return `<span style="font-size:10px;color:#16A34A;margin-left:2px">(+${d}ว)</span>`; })() : '');
     const docCell = r.peakUrl
-      ? `<div class="doc-no-wrap"><a class="peak-link" href="${r.peakUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${r.docNo}<span class="ext-ico">↗</span></a></div>`
+      ? `<a class="peak-link" href="${r.peakUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${r.docNo}">${r.docNo}<span class="ext-ico">↗</span></a>`
       : `<span class="doc">${r.docNo}</span>`;
     return `<tr class="${cls}">
-      <td class="dt" style="text-align:center;color:var(--ink-3)">${i+1}</td>
-      <td>${docCell}</td>
+      <td class="dt" style="text-align:center;color:var(--ink-4)">${i+1}</td>
+      <td class="doc-no-wrap">${docCell}</td>
       <td class="dt">${r.code}</td>
-      <td class="cust" style="max-width:220px" title="${r.customer}">${r.customer}${ptag}${woff}</td>
-      <td class="dt">${r.ref||'—'}</td>
+      <td class="cust" title="${r.customer}">${r.customer}${ptag}${woff}</td>
+      <td class="dt" style="overflow:hidden;text-overflow:ellipsis">${r.ref||'—'}</td>
       <td class="mn dt">${r.date}</td>
       <td class="mn"><span class="${odoCls}">${r.dueDate}</span>${odoNote}</td>
       <td class="mn">${fmt(r.totalAmt)}</td>
       <td class="mn" style="color:${r.paid>0?'#16A34A':'var(--ink-4)'}">${r.paid>0?fmt(r.paid):'—'}</td>
-      <td class="mn" style="color:${r.credited>0?'#7C3AED':'var(--ink-4)'}">${r.credited>0?fmt(r.credited):'—'}</td>
       <td class="mn" style="font-weight:700;color:${odo>=90?'#DC2626':odo>=30?'#D97706':'var(--ink)'}">${fmt(r.outstanding)}</td>
       <td>${badge}</td>
     </tr>`;
   }).join('');
   document.getElementById('inv-foot').innerHTML = `<tr>
-    <td colspan="7" style="padding:10px 14px;font-weight:700">รวม ${rows.length} รายการ</td>
+    <td colspan="7" style="padding:8px 10px;font-weight:700;font-family:'Sarabun',sans-serif;font-size:13px">รวม ${rows.length} รายการ</td>
     <td class="mn">${fmt(sumTot)}</td>
     <td class="mn" style="color:#16A34A">${sumPaid>0?fmt(sumPaid):'—'}</td>
-    <td class="mn" style="color:#7C3AED">${sumCredited>0?fmt(sumCredited):'—'}</td>
     <td class="mn" style="color:var(--zred)">${fmt(sumOut)}</td>
     <td></td>
   </tr>`;
