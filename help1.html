@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Z.com — ศูนย์ช่วยเหลือ</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#e53e3e;--red-dark:#c53030;--red-bg:#fff5f5;--red-light:#fed7d7;
+  --navy:#1a2744;
+  --text:#1a202c;--text2:#4a5568;--text3:#718096;
+  --bg:#f7f8fa;--white:#fff;--border:#e2e8f0;--border2:#edf2f7;
+  --radius:12px;--radius-sm:8px;
+  --panel-w:420px;--nav-h:56px;
+}
+[data-theme="dark"]{
+  --text:#f0f4f8;--text2:#cbd5e0;--text3:#718096;
+  --bg:#0f1117;--white:#1a1d27;--border:#2d3748;--border2:#252836;
+  --red-bg:#2d1515;--red-light:#742a2a;--navy:#0d1526;
+}
+html,body{height:100%;overflow:hidden;font-family:'Sarabun',sans-serif;color:var(--text);font-size:16px;line-height:1.6;background:var(--bg)}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;gap:12px;z-index:100}
+.nav-logo{font-size:20px;font-weight:700;color:var(--red);cursor:pointer;white-space:nowrap;flex-shrink:0}
+.nav-spacer{flex:1}
+.nav-actions{display:flex;gap:8px;align-items:center}
+.nav-links{display:flex;gap:14px;align-items:center;flex-shrink:0}
+.nav-links a{font-size:13px;color:var(--text2);text-decoration:none;font-weight:500}
+.nav-links a:hover{color:var(--red)}
+.nav-btn-link{background:var(--red);color:#fff!important;padding:6px 16px;border-radius:6px;font-size:13px;font-weight:600}
+.icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s;color:var(--text2);flex-shrink:0}
+.icon-btn:hover{background:var(--border2)}
+.icon-btn.on{background:var(--red-bg);border-color:var(--red-light);color:var(--red)}
+
+/* ── LAYOUT ── */
+.root{display:flex;height:100vh;padding-top:var(--nav-h)}
+.main{flex:1;overflow-y:auto;min-width:0}
+
+/* ── RESIZE ── */
+.panel-resize{width:5px;flex-shrink:0;cursor:col-resize;background:transparent;transition:background .15s;position:relative;z-index:10;display:none}
+.panel-resize.show{display:block}
+.panel-resize:hover,.panel-resize.dragging{background:var(--red-light)}
+.panel-resize::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:36px;width:3px;border-radius:3px;background:var(--border)}
+.panel-resize:hover::after,.panel-resize.dragging::after{background:var(--red)}
+
+/* ── PANEL ── */
+.panel{width:0;overflow:hidden;flex-shrink:0;background:var(--white);border-left:0px solid var(--border);display:flex;flex-direction:column;transition:width .35s cubic-bezier(.4,0,.2,1),border-left-width .35s}
+.panel.open{width:var(--panel-w);border-left-width:1px}
+.panel-inner{width:var(--panel-w);display:flex;flex-direction:column;height:100%;overflow:hidden}
+.panel-top{padding:11px 14px 9px;flex-shrink:0;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:10px}
+.panel-top-icon{width:30px;height:30px;background:var(--red-bg);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.panel-top-title{font-size:13px;font-weight:700;color:var(--text)}
+.panel-top-sub{font-size:11px;color:var(--text3)}
+.panel-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.ptab{flex:1;padding:9px 0;font-size:13px;font-weight:600;font-family:'Sarabun',sans-serif;border:none;background:none;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s}
+.ptab.active{color:var(--red);border-bottom-color:var(--red)}
+
+/* ── CHAT ── */
+.chat-body{flex:1;overflow-y:auto;padding:16px 12px 8px;display:flex;flex-direction:column;gap:14px;background:var(--bg);scroll-behavior:smooth}
+.msg-row{display:flex;gap:9px;align-items:flex-end;max-width:100%}
+.msg-row.user{flex-direction:row-reverse}
+.bot-avatar{width:30px;height:30px;background:var(--red-bg);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-bottom:2px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.bubble{max-width:84%;padding:11px 14px;border-radius:16px;font-size:13.5px;line-height:1.6;word-break:break-word}
+.bubble.bot{background:var(--white);border:1px solid var(--border);border-bottom-left-radius:4px;color:var(--text2);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.bubble.user{background:var(--red);color:#fff;border-bottom-right-radius:4px;box-shadow:0 2px 6px rgba(229,62,62,.25)}
+.bubble-time{font-size:10px;opacity:.45;margin-top:5px;display:block;letter-spacing:.2px}
+.bubble.user .bubble-time{color:rgba(255,255,255,.8);text-align:right}
+.bubble.bot .bubble-time{color:var(--text3)}
+.art-cards{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.art-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;cursor:pointer;transition:all .15s}
+.art-card:hover{border-color:var(--red-light);background:var(--red-bg);transform:translateY(-1px);box-shadow:0 3px 8px rgba(229,62,62,.1)}
+.art-card.active{border-color:var(--red);background:var(--red-bg)}
+.art-card-tag{font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.art-card-title{font-size:13px;font-weight:700;color:var(--text);line-height:1.35;margin-bottom:3px}
+.art-card-sub{font-size:11px;color:var(--text3);line-height:1.45}
+.qr-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.qr-btn{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--white);font-size:12px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;color:var(--text2);transition:all .15s;white-space:nowrap}
+.qr-btn:hover{background:var(--red-bg);border-color:var(--red-light);color:var(--red)}
+.typing-dot{display:flex;gap:5px;padding:4px 2px}
+.typing-dot span{width:7px;height:7px;background:var(--border);border-radius:50%;animation:tdot .9s infinite}
+.typing-dot span:nth-child(2){animation-delay:.15s}
+.typing-dot span:nth-child(3){animation-delay:.3s}
+@keyframes tdot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+/* ── CHAT INPUT ── */
+.chat-input-area{padding:10px 12px 13px;border-top:1px solid var(--border);background:var(--white);flex-shrink:0}
+.chat-input-box{display:flex;align-items:flex-end;gap:6px;background:var(--bg);border:1.5px solid var(--border);border-radius:16px;padding:8px 8px 8px 14px;transition:border-color .2s,box-shadow .2s}
+.chat-input-box:focus-within{border-color:var(--red);background:var(--white);box-shadow:0 0 0 3px rgba(229,62,62,.06)}
+.chat-input-box textarea{flex:1;border:none;outline:none;background:transparent;font-size:14px;font-family:'Sarabun',sans-serif;color:var(--text);line-height:1.55;resize:none;min-height:24px;overflow:hidden;padding:5px 0}
+.chat-input-box textarea::placeholder{color:var(--text3)}
+.chat-input-box textarea:disabled{opacity:.45;cursor:not-allowed}
+.chat-attach{width:34px;height:34px;border-radius:8px;border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;transition:background .15s;color:var(--text3)}
+.chat-attach:hover{background:var(--border2)}
+.chat-send{width:34px;height:34px;background:var(--red);border:none;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s;font-size:15px;box-shadow:0 2px 6px rgba(229,62,62,.3)}
+.chat-send:hover:not(:disabled){background:var(--red-dark);transform:translateY(-1px);box-shadow:0 3px 8px rgba(229,62,62,.4)}
+.chat-send:disabled{opacity:.35;cursor:not-allowed;box-shadow:none;transform:none}
+.chat-hint{font-size:11px;color:var(--text3);text-align:center;margin-top:7px}
+
+/* ── HISTORY ── */
+.hist-empty{padding:28px 14px;text-align:center;font-size:13px;color:var(--text3);line-height:1.7}
+.hist-section-label{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;padding:12px 12px 6px}
+.hist-item{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;transition:background .15s}
+.hist-item:hover{background:var(--border2)}
+.hist-icon{width:28px;height:28px;border-radius:7px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.hist-text{flex:1;min-width:0}
+.hist-q{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-meta{font-size:11px;color:var(--text3);margin-top:1px}
+.hist-del{font-size:13px;color:var(--text3);background:none;border:none;cursor:pointer;padding:3px 6px;border-radius:4px;opacity:0;transition:opacity .15s}
+.hist-item:hover .hist-del{opacity:1}
+.hist-del:hover{color:var(--red)}
+
+/* ── HOME ── */
+#view-home{display:flex;flex-direction:column}
+.hero{
+  min-height:calc(100vh - var(--nav-h));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:60px 24px 80px;text-align:center;background:var(--white);
+}
+.hero-logo{font-size:34px;font-weight:700;color:var(--red);margin-bottom:10px;letter-spacing:-.5px}
+.hero-tagline{font-size:19px;color:var(--text3);font-weight:300;margin-bottom:40px;line-height:1.5}
+.hero-search-wrap{width:100%;max-width:620px;position:relative;filter:drop-shadow(0 2px 16px rgba(0,0,0,.08))}
+.hero-search-wrap input{width:100%;padding:18px 60px 18px 24px;font-size:17px;font-family:'Sarabun',sans-serif;border:1.5px solid var(--border);border-radius:36px;outline:none;color:var(--text);background:var(--white);transition:border-color .2s,box-shadow .2s}
+.hero-search-wrap input:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(229,62,62,.08)}
+.hero-search-btn{position:absolute;right:7px;top:50%;transform:translateY(-50%);background:var(--red);border:none;color:#fff;width:46px;height:46px;border-radius:50%;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.hero-search-btn:hover{background:var(--red-dark)}
+.hero-tags{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:620px}
+.hero-tag{background:var(--border2);color:var(--text2);font-size:14px;padding:7px 18px;border-radius:24px;cursor:pointer;border:1px solid var(--border);transition:all .15s}
+.hero-tag:hover{background:var(--red-bg);border-color:var(--red-light);color:var(--red)}
+.hero-stats{margin-top:52px;display:flex;gap:44px;font-size:14px;color:var(--text3)}
+.hero-stat strong{color:var(--text);font-size:22px;font-weight:700;display:block;margin-bottom:2px}
+
+/* ── ARTICLE ── */
+#view-article{display:none;padding:28px 44px 52px}
+.breadcrumb{font-size:13px;color:var(--text3);margin-bottom:18px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.breadcrumb span{cursor:pointer;transition:color .15s}
+.breadcrumb span:hover{color:var(--red)}
+.breadcrumb .sep{color:var(--border)}
+.art-header{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:26px 30px;margin-bottom:14px}
+.art-tag{display:inline-block;background:var(--red-bg);color:var(--red);font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:12px;letter-spacing:.3px}
+.art-header h1{font-size:25px;font-weight:700;line-height:1.35;margin-bottom:14px;color:var(--text)}
+.art-meta{display:flex;gap:16px;font-size:13px;color:var(--text3);flex-wrap:wrap;align-items:center;padding-top:12px;border-top:1px solid var(--border2)}
+.stars{color:#f6ad55}
+.art-body{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:26px 30px}
+.art-body h2{font-size:18px;font-weight:700;margin:22px 0 10px;color:var(--text)}
+.art-body h2:first-child{margin-top:0}
+.art-body p{font-size:15px;line-height:1.85;color:var(--text2);margin-bottom:12px}
+.summary-box{background:var(--border2);border-left:4px solid var(--red);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:13px 16px;margin-bottom:18px;font-size:14px;color:var(--text2);line-height:1.7}
+.dns-card{border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 15px;margin-bottom:9px;display:flex;gap:13px;align-items:flex-start;transition:border-color .15s}
+.dns-card:hover{border-color:var(--red-light)}
+.dns-badge{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:#fff;margin-top:1px}
+.db-a{background:#3182ce}.db-cn{background:#38a169}.db-mx{background:#d97706}.db-txt{background:#805ad5}
+.dns-name{font-size:14px;font-weight:700;margin-bottom:3px;color:var(--text)}
+.dns-desc{font-size:13px;color:var(--text3);line-height:1.5}
+.dns-desc code{font-size:12px;background:var(--bg);padding:2px 7px;border-radius:4px;color:var(--red-dark);font-family:monospace}
+.helpful-row{display:flex;align-items:center;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border2);flex-wrap:wrap}
+.helpful-row p{font-size:14px;color:var(--text3)}
+.helpful-btn{padding:7px 16px;border-radius:20px;border:1px solid var(--border);font-size:13px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;background:var(--white);color:var(--text2);transition:all .15s}
+.helpful-btn:hover:not(:disabled){background:var(--border2)}
+.helpful-btn.voted-yes{background:#f0fff4;border-color:#9ae6b4;color:#276749;cursor:default}
+.helpful-btn.voted-no{background:var(--red-bg);border-color:var(--red-light);color:var(--red-dark);cursor:default}
+
+/* ── EMPTY / NO-RESULT ── */
+#view-empty{display:none;padding:32px 44px 52px}
+#empty-default{min-height:50vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center}
+
+.fade-in{animation:fi .22s ease forwards}
+.msg-in{animation:mi .2s ease forwards}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes mi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+@media(max-width:800px){
+  .panel.open{position:fixed;right:0;top:var(--nav-h);bottom:0;width:100vw!important;z-index:90}
+  .panel-resize{display:none!important}
+  #view-article,#view-empty{padding-left:18px;padding-right:18px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-logo" onclick="goHome()">Z.com</span>
+  <div class="nav-spacer"></div>
+  <div class="nav-actions">
+    <button class="icon-btn" id="dm-btn" onclick="toggleDark()" title="เปลี่ยน Theme">🌙</button>
+    <button class="icon-btn" id="panel-toggle-btn" onclick="togglePanel()" title="แสดง/ซ่อน panel" style="display:none">💬</button>
+  </div>
+  <div class="nav-links">
+    <a href="#">แจ้งปัญหา</a>
+    <a href="#" class="nav-btn-link">เข้าสู่ระบบ</a>
+  </div>
+</nav>
+
+<div class="root">
+  <div class="main" id="main">
+
+    <!-- HOME -->
+    <div id="view-home">
+      <div class="hero">
+        <div class="hero-logo">Z.com Help Center</div>
+        <div class="hero-tagline">บทความกว่า 248 บทความ ครอบคลุมทุกบริการ Z.com</div>
+        <div class="hero-search-wrap">
+          <input type="text" id="hero-input" placeholder="มีคำถามอะไร? พิมพ์ได้เลย..." autofocus
+            onkeydown="if(event.key==='Enter')sendQuery(this.value)">
+          <button class="hero-search-btn" onclick="sendQuery(document.getElementById('hero-input').value)">🔍</button>
+        </div>
+        <div class="hero-tags">
+          <span class="hero-tag" onclick="sendQuery('DNS Records')">DNS Records</span>
+          <span class="hero-tag" onclick="sendQuery('SSL')">SSL / HTTPS</span>
+          <span class="hero-tag" onclick="sendQuery('Email ส่งไม่ได้')">Email ส่งไม่ได้</span>
+          <span class="hero-tag" onclick="sendQuery('WordPress')">WordPress</span>
+          <span class="hero-tag" onclick="sendQuery('Backup')">Backup</span>
+          <span class="hero-tag" onclick="sendQuery('Domain')">ย้าย Domain</span>
+          <span class="hero-tag" onclick="sendQuery('ชำระเงิน')">ชำระเงิน</span>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><strong>248</strong>บทความ</div>
+          <div class="hero-stat"><strong>7</strong>หมวดหมู่</div>
+          <div class="hero-stat"><strong>4.9★</strong>พึงพอใจ</div>
+          <div class="hero-stat"><strong>24/7</strong>ทีมงาน</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMPTY / NO-RESULT -->
+    <div id="view-empty">
+      <div id="empty-default" style="display:none">
+        <div style="font-size:56px;opacity:.1">🔍</div>
+        <div style="font-size:17px;color:var(--text3);font-weight:600;margin-top:4px">เลือกบทความจาก panel ด้านขวา</div>
+        <div style="font-size:14px;color:var(--text3)">คลิกที่บทความเพื่ออ่านรายละเอียด</div>
+      </div>
+      <div id="empty-noresult" style="display:none">
+        <div style="background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:28px 30px;margin-bottom:18px;display:flex;align-items:flex-start;gap:18px">
+          <div style="width:48px;height:48px;border-radius:11px;background:#fefce8;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">😕</div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">ไม่พบผลลัพธ์</div>
+            <h2 style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:7px">ไม่พบบทความสำหรับ "<span id="nr-query" style="color:var(--red)"></span>"</h2>
+            <p style="font-size:14px;color:var(--text3);line-height:1.65">ลองตรวจสอบคำสะกด หรือใช้คำที่กว้างขึ้น เช่น <strong style="color:var(--text)">"DNS"</strong>, <strong style="color:var(--text)">"SSL"</strong>, <strong style="color:var(--text)">"Email"</strong></p>
+          </div>
+        </div>
+        <div style="margin-bottom:18px">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:11px">บทความยอดนิยมที่อาจช่วยได้</div>
+          <div id="nr-popular" style="display:flex;flex-direction:column;gap:9px"></div>
+        </div>
+        <div style="padding:12px 16px;background:var(--border2);border-radius:var(--radius-sm);font-size:13px;color:var(--text3);display:flex;align-items:center;gap:8px">
+          <span>💡</span> ยังหาไม่เจอ? พิมพ์ <strong style="color:var(--text)">"คุยกับเจ้าหน้าที่"</strong> ใน panel ด้านขวาครับ
+        </div>
+      </div>
+    </div>
+
+    <!-- ARTICLE -->
+    <div id="view-article">
+      <div class="breadcrumb">
+        <span onclick="goHome()">หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span id="art-cat-bc"></span>
+        <span class="sep">›</span>
+        <span id="art-title-bc" style="color:var(--text);cursor:default"></span>
+      </div>
+      <div class="art-header">
+        <div class="art-tag" id="art-tag"></div>
+        <h1 id="art-title"></h1>
+        <div class="art-meta">
+          <span id="art-views"></span>
+          <span id="art-time"></span>
+          <span id="art-updated"></span>
+          <span><span class="stars">★★★★★</span> <span id="art-rating"></span></span>
+        </div>
+      </div>
+      <div class="art-body" id="art-body"></div>
+    </div>
+
+  </div><!-- /main -->
+
+  <div class="panel-resize" id="panel-resize"></div>
+
+  <!-- PANEL -->
+  <div class="panel" id="panel">
+    <div class="panel-inner" id="panel-inner">
+      <div class="panel-top">
+        <div class="panel-top-icon">🔍</div>
+        <div style="flex:1;min-width:0">
+          <div class="panel-top-title">ค้นหาคำตอบ</div>
+          <div class="panel-top-sub">248 บทความ · ครอบคลุมทุกบริการ Z.com</div>
+        </div>
+      </div>
+      <div class="panel-tabs">
+        <button class="ptab active" id="ptab-chat" onclick="switchTab('chat')">ถามตอบ</button>
+        <button class="ptab" id="ptab-history" onclick="switchTab('history')">ประวัติ</button>
+      </div>
+
+      <!-- CHAT TAB -->
+      <div id="tab-chat" style="display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0">
+        <div class="chat-body" id="chat-body"></div>
+        <div class="chat-input-area">
+          <div class="chat-input-box">
+            <textarea id="chat-input" rows="1"
+              placeholder="อธิบายปัญหาที่พบ..."
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFromChat()}"
+              oninput="autoGrow(this)"></textarea>
+            <div style="display:flex;align-items:flex-end;gap:4px;padding-bottom:2px">
+              <button class="chat-attach" title="แนบไฟล์">📎</button>
+              <button class="chat-send" id="send-btn" onclick="sendFromChat()" title="ส่ง (Enter)">➤</button>
+            </div>
+          </div>
+          <!-- <div class="chat-hint">Enter ส่ง · Shift+Enter ขึ้นบรรทัดใหม่ · / โฟกัส</div> -->
+        </div>
+      </div>
+
+      <!-- HISTORY TAB -->
+      <div id="tab-history" style="display:none;flex:1;overflow:hidden;flex-direction:column;min-height:0">
+        <div style="flex:1;overflow-y:auto;background:var(--bg)" id="hist-body">
+          <div class="hist-empty">
+            <div style="font-size:30px;opacity:.15;margin-bottom:8px">🕐</div>
+            ยังไม่มีประวัติการค้นหา<br>เริ่มพิมพ์คำถามในแท็บถามตอบ
+          </div>
+        </div>
+        <div style="padding:10px 12px;border-top:1px solid var(--border);background:var(--white)">
+          <button onclick="clearHistory()"
+            style="width:100%;padding:8px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--white);font-size:12px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;color:var(--text3);transition:background .15s"
+            onmouseover="this.style.background='var(--border2)'" onmouseout="this.style.background='var(--white)'">
+            ล้างประวัติทั้งหมด
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /root -->
+
+<script>
+/* ── DATA ── */
+const ARTICLES={
+  dns:{title:'การตั้งค่า DNS Records สำหรับ Domain',tag:'Domain',cat:'Domain',views:'👁 10,247 ครั้ง',time:'🕐 7 นาที',updated:'📅 3 ก.พ. 2568',rating:'4.9/5 (218 คน)',desc:'A Record, CNAME, MX, TXT และวิธีตั้งค่าผ่าน Z.com Member Zone',
+    body:`<div class="summary-box"><strong>สรุปบทความ</strong><br>คู่มืออธิบาย DNS Record ประเภทต่างๆ และวิธีตั้งค่าผ่าน Z.com Member Zone เพื่อเชื่อมโดเมนกับ Hosting, Email หรือบริการภายนอก</div>
+    <h2>DNS Record คืออะไร?</h2><p>DNS (Domain Name System) Record คือไฟล์คำสั่งที่บอกว่าโดเมนของคุณชี้ไปที่ไหน เช่น Hosting Server, Mail Server หรือบริการ CDN</p>
+    <h2>ประเภท DNS Record ที่ใช้บ่อย</h2>
+    <div class="dns-card"><div class="dns-badge db-a">A</div><div><div class="dns-name">A Record — ชี้โดเมนไปที่ IP Address</div><div class="dns-desc">ใช้เชื่อมโดเมนกับ Hosting Server เช่น <code>yourdomain.com → 103.20.100.50</code></div></div></div>
+    <div class="dns-card"><div class="dns-badge db-cn">CN</div><div><div class="dns-name">CNAME — ชี้ Subdomain ไปที่โดเมนอื่น</div><div class="dns-desc">ใช้สร้าง subdomain เช่น <code>www → yourdomain.com</code> หรือเชื่อม Shopify, CDN</div></div></div>
+    <div class="dns-card"><div class="dns-badge db-mx">MX</div><div><div class="dns-name">MX Record — กำหนด Mail Server</div><div class="dns-desc">ใช้ตั้งค่าอีเมล เช่น Google Workspace, Microsoft 365 หรือ Email Hosting ของ Z.com</div></div></div>
+    <div class="dns-card"><div class="dns-badge db-txt">TXT</div><div><div class="dns-name">TXT Record — ข้อมูลยืนยันตัวตน</div><div class="dns-desc">ใช้ยืนยันความเป็นเจ้าของโดเมน, SPF, DKIM สำหรับป้องกัน Email Spam</div></div></div>
+    <h2>วิธีตั้งค่า DNS ผ่าน Z.com Member Zone</h2>
+    <p>1. เข้าสู่ระบบที่ <strong>member.z.com</strong> → เลือกเมนู <strong>Domain</strong></p>
+    <p>2. คลิกที่โดเมนที่ต้องการ → เลือก <strong>DNS Settings</strong></p>
+    <p>3. กดปุ่ม <strong>Add Record</strong> → เลือกประเภท Record และกรอกข้อมูล</p>
+    <p>4. กด <strong>Save</strong> — การเปลี่ยนแปลง DNS อาจใช้เวลา 24–48 ชั่วโมง Propagate ทั่วโลก</p>`},
+  'ssl-install':{title:'วิธีการติดตั้ง SSL Certificate บน cPanel',tag:'SSL Certificate',cat:'SSL Certificate',views:'👁 8,512 ครั้ง',time:'🕐 5 นาที',updated:'📅 15 ม.ค. 2568',rating:'4.8/5 (142 คน)',desc:'AutoSSL ฟรี และ Manual SSL ที่ซื้อมา',
+    body:`<div class="summary-box"><strong>สรุปบทความ</strong><br>วิธีติดตั้ง SSL Certificate บน cPanel ทั้งแบบ AutoSSL (Let's Encrypt ฟรี) และแบบ Manual</div>
+    <h2>SSL Certificate คืออะไร?</h2><p>SSL ทำให้เว็บไซต์ใช้ HTTPS เข้ารหัสข้อมูลระหว่างผู้ใช้งานกับเซิร์ฟเวอร์ ช่วยเพิ่มความน่าเชื่อถือและปรับปรุง SEO</p>
+    <h2>ติดตั้ง AutoSSL (Let's Encrypt ฟรี)</h2>
+    <p>1. เข้า cPanel → ค้นหา <strong>SSL/TLS</strong> → คลิก <strong>Manage SSL Sites</strong></p>
+    <p>2. เลือกโดเมน → คลิก <strong>Run AutoSSL</strong> → รอระบบติดตั้งอัตโนมัติ (5–10 นาที)</p>
+    <h2>ติดตั้ง SSL แบบ Manual</h2>
+    <p>1. ดาวน์โหลดไฟล์ Certificate จากอีเมลที่ได้รับ</p>
+    <p>2. เข้า cPanel → <strong>SSL/TLS</strong> → <strong>Install and Manage SSL</strong></p>
+    <p>3. วาง Certificate, Private Key และ CA Bundle → กด <strong>Install Certificate</strong></p>`},
+  'ssl-expire':{title:'SSL หมดอายุ ต่ออายุอย่างไร?',tag:'SSL Certificate',cat:'SSL Certificate',views:'👁 6,889 ครั้ง',time:'🕐 4 นาที',updated:'📅 10 ม.ค. 2568',rating:'4.7/5 (98 คน)',desc:'ตรวจสอบและต่ออายุ SSL ทั้ง AutoSSL และ SSL ที่ซื้อมา',
+    body:`<div class="summary-box"><strong>สรุปบทความ</strong><br>ขั้นตอนการต่ออายุ SSL Certificate ทั้งแบบ AutoSSL และ SSL ที่ซื้อมา</div>
+    <h2>ตรวจสอบวันหมดอายุ</h2><p>คลิกไอคอน 🔒 ที่ Address Bar → <strong>Connection is Secure</strong> → <strong>Certificate is Valid</strong></p>
+    <h2>ต่ออายุ AutoSSL</h2><p>AutoSSL ต่ออายุอัตโนมัติทุก 90 วัน หากมีปัญหาเข้า cPanel → <strong>SSL/TLS Status</strong> → กด <strong>Run AutoSSL</strong></p>
+    <h2>ต่ออายุ SSL ที่ซื้อมา</h2>
+    <p>1. เข้า member.z.com → เลือก <strong>SSL Certificate</strong> → คลิก <strong>Renew</strong></p>
+    <p>2. เลือกระยะเวลาและชำระเงิน → รอรับ Certificate ใหม่ทางอีเมล</p>`},
+  'email-setup':{title:'ตั้งค่า Email ส่งไม่ออก แก้ไขอย่างไร?',tag:'Email Hosting',cat:'Email Hosting',views:'👁 5,234 ครั้ง',time:'🕐 6 นาที',updated:'📅 20 ม.ค. 2568',rating:'4.8/5 (76 คน)',desc:'แก้ SMTP, SPF, DKIM และการตั้งค่า Mail Client',
+    body:`<div class="summary-box"><strong>สรุปบทความ</strong><br>แก้ปัญหา Email ส่งไม่ออก ตรวจสอบ SMTP Settings, SPF/DKIM Records และการตั้งค่า Mail Client</div>
+    <h2>ตรวจสอบ SMTP Settings</h2><p>SMTP Host: <code>mail.yourdomain.com</code> Port 587 (TLS) หรือ 465 (SSL)</p>
+    <h2>ตรวจสอบ SPF Record</h2><p>เพิ่ม TXT Record: <code>v=spf1 include:spf.z.com ~all</code></p>
+    <h2>ตั้งค่า DKIM</h2><p>เข้า cPanel → <strong>Email Deliverability</strong> → คลิก <strong>Repair</strong></p>`},
+  'wp-backup':{title:'วิธี Backup WordPress ด้วย cPanel',tag:'Web Hosting',cat:'Web Hosting',views:'👁 4,721 ครั้ง',time:'🕐 8 นาที',updated:'📅 5 ก.พ. 2568',rating:'4.9/5 (112 คน)',desc:'Backup ไฟล์และ Database ผ่าน cPanel Backup Wizard',
+    body:`<div class="summary-box"><strong>สรุปบทความ</strong><br>สำรองข้อมูล WordPress ทั้งไฟล์และ Database ผ่าน cPanel Backup Wizard</div>
+    <h2>Backup ผ่าน cPanel Backup Wizard</h2>
+    <p>1. เข้า cPanel → <strong>Backup Wizard</strong> → คลิก <strong>Back Up</strong> → เลือก <strong>Full Backup</strong></p>
+    <p>2. กำหนด Destination และอีเมล → กด <strong>Generate Backup</strong></p>
+    <h2>Backup เฉพาะ Database</h2>
+    <p>เข้า cPanel → <strong>phpMyAdmin</strong> → เลือก Database → คลิก <strong>Export</strong> → SQL → <strong>Go</strong></p>`},
+};
+const SD=Object.entries(ARTICLES).map(([id,a])=>({id,...a}));
+
+/* ── STATE ── */
+let opened=false,curArt=null,busy=false,botState='search',vData={};
+let history_=[];
+
+/* ── DARK MODE ── */
+function toggleDark(){
+  const doc=document.documentElement;
+  const dark=doc.getAttribute('data-theme')==='dark';
+  doc.setAttribute('data-theme',dark?'light':'dark');
+  document.getElementById('dm-btn').textContent=dark?'🌙':'☀️';
+  localStorage.setItem('zcom-theme',dark?'light':'dark');
+}
+(()=>{const s=localStorage.getItem('zcom-theme');if(s==='dark'){document.documentElement.setAttribute('data-theme','dark');document.getElementById('dm-btn').textContent='☀️';}})();
+
+/* ── KEYBOARD / ── */
+document.addEventListener('keydown',e=>{
+  if(e.key==='/'&&!['TEXTAREA','INPUT'].includes(document.activeElement.tagName)){
+    e.preventDefault();
+    const t=document.getElementById('chat-input');
+    if(t&&!t.disabled){t.focus();switchTab('chat');}
+  }
+});
+
+/* ── RESIZE ── */
+(()=>{
+  const h=document.getElementById('panel-resize'),p=document.getElementById('panel'),inn=document.getElementById('panel-inner');
+  let drag=false,sx=0,sw=0;
+  h.addEventListener('mousedown',e=>{drag=true;sx=e.clientX;sw=p.offsetWidth;h.classList.add('dragging');document.body.style.cssText+='cursor:col-resize;user-select:none';});
+  document.addEventListener('mousemove',e=>{if(!drag)return;const w=Math.min(Math.max(sw+(sx-e.clientX),280),720);p.style.cssText=`width:${w}px;border-left-width:1px;transition:none`;inn.style.width=w+'px';});
+  document.addEventListener('mouseup',()=>{if(!drag)return;drag=false;h.classList.remove('dragging');document.body.style.cursor='';document.body.style.userSelect='';p.style.transition='';});
+})();
+
+/* ── PANEL TOGGLE ── */
+function togglePanel(){
+  const p=document.getElementById('panel'),r=document.getElementById('panel-resize'),b=document.getElementById('panel-toggle-btn');
+  const isOpen=p.classList.contains('open');
+  p.classList.toggle('open',!isOpen);
+  r.classList.toggle('show',!isOpen);
+  b.classList.toggle('on',!isOpen);
+}
+
+/* ── UTILS ── */
+function T(){const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');}
+function autoGrow(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
+function scrollDown(){const b=document.getElementById('chat-body');setTimeout(()=>{b.scrollTop=b.scrollHeight;},40);}
+function append(html){
+  const b=document.getElementById('chat-body'),d=document.createElement('div');
+  d.innerHTML=html;const el=d.firstElementChild;el.classList.add('msg-in');
+  b.appendChild(el);scrollDown();
+}
+function setBusy(v){
+  busy=v;
+  const btn=document.getElementById('send-btn'),ta=document.getElementById('chat-input');
+  if(btn)btn.disabled=v;
+  ta.disabled=v;
+  if(!v){ta.disabled=false;setPlaceholder();if(opened)setTimeout(()=>ta.focus(),40);}
+}
+function setPlaceholder(){
+  const m={search:'อธิบายปัญหาที่พบ...',verify_name:'พิมพ์ชื่อ-นามสกุลของคุณ...',verify_email:'พิมพ์อีเมล หรือเบอร์โทรศัพท์...',track_id:'พิมพ์หมายเลขคำร้อง เช่น ND-12345...',agent:'รอเจ้าหน้าที่รับสาย...'};
+  document.getElementById('chat-input').placeholder=m[botState]||'อธิบายปัญหาที่พบ...';
+}
+function typing(){
+  setBusy(true);
+  const b=document.getElementById('chat-body'),el=document.createElement('div');
+  el.className='msg-row msg-in';el.id='ti';
+  el.innerHTML='<div class="bot-avatar">🔍</div><div class="bubble bot"><div class="typing-dot"><span></span><span></span><span></span></div></div>';
+  b.appendChild(el);scrollDown();
+}
+function rmTyping(){const e=document.getElementById('ti');if(e)e.remove();}
+function botMsg(html,t){return `<div class="msg-row msg-in"><div class="bot-avatar">🔍</div><div class="bubble bot">${html}<span class="bubble-time">${t}</span></div></div>`;}
+function qBtn(label,q){return `<button class="qr-btn" onclick="sendQuery('${(q||label).replace(/'/g,"\\'")}'">${label}</button>`;}
+
+/* ── HISTORY ── */
+function loadHist(){try{history_=JSON.parse(localStorage.getItem('zcom-h')||'[]');}catch{history_=[];}renderHist();}
+function saveHist(){try{localStorage.setItem('zcom-h',JSON.stringify(history_.slice(0,30)));}catch{}}
+function addHist(q){
+  const i=history_.findIndex(h=>h.q.toLowerCase()===q.toLowerCase()),t=T();
+  if(i>=0){history_[i].time=t;history_[i].count=(history_[i].count||1)+1;const r=history_.splice(i,1)[0];history_.unshift(r);}
+  else history_.unshift({q,time:t,count:1});
+  if(history_.length>30)history_.pop();
+  saveHist();renderHist();
+}
+function renderHist(){
+  const b=document.getElementById('hist-body');
+  if(!history_.length){b.innerHTML='<div class="hist-empty"><div style="font-size:30px;opacity:.15;margin-bottom:8px">🕐</div>ยังไม่มีประวัติการค้นหา<br>เริ่มพิมพ์คำถามในแท็บถามตอบ</div>';return;}
+  b.innerHTML='<div class="hist-section-label">ล่าสุด — '+history_.length+' รายการ</div>'+
+    history_.map((h,i)=>`<div class="hist-item" onclick="reSearch('${h.q.replace(/'/g,"\\'")}')">
+      <div class="hist-icon">🔍</div>
+      <div class="hist-text"><div class="hist-q">${h.q}</div><div class="hist-meta">${h.time}${h.count>1?' · '+h.count+' ครั้ง':''}</div></div>
+      <button class="hist-del" onclick="event.stopPropagation();delHist(${i})">✕</button>
+    </div>`).join('');
+}
+function reSearch(q){switchTab('chat');sendQuery(q);}
+function delHist(i){history_.splice(i,1);saveHist();renderHist();}
+function clearHistory(){history_=[];saveHist();renderHist();}
+
+/* ── BOT STATE ── */
+const KW_AGENT=['คุยกับเจ้าหน้าที่','ติดต่อเจ้าหน้าที่','agent','ยังไม่ได้','แก้ไม่ได้','ช่วยด้วย','ไม่หาย'];
+const KW_TRACK=['ติดตามสถานะ','เช็คสถานะ','track','เลขที่คำร้อง','ติดตาม ticket'];
+const KW_DONE=['ได้แล้ว','แก้ได้แล้ว','โอเค','ok','ขอบคุณ','thank','เข้าใจแล้ว'];
+function kw(q,l){return l.some(k=>q.toLowerCase().includes(k.toLowerCase()));}
+
+function handleFlow(q){
+  const t=T();
+  if(botState==='verify_name'){
+    vData.name=q;botState='verify_email';setPlaceholder();
+    typing();setTimeout(()=>{rmTyping();append(botMsg(`ขอบคุณครับคุณ <strong>${q}</strong> 😊<br>กรุณาระบุ <strong>อีเมล</strong> หรือ <strong>เบอร์โทร</strong> ที่ลงทะเบียนไว้`,t));setBusy(false);},500);return true;
+  }
+  if(botState==='verify_email'){
+    vData.contact=q;botState='agent';setPlaceholder();
+    const tk=`ND-${Math.floor(10000+Math.random()*90000)}`;
+    typing();setTimeout(()=>{rmTyping();append(botMsg(`<div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><span>✅</span><strong style="color:var(--text)">ยืนยันตัวตนสำเร็จ</strong></div>
+      <div style="background:var(--bg);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;margin-bottom:10px"><div style="font-size:11px;color:var(--text3);margin-bottom:2px">ข้อมูลของคุณ</div><strong>${vData.name}</strong> · ${vData.contact}</div>
+      กำลังเชื่อมต่อเจ้าหน้าที่ครับ รอสักครู่...
+      <div style="margin-top:9px;padding:9px 12px;background:#f0fff4;border:1px solid #9ae6b4;border-radius:var(--radius-sm);font-size:12px;color:#276749;display:flex;align-items:center;gap:6px">🟢 เจ้าหน้าที่รับเรื่องแล้ว · หมายเลข <strong>${tk}</strong></div>
+      <div style="margin-top:7px;font-size:11px;color:var(--text3)">ใช้หมายเลขนี้ติดตามสถานะได้ครับ</div>`,t));setBusy(false);},1500);return true;
+  }
+  if(botState==='track_id'){
+    botState='search';setPlaceholder();
+    const c=q.replace(/[^0-9]/g,'');
+    typing();setTimeout(()=>{rmTyping();
+      if(c.length>=4){append(botMsg(`<div style="font-weight:700;color:var(--text);margin-bottom:9px">📋 สถานะคำร้อง #${c}</div>
+        <div style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;font-size:13px">
+          <div style="padding:8px 12px;display:flex;justify-content:space-between;border-bottom:1px solid var(--border2)"><span style="color:var(--text3)">สถานะ</span><span style="background:#fef3c7;color:#92400e;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700">กำลังดำเนินการ</span></div>
+          <div style="padding:8px 12px;display:flex;justify-content:space-between;border-bottom:1px solid var(--border2)"><span style="color:var(--text3)">หมวดหมู่</span><span>Web Hosting</span></div>
+          <div style="padding:8px 12px;display:flex;justify-content:space-between"><span style="color:var(--text3)">อัปเดตล่าสุด</span><span>${new Date().toLocaleDateString('th-TH')}</span></div>
+        </div>
+        <div class="qr-wrap">${qBtn('🔍 ค้นหาบทความ','DNS')}${qBtn('💬 คุยกับเจ้าหน้าที่')}</div>`,t));}
+      else{append(botMsg(`ไม่พบหมายเลข "<strong>${q}</strong>" ในระบบครับ<br><span style="font-size:12px;color:var(--text3)">ตัวอย่าง: ND-12345</span><div class="qr-wrap">${qBtn('🔄 ลองอีกครั้ง','ติดตามสถานะ')}${qBtn('💬 ติดต่อเจ้าหน้าที่','คุยกับเจ้าหน้าที่')}</div>`,t));}
+      setBusy(false);},700);return true;
+  }
+  if(kw(q,KW_TRACK)){botState='track_id';setPlaceholder();typing();setTimeout(()=>{rmTyping();append(botMsg(`ติดตามสถานะคำร้องครับ 📋<br>กรุณาระบุ <strong>หมายเลขคำร้อง</strong> ของคุณ<br><span style="font-size:12px;color:var(--text3)">เช่น ND-12345</span>`,t));setBusy(false);},400);return true;}
+  if(kw(q,KW_AGENT)){botState='verify_name';setPlaceholder();typing();setTimeout(()=>{rmTyping();append(botMsg(`<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px"><span>👤</span><strong style="color:var(--text)">เชื่อมต่อกับเจ้าหน้าที่</strong></div>ก่อนเชื่อมต่อขอยืนยันตัวตนก่อนนะครับ<br>กรุณาระบุ <strong>ชื่อ-นามสกุล</strong> ของคุณ`,t));setBusy(false);},500);return true;}
+  if(kw(q,KW_DONE)){botState='search';setPlaceholder();typing();setTimeout(()=>{rmTyping();append(botMsg(`ยินดีด้วยครับ! 🎉 ดีใจที่ช่วยได้<br>หากมีปัญหาอื่นพิมพ์ถามได้เลยครับ<div class="qr-wrap">${qBtn('📍 ติดตามสถานะ','ติดตามสถานะ')}${qBtn('🔍 ค้นหาเพิ่มเติม','DNS')}</div>`,t));setBusy(false);},400);return true;}
+  return false;
+}
+
+function botReply(q){
+  if(handleFlow(q))return;
+  const delay=Math.min(400+q.length*12,1100);
+  typing();
+  setTimeout(()=>{
+    rmTyping();
+    const res=SD.filter(a=>a.title.toLowerCase().includes(q.toLowerCase())||a.cat.toLowerCase().includes(q.toLowerCase())||a.desc.toLowerCase().includes(q.toLowerCase()));
+    const t=T();
+    if(res.length){
+      const cards=res.slice(0,3).map(r=>`<div class="art-card" id="ac-${r.id}" onclick="showArt('${r.id}')"><div class="art-card-tag">${r.cat}</div><div class="art-card-title">${r.title}</div><div class="art-card-sub">${r.desc}</div></div>`).join('');
+      append(botMsg(`พบ ${res.length} บทความที่เกี่ยวข้องครับ<div class="art-cards">${cards}</div>
+        <div style="margin-top:9px;padding-top:9px;border-top:1px solid var(--border2);font-size:12px;color:var(--text3);display:flex;align-items:center;gap:7px;flex-wrap:wrap">บทความนี้ช่วยได้ไหม?
+          <span onclick="sendQuery('ได้แล้ว')" style="cursor:pointer;background:#f0fff4;color:#276749;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid #9ae6b4">✓ แก้ได้แล้ว</span>
+          <span onclick="sendQuery('คุยกับเจ้าหน้าที่')" style="cursor:pointer;background:var(--red-bg);color:var(--red);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid var(--red-light)">💬 ยังไม่ได้</span>
+        </div>`,t));
+      showArt(res[0].id);
+    } else {
+      const fb=SD.slice(0,3).map(r=>`<div class="art-card" id="ac-${r.id}" onclick="showArt('${r.id}')"><div class="art-card-tag">${r.cat}</div><div class="art-card-title">${r.title}</div><div class="art-card-sub">${r.desc}</div></div>`).join('');
+      append(botMsg(`<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px"><span>😕</span><strong style="color:var(--text)">ไม่พบบทความสำหรับ "<em>${q}</em>"</strong></div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:8px">ลองใช้คำที่กว้างขึ้น เช่น "DNS", "SSL", "Email"</div>
+        <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px">บทความยอดนิยม</div>
+        <div class="art-cards">${fb}</div>
+        <div style="margin-top:8px"><button onclick="sendQuery('คุยกับเจ้าหน้าที่')" style="width:100%;padding:8px;border-radius:7px;border:none;background:var(--red);color:#fff;font-size:12px;font-weight:700;font-family:'Sarabun',sans-serif;cursor:pointer">💬 ยังไม่ได้ — ติดต่อเจ้าหน้าที่</button></div>`,t));
+      showNoResult(q);
+    }
+    setBusy(false);
+  },delay);
+}
+
+/* ── VIEWS ── */
+function showNoResult(q){
+  document.getElementById('view-article').style.display='none';
+  document.getElementById('view-empty').style.display='block';
+  document.getElementById('empty-default').style.display='none';
+  document.getElementById('empty-noresult').style.display='block';
+  document.getElementById('nr-query').textContent=q;
+  document.getElementById('nr-popular').innerHTML=SD.slice(0,3).map(r=>`
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;cursor:pointer;display:flex;gap:12px;align-items:flex-start;transition:border-color .15s" onclick="showArt('${r.id}')" onmouseover="this.style.borderColor='var(--red-light)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="width:34px;height:34px;border-radius:7px;background:var(--red-bg);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">📄</div>
+      <div><div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px">${r.cat}</div>
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px">${r.title}</div>
+      <div style="font-size:12px;color:var(--text3)">${r.desc}</div></div>
+    </div>`).join('');
+  document.getElementById('main').scrollTop=0;
+}
+
+function showArt(id){
+  const a=ARTICLES[id];if(!a)return;
+  curArt=id;
+  document.querySelectorAll('.art-card').forEach(e=>e.classList.remove('active'));
+  const ac=document.getElementById('ac-'+id);if(ac)ac.classList.add('active');
+  document.getElementById('art-tag').textContent=a.tag;
+  document.getElementById('art-cat-bc').textContent=a.cat;
+  document.getElementById('art-title-bc').textContent=a.title;
+  document.getElementById('art-title').textContent=a.title;
+  document.getElementById('art-views').textContent=a.views;
+  document.getElementById('art-time').textContent=a.time;
+  document.getElementById('art-updated').textContent=a.updated;
+  document.getElementById('art-rating').textContent=a.rating;
+  document.getElementById('art-body').innerHTML=a.body+`
+    <div class="helpful-row">
+      <p>บทความนี้มีประโยชน์ไหม?</p>
+      <button class="helpful-btn" id="hbtn-y" onclick="rate('yes','${id}')">👍 มีประโยชน์</button>
+      <button class="helpful-btn" id="hbtn-n" onclick="rate('no','${id}')">👎 ไม่ชัดเจน</button>
+    </div>`;
+  document.getElementById('view-home').style.display='none';
+  document.getElementById('view-empty').style.display='none';
+  document.getElementById('view-article').style.display='block';
+  document.getElementById('view-article').classList.add('fade-in');
+  document.getElementById('main').scrollTop=0;
+}
+
+function rate(v,id){
+  const y=document.getElementById('hbtn-y'),n=document.getElementById('hbtn-n');
+  y.disabled=true;n.disabled=true;
+  const t=T();
+  if(v==='yes'){
+    y.textContent='👍 ขอบคุณ!';y.classList.add('voted-yes');
+    append(botMsg(`ขอบคุณสำหรับ feedback ครับ 🙏 ดีใจที่บทความมีประโยชน์!<div class="qr-wrap">${qBtn('🔍 ค้นหาเพิ่มเติม','SSL')}${qBtn('📍 ติดตามสถานะ','ติดตามสถานะ')}</div>`,t));
+  } else {
+    n.textContent='📝 รับทราบ';n.classList.add('voted-no');
+    append(botMsg(`ขอบคุณครับ จะนำไปปรับปรุงบทความ 📝<br>ต้องการความช่วยเหลือเพิ่มเติมไหม?<div class="qr-wrap">${qBtn('💬 คุยกับเจ้าหน้าที่','คุยกับเจ้าหน้าที่')}${qBtn('🔍 ค้นหาใหม่','DNS')}</div>`,t));
+    switchTab('chat');
+  }
+}
+
+function switchTab(id){
+  document.getElementById('ptab-chat').classList.toggle('active',id==='chat');
+  document.getElementById('ptab-history').classList.toggle('active',id==='history');
+  document.getElementById('tab-chat').style.display=id==='chat'?'flex':'none';
+  document.getElementById('tab-history').style.display=id==='history'?'flex':'none';
+}
+
+/* ── INIT CHAT ── */
+function initChat(){
+  const t=T();
+  append(`<div class="msg-row"><div class="bot-avatar">🔍</div><div class="bubble bot">
+    ยินดีต้อนรับสู่ Help Center ครับ 👋<br>อธิบายปัญหาที่พบ หรือเลือกจากด้านล่างได้เลยครับ
+    <div class="qr-wrap">
+      <button class="qr-btn" onclick="sendQuery('DNS')">🔍 ค้นหาบทความ</button>
+      <button class="qr-btn" onclick="sendQuery('ติดตามสถานะ')">📍 ติดตามสถานะ</button>
+      <button class="qr-btn" onclick="sendQuery('คุยกับเจ้าหน้าที่')">💬 คุยกับเจ้าหน้าที่</button>
+    </div>
+    <span class="bubble-time">${t}</span>
+  </div></div>`);
+}
+
+/* ── SEND ── */
+function sendQuery(q){
+  if(!q||!q.trim()||busy)return;
+  q=q.trim();
+  if(!opened){
+    opened=true;
+    document.getElementById('view-home').style.display='none';
+    document.getElementById('view-empty').style.display='block';
+    document.getElementById('empty-default').style.display='flex';
+    document.getElementById('empty-noresult').style.display='none';
+    document.getElementById('view-article').style.display='none';
+    document.getElementById('panel').classList.add('open');
+    document.getElementById('panel-resize').classList.add('show');
+    const btn=document.getElementById('panel-toggle-btn');
+    btn.style.display='flex';btn.classList.add('on');
+    // only show greeting if chat is empty
+    if(!document.getElementById('chat-body').children.length) initChat();
+  } else {
+    // coming back from home with panel already opened via toggle
+    document.getElementById('view-home').style.display='none';
+    document.getElementById('view-empty').style.display='block';
+    document.getElementById('empty-default').style.display='flex';
+    document.getElementById('empty-noresult').style.display='none';
+    document.getElementById('view-article').style.display='none';
+    document.getElementById('panel').classList.add('open');
+    document.getElementById('panel-resize').classList.add('show');
+    const btn=document.getElementById('panel-toggle-btn');
+    btn.style.display='flex';btn.classList.add('on');
+  }
+  addHist(q);
+  append(`<div class="msg-row user"><div class="bubble user">${q}<span class="bubble-time">${T()}</span></div></div>`);
+  setBusy(true);
+  botReply(q);
+}
+
+function sendFromChat(){
+  const ta=document.getElementById('chat-input');
+  const q=ta.value.trim();
+  if(!q||busy)return;
+  ta.value='';ta.style.height='auto';
+  sendQuery(q);
+}
+
+/* ── GO HOME ── */
+function goHome(){
+  // Don't reset opened — preserve chat history so greeting won't repeat
+  curArt=null;busy=false;
+  document.getElementById('panel').classList.remove('open');
+  document.getElementById('panel-resize').classList.remove('show');
+  const btn=document.getElementById('panel-toggle-btn');
+  btn.classList.remove('on');
+  // keep toggle visible if chat has content
+  btn.style.display=document.getElementById('chat-body').children.length>0?'flex':'none';
+  document.getElementById('view-home').style.display='block';
+  document.getElementById('view-empty').style.display='none';
+  document.getElementById('view-article').style.display='none';
+  document.getElementById('hero-input').value='';
+  document.getElementById('chat-input').value='';
+  document.getElementById('chat-input').style.height='auto';
+  setBusy(false);
+  document.getElementById('main').scrollTop=0;
+  setTimeout(()=>document.getElementById('hero-input').focus(),100);
+}
+
+/* ── BOOT ── */
+loadHist();
+</script>
+</body>
+</html>
