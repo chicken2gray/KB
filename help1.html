@@ -87,17 +87,17 @@ html,body{height:100%;overflow:hidden;font-family:'Sarabun',sans-serif;color:var
 
 /* ── CHAT INPUT ── */
 .chat-input-area{padding:10px 12px 13px;border-top:1px solid var(--border);background:var(--white);flex-shrink:0}
-.chat-input-box{display:flex;align-items:flex-end;gap:6px;background:var(--bg);border:1.5px solid var(--border);border-radius:16px;padding:8px 8px 8px 14px;transition:border-color .2s,box-shadow .2s}
+.chat-input-box{display:flex;flex-direction:column;background:var(--bg);border:1.5px solid var(--border);border-radius:16px;padding:12px 12px 8px 14px;transition:border-color .2s,box-shadow .2s}
 .chat-input-box:focus-within{border-color:var(--red);background:var(--white);box-shadow:0 0 0 3px rgba(229,62,62,.06)}
-.chat-input-box textarea{flex:1;border:none;outline:none;background:transparent;font-size:14px;font-family:'Sarabun',sans-serif;color:var(--text);line-height:1.55;resize:none;min-height:24px;overflow:hidden;padding:5px 0}
+.chat-input-box textarea{width:100%;border:none;outline:none;background:transparent;font-size:14px;font-family:'Sarabun',sans-serif;color:var(--text);line-height:1.55;resize:none;height:66px;overflow:hidden;padding:0;margin-bottom:8px}
 .chat-input-box textarea::placeholder{color:var(--text3)}
 .chat-input-box textarea:disabled{opacity:.45;cursor:not-allowed}
-.chat-attach{width:34px;height:34px;border-radius:8px;border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;transition:background .15s;color:var(--text3)}
+.chat-input-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px}
+.chat-attach{width:30px;height:30px;border-radius:8px;border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;transition:background .15s;color:var(--text3)}
 .chat-attach:hover{background:var(--border2)}
 .chat-send{width:34px;height:34px;background:var(--red);border:none;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s;font-size:15px;box-shadow:0 2px 6px rgba(229,62,62,.3)}
 .chat-send:hover:not(:disabled){background:var(--red-dark);transform:translateY(-1px);box-shadow:0 3px 8px rgba(229,62,62,.4)}
 .chat-send:disabled{opacity:.35;cursor:not-allowed;box-shadow:none;transform:none}
-.chat-hint{font-size:11px;color:var(--text3);text-align:center;margin-top:7px}
 
 /* ── HISTORY ── */
 .hist-empty{padding:28px 14px;text-align:center;font-size:13px;color:var(--text3);line-height:1.7}
@@ -279,16 +279,9 @@ html,body{height:100%;overflow:hidden;font-family:'Sarabun',sans-serif;color:var
   <!-- PANEL -->
   <div class="panel" id="panel">
     <div class="panel-inner" id="panel-inner">
-      <div class="panel-top">
-        <div class="panel-top-icon">🔍</div>
-        <div style="flex:1;min-width:0">
-          <div class="panel-top-title">ค้นหาคำตอบ</div>
-          <div class="panel-top-sub">248 บทความ · ครอบคลุมทุกบริการ Z.com</div>
-        </div>
-      </div>
       <div class="panel-tabs">
-        <button class="ptab active" id="ptab-chat" onclick="switchTab('chat')">ถามตอบ</button>
-        <button class="ptab" id="ptab-history" onclick="switchTab('history')">ประวัติ</button>
+        <button class="ptab active" id="ptab-chat" onclick="switchTab('chat')">💬 ถามตอบ</button>
+        <button class="ptab" id="ptab-history" onclick="switchTab('history')">🕐 ประวัติ</button>
       </div>
 
       <!-- CHAT TAB -->
@@ -296,13 +289,13 @@ html,body{height:100%;overflow:hidden;font-family:'Sarabun',sans-serif;color:var
         <div class="chat-body" id="chat-body"></div>
         <div class="chat-input-area">
           <div class="chat-input-box">
-            <textarea id="chat-input" rows="1"
+            <textarea id="chat-input" rows="3"
               placeholder="อธิบายปัญหาที่พบ..."
               onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFromChat()}"
               oninput="autoGrow(this)"></textarea>
-            <div style="display:flex;align-items:flex-end;gap:4px;padding-bottom:2px">
+            <div class="chat-input-actions">
               <button class="chat-attach" title="แนบไฟล์">📎</button>
-              <button class="chat-send" id="send-btn" onclick="sendFromChat()" title="ส่ง (Enter)">➤</button>
+              <button class="chat-send" id="send-btn" onclick="sendFromChat()" title="ส่ง">➤</button>
             </div>
           </div>
         </div>
@@ -420,7 +413,7 @@ function togglePanel(){
 
 /* ── UTILS ── */
 function T(){const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');}
-function autoGrow(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
+function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,66)+'px';}
 function scrollDown(){const b=document.getElementById('chat-body');setTimeout(()=>{b.scrollTop=b.scrollHeight;},40);}
 function append(html){
   const b=document.getElementById('chat-body'),d=document.createElement('div');
@@ -612,11 +605,6 @@ function initChat(){
   const t=T();
   append(`<div class="msg-row"><div class="bot-avatar">🔍</div><div class="bubble bot">
     ยินดีต้อนรับสู่ Help Center ครับ 👋<br>อธิบายปัญหาที่พบ หรือเลือกจากด้านล่างได้เลยครับ
-    <div class="qr-wrap">
-      <button class="qr-btn" onclick="sendQuery('DNS')">🔍 ค้นหาบทความ</button>
-      <button class="qr-btn" onclick="sendQuery('ติดตามสถานะ')">📍 ติดตามสถานะ</button>
-      <button class="qr-btn" onclick="sendQuery('คุยกับเจ้าหน้าที่')">💬 คุยกับเจ้าหน้าที่</button>
-    </div>
     <span class="bubble-time">${t}</span>
   </div></div>`);
 }
