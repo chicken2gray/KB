@@ -305,7 +305,7 @@ html,body{height:100%;overflow:hidden;font-family:'Sarabun',sans-serif;color:var
               <button class="chat-send" id="send-btn" onclick="sendFromChat()" title="ส่ง (Enter)">➤</button>
             </div>
           </div>
-          <!-- <div class="chat-hint">Enter ส่ง · Shift+Enter ขึ้นบรรทัดใหม่ · / โฟกัส</div> -->
+          <div class="chat-hint">Enter ส่ง · Shift+Enter ขึ้นบรรทัดใหม่ · / โฟกัส</div>
         </div>
       </div>
 
@@ -637,19 +637,26 @@ function sendQuery(q){
     document.getElementById('panel-resize').classList.add('show');
     const btn=document.getElementById('panel-toggle-btn');
     btn.style.display='flex';btn.classList.add('on');
-    // only show greeting if chat is empty
     if(!document.getElementById('chat-body').children.length) initChat();
   } else {
-    // coming back from home with panel already opened via toggle
+    // ensure panel is open (e.g. coming back from home via toggle)
+    const panel=document.getElementById('panel');
+    if(!panel.classList.contains('open')){
+      panel.classList.add('open');
+      document.getElementById('panel-resize').classList.add('show');
+      const btn=document.getElementById('panel-toggle-btn');
+      btn.style.display='flex';btn.classList.add('on');
+    }
+    // hide home if visible, but preserve article/empty state
     document.getElementById('view-home').style.display='none';
-    document.getElementById('view-empty').style.display='block';
-    document.getElementById('empty-default').style.display='flex';
-    document.getElementById('empty-noresult').style.display='none';
-    document.getElementById('view-article').style.display='none';
-    document.getElementById('panel').classList.add('open');
-    document.getElementById('panel-resize').classList.add('show');
-    const btn=document.getElementById('panel-toggle-btn');
-    btn.style.display='flex';btn.classList.add('on');
+    // only reset to empty-default if nothing is showing
+    const artVisible=document.getElementById('view-article').style.display!=='none';
+    const emptyVisible=document.getElementById('view-empty').style.display!=='none';
+    if(!artVisible&&!emptyVisible){
+      document.getElementById('view-empty').style.display='block';
+      document.getElementById('empty-default').style.display='flex';
+      document.getElementById('empty-noresult').style.display='none';
+    }
   }
   addHist(q);
   append(`<div class="msg-row user"><div class="bubble user">${q}<span class="bubble-time">${T()}</span></div></div>`);
